@@ -131,7 +131,7 @@ jfr_cmd=(
   /app/bin/jenkinsfile-runner
     -w "$_JENKINS_APP_DIR"
     -p /usr/share/jenkins/ref/plugins
-    #--runHome "${_JENKINS_HOME}"
+    --runHome "${_JENKINS_HOME}"
     --no-sandbox
     -f "$PIPELINE_FILE"
     "${JFR_PIPELINE_PARAM_ARGS[@]}"
