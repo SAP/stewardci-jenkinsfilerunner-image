@@ -5,11 +5,30 @@ to execute a simple hello world pipeline on a [project "Steward"](https://github
 
 ## Requirements
 
+- Docker
+- Git repo with a Jenkinsfile
+
 ## Download and Installation
+
+```sh
+docker build . -t jenkinsfilerunner
+
+export PIPELINE_GIT_URL=<gitRepoWithJenkinsfile>
+export PIPELINE_GIT_REVISION=<branch>
+export PIPELINE_FILE=<relativePathToJenkinsfile>
+export PIPELINE_PARAMS_JSON={}
+export RUN_NAMESPACE=<anything> # only relevant for Kubernetes use
+
+docker run jenkinsfilerunner
+```
 
 ## Configuration
 
+See [Download and Installation](#download-and-installation)
+
 ## Limitations
+
+Does not support Docker steps yet.
 
 ## Known Issues
 
