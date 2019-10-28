@@ -11,6 +11,12 @@ PARAM_VARS_MANDATORY=(
   'RUN_NAMESPACE'
 )
 
+PARAM_VARS_OPTIONAL=(
+  'JOB_NAME'
+  'RUN_NUMBER'
+  'RUN_CAUSE'
+)
+
 _JENKINS_APP_DIR="/app/jenkins"
 _JENKINS_CASC_D="${_JENKINS_APP_DIR}/WEB-INF/jenkins.yaml.d"
 _JENKINS_HOME="/jenkins_home"
@@ -133,6 +139,9 @@ jfr_cmd=(
     -p /usr/share/jenkins/ref/plugins
     --runHome "${_JENKINS_HOME}"
     --no-sandbox
+    ${JOB_NAME:+"--job-name=${JOB_NAME}"}
+    ${RUN_NUMBER:+"--build-number=${RUN_NUMBER}"}
+    ${RUN_CAUSE:+"--cause=${RUN_CAUSE}"}
     -f "$PIPELINE_FILE"
     "${JFR_PIPELINE_PARAM_ARGS[@]}"
 )
