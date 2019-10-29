@@ -1,7 +1,7 @@
 ## Description
 
-This repo provides a very basic example Jenkinsfile Runner Docker image which is able
-to execute a simple hello world pipeline on a [project "Steward"](https://github.com/SAP/stewardci-core) instance.
+This repo provides a Jenkinsfile Runner Docker image which is able
+to execute Jenkins pipelines on a [project "Steward"](https://github.com/SAP/stewardci-core) instance.
 
 ## Requirements
 
@@ -11,15 +11,17 @@ to execute a simple hello world pipeline on a [project "Steward"](https://github
 ## Download and Installation
 
 ```sh
-docker build . -t jenkinsfilerunner
+# Build the image
+./build.sh
 
-export PIPELINE_GIT_URL=<gitRepoWithJenkinsfile>
-export PIPELINE_GIT_REVISION=<branch>
-export PIPELINE_FILE=<relativePathToJenkinsfile>
-export PIPELINE_PARAMS_JSON={}
-export RUN_NAMESPACE=<anything> # only relevant for Kubernetes use
-
-docker run jenkinsfilerunner
+# Test the image (e.g. with our example Jenkinsfile)
+docker run \
+  -e PIPELINE_GIT_URL=https://github.com/sap-production/demo-pipelines \
+  -e PIPELINE_GIT_REVISION=master \
+  -e PIPELINE_FILE=success/Jenkinsfile \
+  -e PIPELINE_PARAMS_JSON={} \
+  -e RUN_NAMESPACE=anything \
+  stewardci-jenkinsfile-runner-local
 ```
 
 ## Configuration
@@ -28,14 +30,11 @@ See [Download and Installation](#download-and-installation)
 
 ## Limitations
 
-Does not support Docker steps yet.
+no limitations known
 
 ## Known Issues
 
-The Dockerfile provided here only supports simple hello world pipelines. 
-
-To support the Kubernetes plugin, configuration as code, writing logs to Elasticsearch
-a more elaborated image is required. We will provide this here to the Open Source community soon.
+no issues known
 
 ## How to obtain support
 
@@ -47,7 +46,7 @@ You are welcome to contribute to this project via Pull Requests.
 
 ## To-Do (upcoming changes)
 
-More elaborate image soon
+see GitHub issues for planned changes
 
 ## License
 

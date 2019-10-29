@@ -1,0 +1,11 @@
+jenkins:
+  systemMessage: "Jenkinsfile Runner"
+  slaveAgentPort: 50000
+  clouds:
+  - kubernetes:
+      containerCapStr: "0"
+      directConnection: true
+      maxRequestsPerHostStr: "32"
+      name: "kubernetes"
+      namespace: "xxx"
+      serverUrl: "https://kubernetes.default"
