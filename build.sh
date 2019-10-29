@@ -16,4 +16,4 @@ cd ${PROJECT_ROOT}/jenkinsfile-runner-base-image
 ./build.sh || die
 
 cd ${PROJECT_ROOT}/jenkinsfile-runner-steward-image
-./build.sh || die
+./build.sh "$@" || die
