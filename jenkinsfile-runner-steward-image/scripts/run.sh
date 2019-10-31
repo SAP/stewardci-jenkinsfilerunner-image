@@ -12,6 +12,10 @@ PARAM_VARS_MANDATORY=(
 )
 
 PARAM_VARS_OPTIONAL=(
+  'PIPELINE_LOG_ELASTICSEARCH_INDEX_URL'
+  'PIPELINE_LOG_ELASTICSEARCH_AUTH_SECRET'
+  'PIPELINE_LOG_ELASTICSEARCH_TRUSTEDCERTS_SECRET'
+  'PIPELINE_LOG_ELASTICSEARCH_RUN_ID_JSON'
   'JOB_NAME'
   'RUN_NUMBER'
   'RUN_CAUSE'
@@ -118,30 +122,47 @@ function random_alnum() {
   echo "${chars:0:$len}"
 }
 
+function configure_log_elasticsearch() {
+  with_termination_log python3 -b -B -E -I "${HERE}/create_elasticsearch_log_config.py" > "${_JENKINS_CASC_D}/log-elasticsearch.yml" || return 1
+}
+
+casc_yml="${_JENKINS_CASC_D}/casc.yml"
 build_xml="${_JENKINS_HOME}/jobs/job/builds/1/build.xml"
 
 truncate --no-create --size 0 /dev/termination-log || exit 1
 check_required_env_vars "${PARAM_VARS_MANDATORY[@]}" || exit 1
 
+mkdir /workspace || exit 1
+cd /workspace || exit 1
 echo "Cloning pipeline repository $PIPELINE_GIT_URL"
 with_termination_log git clone "$PIPELINE_GIT_URL" . || exit 1
 echo "Checking out pipeline from revision $PIPELINE_GIT_REVISION"
 with_termination_log git checkout "$PIPELINE_GIT_REVISION" || exit 1
+
+with_termination_log sed -i "s/0.0.0.0/$(hostname -i)/g" "$casc_yml" || exit 1
+with_termination_log sed -i "s/xxx/$RUN_NAMESPACE/" "$casc_yml" || exit 1
+configure_log_elasticsearch || exit 1
 
 with_termination_log mkdir "${_JENKINS_HOME}" || exit 1
 
 export -n "${PARAM_VARS_MANDATORY[@]}" "${PARAM_VARS_OPTIONAL[@]}" || exit 1 # do not pass to subprocesses
 make_jfr_pipeline_param_args JFR_PIPELINE_PARAM_ARGS || exit 1
 jfr_err_log=$(mktempfile "error-" ".log") || exit 1
+export JAVA_OPTS="-Dhudson.TcpSlaveAgentListener.hostName=$(hostname -i)"
+
+# The following is a workaround until this PR is released: https://github.com/jenkinsci/kubernetes-plugin/pull/628
+# Jenkinsfile Runner does not expose a UI, so this URL is fake...
+export JAVA_OPTS="${JAVA_OPTS} -DKUBERNETES_JENKINS_URL=http://jenkinsfilerunner/"
+
 jfr_cmd=(
   /app/bin/jenkinsfile-runner
     -w "$_JENKINS_APP_DIR"
     -p /usr/share/jenkins/ref/plugins
     --runHome "${_JENKINS_HOME}"
     --no-sandbox
-    ${JOB_NAME:+"--job-name=${JOB_NAME}"}
-    ${RUN_NUMBER:+"--build-number=${RUN_NUMBER}"}
-    ${RUN_CAUSE:+"--cause=${RUN_CAUSE}"}
+    ${JOB_NAME:+--job-name "${JOB_NAME}"}
+    ${RUN_NUMBER:+--build-number "${RUN_NUMBER}"}
+    ${RUN_CAUSE:+--cause "${RUN_CAUSE}"}
     -f "$PIPELINE_FILE"
     "${JFR_PIPELINE_PARAM_ARGS[@]}"
 )
