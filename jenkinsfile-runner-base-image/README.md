@@ -10,7 +10,7 @@ Below you find ways to generate this list.
 
 ### Plugins from existing Jenkins
 
-From the `script console` of a running Jenkins execute the following script to get the list of all installed plugins, preformatted for the `packager-config.yml`.
+From the Script Console of a running Jenkins execute the following script to get the list of all installed plugins, preformatted for the `packager-config.yml`.
 
 ```groovy
 def JENKINS_HOME = System.getenv('JENKINS_HOME')

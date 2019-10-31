@@ -12,6 +12,8 @@ function die() {
 
 name=stewardci-jenkinsfile-runner
 
+cd "$(dirname "$BASH_SOURCE")"
+
 git rev-parse --git-dir
 if [[ $? == 128 ]]; then
   # not in a Git checkout

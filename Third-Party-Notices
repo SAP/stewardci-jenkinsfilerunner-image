@@ -1,4 +1,4 @@
-This Docker image is build using Custom War Packager. The resulting image is based on an official Jenkins image, Jenkinsfile Runner and contains multiple Jenkins plugins.
+This Docker image is built using Custom War Packager. The resulting image is based on an official Jenkins image, Jenkinsfile Runner and contains multiple Jenkins plugins.
 
 In the event that we overlooked to list required notice, please bring this to our attention by contacting us via this email: opensource@sap.com
 

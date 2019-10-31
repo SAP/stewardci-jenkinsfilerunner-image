@@ -124,8 +124,6 @@ function random_alnum() {
 
 function configure_log_elasticsearch() {
   with_termination_log python3 -b -B -E -I "${HERE}/create_elasticsearch_log_config.py" > "${_JENKINS_CASC_D}/log-elasticsearch.yml" || return 1
-  # TODO remove debug code
-  { cat "${_JENKINS_CASC_D}/log-elasticsearch.yml"; echo; } || true
 }
 
 casc_yml="${_JENKINS_CASC_D}/casc.yml"
