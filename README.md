@@ -9,7 +9,20 @@ to execute Jenkins pipelines on a [project "Steward"](https://github.com/SAP/ste
 - Git repo with a Jenkinsfile
 
 ## Download and Installation
+Prebuild image versions can be found in [dockerhub](https://hub.docker.com/r/stewardci/stewardci-jenkinsfile-runner).
+To test the image using docker call:
+```sh
+# Test the image (e.g. with our example Jenkinsfile)
+docker run \
+  -e PIPELINE_GIT_URL=https://github.com/sap-production/demo-pipelines \
+  -e PIPELINE_GIT_REVISION=master \
+  -e PIPELINE_FILE=success/Jenkinsfile \
+  -e PIPELINE_PARAMS_JSON={} \
+  -e RUN_NAMESPACE=anything \
+  stewardci/stewardci-jenkinsfile-runner
+```
 
+To build and test from sources execute the following commands:
 ```sh
 # Build the image
 ./build.sh
