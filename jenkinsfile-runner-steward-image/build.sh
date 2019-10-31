@@ -12,7 +12,7 @@ function die() {
 
 name=stewardci-jenkinsfile-runner
 
-cd "$(dirname "$BASH_SOURCE")"
+cd "$(dirname "$BASH_SOURCE")" || die
 
 git rev-parse --git-dir
 if [[ $? == 128 ]]; then

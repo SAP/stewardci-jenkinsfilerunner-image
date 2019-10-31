@@ -10,7 +10,7 @@ function die() {
   exit 1
 }
 
-PROJECT_ROOT=$(cd "$(dirname "$BASH_SOURCE")"; pwd)
+PROJECT_ROOT=$(cd "$(dirname "$BASH_SOURCE")" && pwd) || die
 
 cd ${PROJECT_ROOT}/jenkinsfile-runner-base-image
 ./build.sh || die

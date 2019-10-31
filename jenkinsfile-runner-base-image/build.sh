@@ -10,7 +10,7 @@ function die() {
   exit 1
 }
 
-cd "$(dirname "$BASH_SOURCE")"
+cd "$(dirname "$BASH_SOURCE")" || die
 
 curl -O https://repo.jenkins-ci.org/releases/io/jenkins/tools/custom-war-packager/custom-war-packager-cli/1.7/custom-war-packager-cli-1.7-jar-with-dependencies.jar
 CUSTOM_WAR_PACKAGER_CLI_JAR="${PWD}/custom-war-packager-cli-1.7-jar-with-dependencies.jar"
