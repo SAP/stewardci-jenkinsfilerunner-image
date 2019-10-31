@@ -32,7 +32,15 @@ if [[ ${1-} == "--push" ]]; then
   [[ -n $docker_repo ]] || die "error: --push needs an argument"
   if [[ $docker_repo == *"gcr.io"* ]]; then
     docker login -u _json_key -p "$(cat "${GOOGLE_APPLICATION_CREDENTIALS}")" "${docker_repo}" || die
+  else
+    user="${3-}"
+    password="${4-}"
+    if [[ -n $user ]]; then
+        [[ -n $password ]] || die "error: password parameter missing"
+        docker login -u "$user" -p "$password"
+    fi
   fi
+
   echo "Pushing ${docker_repo}/$name:$tag"
   docker tag "${name}-local" "${docker_repo}/$name:$tag" || die
   docker push "${docker_repo}/$name:$tag" || die
