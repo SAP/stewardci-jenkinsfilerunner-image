@@ -19,7 +19,9 @@ docker run \
   -e PIPELINE_FILE=success/Jenkinsfile \
   -e PIPELINE_PARAMS_JSON={} \
   -e RUN_NAMESPACE=anything \
-  stewardci/stewardci-jenkinsfile-runner
+  -v "/workspace" \
+  -w "/workspace" \
+  stewardci/stewardci-jenkinsfile-runner:191031_07973f6
 ```
 
 To build and test from sources execute the following commands:
@@ -34,6 +36,8 @@ docker run \
   -e PIPELINE_FILE=success/Jenkinsfile \
   -e PIPELINE_PARAMS_JSON={} \
   -e RUN_NAMESPACE=anything \
+  -v "/workspace" \
+  -w "/workspace" \
   stewardci-jenkinsfile-runner-local
 ```
 
