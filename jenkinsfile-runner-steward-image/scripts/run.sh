@@ -132,8 +132,6 @@ build_xml="${_JENKINS_HOME}/jobs/job/builds/1/build.xml"
 truncate --no-create --size 0 /dev/termination-log || exit 1
 check_required_env_vars "${PARAM_VARS_MANDATORY[@]}" || exit 1
 
-mkdir /workspace || exit 1
-cd /workspace || exit 1
 echo "Cloning pipeline repository $PIPELINE_GIT_URL"
 with_termination_log git clone "$PIPELINE_GIT_URL" . || exit 1
 echo "Checking out pipeline from revision $PIPELINE_GIT_REVISION"
