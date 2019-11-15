@@ -14,7 +14,7 @@ To test the image using docker call:
 ```sh
 # Test the image (e.g. with our example Jenkinsfile)
 docker run \
-  -e PIPELINE_GIT_URL=https://github.com/sap-production/demo-pipelines \
+  -e PIPELINE_GIT_URL=https://github.com/SAP-samples/stewardci-example-pipelines \
   -e PIPELINE_GIT_REVISION=master \
   -e PIPELINE_FILE=success/Jenkinsfile \
   -e PIPELINE_PARAMS_JSON={} \
@@ -31,7 +31,7 @@ To build and test from sources execute the following commands:
 
 # Test the image (e.g. with our example Jenkinsfile)
 docker run \
-  -e PIPELINE_GIT_URL=https://github.com/sap-production/demo-pipelines \
+  -e PIPELINE_GIT_URL=https://github.com/SAP-samples/stewardci-example-pipelines \
   -e PIPELINE_GIT_REVISION=master \
   -e PIPELINE_FILE=success/Jenkinsfile \
   -e PIPELINE_PARAMS_JSON={} \
