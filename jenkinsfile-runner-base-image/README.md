@@ -13,24 +13,40 @@ Below you find ways to generate this list.
 From the Script Console of a running Jenkins execute the following script to get the list of all installed plugins, preformatted for the `packager-config.yml`.
 
 ```groovy
-def JENKINS_HOME = System.getenv('JENKINS_HOME')
+import com.cloudbees.groovy.cps.NonCPS
 
-Jenkins.instance.pluginManager.plugins.toSorted {
-  a, b -> a.shortName <=> b.shortName
-}
-.each {
-  plugin ->
-  def groupId
-  def manifestFile = new File(JENKINS_HOME, "plugins/${plugin.shortName}/META-INF/MANIFEST.MF")
-  manifestFile.withInputStream { mfStream ->
-    def manifest = new java.util.jar.Manifest(mfStream)
-    groupId = manifest.mainAttributes.getValue("Group-Id")
-  }
-  println("""\
+printPlugins(Jenkins.instance.pluginManager.plugins)
+true
+
+@NonCPS
+def printPlugins(plugins) {
+    def JENKINS_HOME = System.getenv('JENKINS_HOME')
+
+    def pluginsDir
+
+    if (new File("${JENKINS_HOME}/plugins").exists()) {
+        pluginsDir = "${JENKINS_HOME}/plugins"
+    } else if (new File("/usr/share/jenkins/ref/plugins").exists()) {
+        pluginsDir = "/usr/share/jenkins/ref/plugins"
+    } else {
+        throw new RuntimeException("Could not determine plugins directory.")
+    }
+
+    plugins.toSorted {
+        a, b -> a.shortName <=> b.shortName
+    }.each {
+        plugin ->
+            def groupId
+            def manifestFile = new File("${pluginsDir}/${plugin.shortName}/META-INF/MANIFEST.MF")
+            manifestFile.withInputStream { mfStream ->
+                def manifest = new java.util.jar.Manifest(mfStream)
+                groupId = manifest.mainAttributes.getValue("Group-Id")
+            }
+            println("""\
   - groupId: "${groupId}"
     artifactId: "${plugin.shortName}"
     source:
       version: "${plugin.version}\"""")
+    }
 }
-true
 ```
