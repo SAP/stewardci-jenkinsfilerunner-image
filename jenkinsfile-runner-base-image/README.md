@@ -13,6 +13,8 @@ Below you find ways to generate this list.
 From the Script Console of a running Jenkins execute the following script to get the list of all installed plugins, preformatted for the `packager-config.yml`.
 
 ```groovy
+import com.cloudbees.groovy.cps.NonCPS
+
 printPlugins(Jenkins.instance.pluginManager.plugins)
 true
 
