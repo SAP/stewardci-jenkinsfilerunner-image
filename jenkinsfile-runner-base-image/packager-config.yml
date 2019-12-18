@@ -222,7 +222,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "cloudbees-folder"
     source:
-      version: "6.10.0"
+      version: "6.10.1"
 # Static Analysis Utilities (Jenkins-Version: 1.625.1)
   - groupId: "org.jvnet.hudson.plugins"
     artifactId: "analysis-core"
@@ -322,7 +322,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "subversion"
     source:
-      version: "2.12.2"
+      version: "2.13.0"
 # MapDB API (Jenkins-Version: 1.565)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "mapdb-api"
@@ -407,7 +407,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "influxdb"
     source:
-      version: "2.0.3"
+      version: "2.0.4"
 # Cobertura (Jenkins-Version: 2.60.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "cobertura"
@@ -417,7 +417,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "code-coverage-api"
     source:
-      version: "1.1.1"
+      version: "1.1.2"
 # Branch API (Jenkins-Version: 2.138.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "branch-api"
@@ -447,7 +447,7 @@ plugins:
   - groupId: "org.csanchez.jenkins.plugins"
     artifactId: "kubernetes"
     source:
-      version: "1.22.0"
+      version: "1.22.1"
 # Docker Commons (Jenkins-Version: 2.150.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "docker-commons"
@@ -658,4 +658,3 @@ plugins:
     artifactId: "resource-disposer"
     source:
       version: "0.14"
-
