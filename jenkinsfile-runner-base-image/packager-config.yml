@@ -18,7 +18,7 @@ buildSettings:
         git: https://github.com/jenkinsci/jenkinsfile-runner.git
         branch: master
     docker:
-      base: "jenkins/jenkins:2.190.3-alpine"
+      base: "jenkins/jenkins:2.204.1-alpine"
       tag: "jenkinsfile-runner-base-local"
       build: true
 
@@ -26,7 +26,7 @@ war:
   groupId: "org.jenkins-ci.main"
   artifactId: "jenkins-war"
   source:
-    version: "2.190.3"
+    version: "2.204.1"
 
 systemProperties:
     jenkins.model.Jenkins.slaveAgentPort: "50000"
@@ -52,7 +52,7 @@ plugins:
     artifactId: "pipeline-elasticsearch-logs"
     source:
       git: 'https://github.com/SAP/elasticsearch-logs-plugin.git'
-      commit: efe3ada8c751222a02a614e6fd79feacdafb8d30
+      commit: b05241336196d67edb42770e8b6af4daae6bec4c
 
 
 # See plugins.txt for plugin selection without dependencies (keep this list in sync)
@@ -77,7 +77,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-step-api"
     source:
-      version: "2.21"
+      version: "2.22"
 # OWASP Markup Formatter (Jenkins-Version: 2.60.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "antisamy-markup-formatter"
@@ -213,11 +213,11 @@ plugins:
     artifactId: "workflow-support"
     source:
       version: "3.3"
-# Config File Provider (Jenkins-Version: 2.60.3)
+# Config File Provider (Jenkins-Version: 2.121.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "config-file-provider"
     source:
-      version: "3.6.2"
+      version: "3.6.3"
 # Folders (Jenkins-Version: 2.130)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "cloudbees-folder"
@@ -292,7 +292,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-basic-steps"
     source:
-      version: "2.18"
+      version: "2.19"
 # Pipeline: Nodes and Processes (Jenkins-Version: 2.176.1)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-durable-task-step"
@@ -362,7 +362,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "jackson2-api"
     source:
-      version: "2.10.1"
+      version: "2.10.2"
 # Variant (Jenkins-Version: 2.60.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "variant"
@@ -392,7 +392,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "gradle"
     source:
-      version: "1.35"
+      version: "1.36"
 # HTML Publisher (Jenkins-Version: 1.609.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "htmlpublisher"
@@ -447,12 +447,12 @@ plugins:
   - groupId: "org.csanchez.jenkins.plugins"
     artifactId: "kubernetes"
     source:
-      version: "1.22.1"
+      version: "1.22.4"
 # Docker Commons (Jenkins-Version: 2.150.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "docker-commons"
     source:
-      version: "1.15"
+      version: "1.16"
 # Authentication Tokens API (Jenkins-Version: 1.580.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "authentication-tokens"
@@ -477,7 +477,12 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "kubernetes-client-api"
     source:
-      version: "4.6.4-1"
+      version: "4.6.4-2"
+# bouncycastle API (Jenkins-Version: 2.60.3)
+  - groupId: "org.jenkins-ci.plugins"
+    artifactId: "bouncycastle-api"
+    source:
+      version: "2.18"
 # Kubernetes Credentials (Jenkins-Version: 2.60.3)
   - groupId: "org.jenkinsci.plugins"
     artifactId: "kubernetes-credentials"
@@ -497,7 +502,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "aws-java-sdk"
     source:
-      version: "1.11.687"
+      version: "1.11.700"
 # Nexus Artifact Uploader (Jenkins-Version: 1.651.3)
   - groupId: "sp.sd"
     artifactId: "nexus-artifact-uploader"
@@ -543,11 +548,6 @@ plugins:
     artifactId: "ssh-agent"
     source:
       version: "1.17"
-# bouncycastle API (Jenkins-Version: 2.60.3)
-  - groupId: "org.jenkins-ci.plugins"
-    artifactId: "bouncycastle-api"
-    source:
-      version: "2.17"
 # Timestamper (Jenkins-Version: 2.150.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "timestamper"
@@ -562,12 +562,12 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "warnings-ng"
     source:
-      version: "7.2.2"
+      version: "7.3.0"
 # Analysis Model API (Jenkins-Version: 2.138.4)
   - groupId: "io.jenkins.plugins"
     artifactId: "analysis-model-api"
     source:
-      version: "7.0.2"
+      version: "7.0.4"
 # Forensics API (Jenkins-Version: 2.138.4)
   - groupId: "io.jenkins.plugins"
     artifactId: "forensics-api"
@@ -618,11 +618,11 @@ plugins:
     artifactId: "workflow-multibranch"
     source:
       version: "2.21"
-# Pipeline: Build Step (Jenkins-Version: 2.121.1)
+# Pipeline: Build Step (Jenkins-Version: 2.138.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "pipeline-build-step"
     source:
-      version: "2.10"
+      version: "2.11"
 # Pipeline: Milestone Step (Jenkins-Version: 1.642.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "pipeline-milestone-step"
@@ -648,11 +648,11 @@ plugins:
     artifactId: "pipeline-stage-tags-metadata"
     source:
       version: "1.5.0"
-# Workspace Cleanup (Jenkins-Version: 1.642.1)
+# Workspace Cleanup (Jenkins-Version: 2.121)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "ws-cleanup"
     source:
-      version: "0.37"
+      version: "0.38"
 # Resource Disposer (Jenkins-Version: 2.54)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "resource-disposer"
