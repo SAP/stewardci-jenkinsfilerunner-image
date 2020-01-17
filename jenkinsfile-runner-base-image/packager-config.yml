@@ -52,7 +52,7 @@ plugins:
     artifactId: "pipeline-elasticsearch-logs"
     source:
       git: 'https://github.com/SAP/elasticsearch-logs-plugin.git'
-      commit: b05241336196d67edb42770e8b6af4daae6bec4c
+      commit: 76bb444af073385c2233c50cbbfb44a63f54eff5
 
 
 # See plugins.txt for plugin selection without dependencies (keep this list in sync)
