@@ -127,7 +127,7 @@ function configure_log_elasticsearch() {
 }
 
 casc_yml="${_JENKINS_CASC_D}/casc.yml"
-build_xml="${_JENKINS_HOME}/jobs/job/builds/1/build.xml" #TODO: Does not work if JOB_NAME and/or RUN_NUMBER is used!
+build_xml="${_JENKINS_HOME}/jobs/${JOB_NAME:-job}/builds/${RUN_NUMBER:-1}/build.xml"
 
 truncate --no-create --size 0 /dev/termination-log || exit 1
 check_required_env_vars "${PARAM_VARS_MANDATORY[@]}" || exit 1
