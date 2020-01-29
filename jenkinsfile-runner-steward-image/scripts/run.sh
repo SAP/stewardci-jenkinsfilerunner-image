@@ -31,7 +31,7 @@ function check_required_env_vars() {
     if [[ -z ${!var-} ]]; then
       message="error: environment variable not set or empty: $var"
       echo "$message" >&2
-      echo "$message" >> /dev/termination-log
+      echo "$message" >> /run/termination-log
       rc=1
     fi
   done
@@ -78,7 +78,7 @@ function log_failed_command_to_termination_log() {
     echo "Command [${cmd[@]@Q}] failed with exit code $rc"
     echo "Error output:"
     cat "$err_log"
-  } >> /dev/termination-log
+  } >> /run/termination-log
 }
 
 function make_jfr_pipeline_param_args() {
@@ -129,7 +129,7 @@ function configure_log_elasticsearch() {
 casc_yml="${_JENKINS_CASC_D}/casc.yml"
 build_xml="${_JENKINS_HOME}/jobs/${JOB_NAME:-job}/builds/${RUN_NUMBER:-1}/build.xml"
 
-truncate --no-create --size 0 /dev/termination-log || exit 1
+truncate -c -s 0 /run/termination-log || exit 1
 check_required_env_vars "${PARAM_VARS_MANDATORY[@]}" || exit 1
 
 echo "Cloning pipeline repository $PIPELINE_GIT_URL"
@@ -141,7 +141,7 @@ with_termination_log sed -i "s/0.0.0.0/$(hostname -i)/g" "$casc_yml" || exit 1
 with_termination_log sed -i "s/xxx/$RUN_NAMESPACE/" "$casc_yml" || exit 1
 configure_log_elasticsearch || exit 1
 
-with_termination_log mkdir "${_JENKINS_HOME}" || exit 1
+with_termination_log mkdir -p "${_JENKINS_HOME}" || exit 1
 
 export -n "${PARAM_VARS_MANDATORY[@]}" "${PARAM_VARS_OPTIONAL[@]}" || exit 1 # do not pass to subprocesses
 make_jfr_pipeline_param_args JFR_PIPELINE_PARAM_ARGS || exit 1
@@ -178,14 +178,14 @@ rm -f "$jfr_err_log" &> /dev/null
 completed=$(with_termination_log xmlstarlet sel -t -v /flow-build/completed "$build_xml") || exit 1
 result=$(with_termination_log xmlstarlet sel -t -v /flow-build/result "$build_xml") || exit 1
 if [[ $completed != "true" ]]; then
-  echo "Pipeline not completed" | tee -a /dev/termination-log
+  echo "Pipeline not completed" | tee -a /run/termination-log
   exit "$jfr_rc"
 fi
 if [[ -z $result ]]; then
-  echo "No pipeline result in build.xml" | tee -a /dev/termination-log
+  echo "No pipeline result in build.xml" | tee -a /run/termination-log
   exit "$jfr_rc"
 fi
-echo "Pipeline completed with result: $result" | tee -a /dev/termination-log
+echo "Pipeline completed with result: $result" | tee -a /run/termination-log
 if [[ $result != "SUCCESS" ]]; then
   exit 1
 fi
