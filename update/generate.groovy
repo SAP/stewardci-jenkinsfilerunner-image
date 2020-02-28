@@ -1,30 +1,35 @@
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
 
+wantedPlugins = [:]
 resultingPlugins = [:]
 updateCenter = null
 debug = false
 
 if(args.length == 1) {
     process(args[0], "-cwp")
-} else if(args.length == 2) {
-    if(args[1] == "-cwp" || args[1] == "-list") {
-        process(args[0], args[1])
+} else if(args.length >= 2) {
+    if(args[1] == "-cwp" || args[1] == "-list" || args[1] == "-tree") {
+        skipOptional = (args.length == 3 && args[2] == "--skip-optional")
+        process(args[0], args[1], skipOptional)
     } else {
         println("Unknown argument " + args[1])
     }
 } else {
-    println "Usage: groovy generate.groovy <pluginsListFile> [outputFormat]"
-    println "    outputFormat  -cwp    Custom War Packager packager-config.yml format (default)"
-    println "                  -list   Simple list of plugin names"
+    println "Usage: groovy generate.groovy <pluginsListFile> <outputFormat> [--skip-optional]"
+    println "    pluginsListFile         Path to a file with plugin names (new line separated) of wanted plugins"
+    println "    outputFormat    -cwp    Custom War Packager packager-config.yml format (default)"
+    println "                    -list   Simple list of plugin names"
+    println "                    -tree   Print the dependency tree of each plugin"
+    println "    --skip-optional         Do not include optional plugin dependencies"
     println ""
     println "e.g. groovy generate.groovy plugins.txt -cwp"
 }
 
-def process(wantedPluginsFile, outFormat) {
-    def wantedPlugins = []
+def process(wantedPluginsFile, outFormat, skipOptional) {
+    def wantedPluginNames = []
     String fileContents = new File(wantedPluginsFile).getText('UTF-8').eachLine { line ->
-        wantedPlugins << line
+        wantedPluginNames << line
     }
 
     def url = "https://updates.jenkins.io/update-center.json".toURL()
@@ -36,11 +41,12 @@ def process(wantedPluginsFile, outFormat) {
     def jsonSlurper = new JsonSlurper()
     updateCenter = jsonSlurper.parseText(updateCenterJson)
 
-    for(wanted in wantedPlugins){
+    for(wanted in wantedPluginNames){
         def wantedPlugin = updateCenter.plugins[wanted]
+        wantedPlugins[wantedPlugin.name] = wantedPlugin
         resultingPlugins[wantedPlugin.name] = wantedPlugin
         if(debug) println "Added: " + wantedPlugin.name
-        addDependencies(wantedPlugin)
+        addDependencies(wantedPlugin, skipOptional)
     }
 
     if(outFormat == "-list") {
@@ -64,22 +70,54 @@ def process(wantedPluginsFile, outFormat) {
             println "      version: \"" + version + "\""
         }
     }
+
+    if(outFormat == "-tree") {
+        for(plugin in wantedPlugins.values()){
+            printDependencyTree(plugin, 0, "wanted")
+        }
+        println("--- Statistics -------------------------")
+        println("Wanted plugins:    " + wantedPlugins.size())
+        println("Resulting plugins: " + resultingPlugins.size())
+    }
+
 }
 
-def addDependencies(plugin) {
+def addDependencies(plugin, skipOptional) {
     //println "addDependencies(" + plugin + ")"
     for(dependency in plugin.dependencies){
+        if(skipOptional && dependency.optional) {
+            continue;
+        }
         def dependencyPlugin = updateCenter.plugins[dependency.name]
         if(dependencyPlugin) {
             resultingPlugins[dependency.name] = dependencyPlugin
             if(debug) println "Added dependency (of " + plugin.name + "): " + dependencyPlugin.name
-            addDependencies(dependencyPlugin)
+            addDependencies(dependencyPlugin, skipOptional)
         } else {
             if(dependency.optional) {
-                println "ERROR: Could not find dependency " + dependency
+                println "ERROR: Could not find (optional) dependency " + dependency
             } else {
-                throw new RuntimeException("Could not find dependency " + dependency)
+                throw new RuntimeException("Could not find (required) dependency " + dependency)
             }
+        }
+    }
+}
+
+def printDependencyTree(plugin, indent, type) {
+    if(indent == 0) {
+        print "- "
+    } else {
+        for(i = 0; i < indent; i++) {
+            print "  "
+        }
+    }
+    println plugin.name + ":" + plugin.version + " (" + type + ")"
+    for(dependency in plugin.dependencies){
+        dependencyPlugin = resultingPlugins[dependency.name]
+        if(dependencyPlugin == null) {
+            if(!dependency.optional) throw new RuntimeException(dependency.name + " (required) not contained in resultingPlugins")
+        } else {
+            printDependencyTree(dependencyPlugin, indent+1, dependency.optional ? "optional" : "required")
         }
     }
 }

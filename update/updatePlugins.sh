@@ -10,7 +10,7 @@ mv "${packagerConfig}.tmp" "${packagerConfig}"
 
 # Generate new plugins list
 echo "##PLUGINS-START (do not remove!)" >> "${packagerConfig}"
-groovy "${PROJECT_ROOT}/update/generate.groovy" "${pluginList}" -cwp >> "${packagerConfig}"
+groovy "${PROJECT_ROOT}/update/generate.groovy" "${pluginList}" -cwp --skip-optional >> "${packagerConfig}"
 echo "##PLUGINS-END (do not remove!)" >> "${packagerConfig}"
 
 echo "Updated plugins in ${packagerConfig}"
