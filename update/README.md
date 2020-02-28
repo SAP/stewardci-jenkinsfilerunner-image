@@ -43,7 +43,7 @@ This can be copied/pasted into the `plugins` section of a [Custom War Packager] 
 
 To print the dependency tree run e.g.
 ```sh
-groovy generate.groovy "../jenkinsfile-runner-base-image/plugins.txt" -tree --skip-optional`
+groovy generate.groovy "../jenkinsfile-runner-base-image/plugins.txt" -tree --skip-optional
 ```
 
 
