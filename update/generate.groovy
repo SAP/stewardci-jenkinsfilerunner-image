@@ -56,7 +56,8 @@ def process(wantedPluginsFile, outFormat, skipOptional) {
     }
 
     if(outFormat == "-cwp") {
-        for(plugin in resultingPlugins.values()){
+        for(pluginKey in resultingPlugins.sort()*.key){
+            plugin = resultingPlugins[pluginKey]
             def gav = plugin.gav
             def matcher = gav =~ /([^:]*):([^:]*):([^:]*)/
             if (!matcher) throw new RuntimeException("Wrong gav: " + gav)
@@ -72,7 +73,8 @@ def process(wantedPluginsFile, outFormat, skipOptional) {
     }
 
     if(outFormat == "-tree") {
-        for(plugin in wantedPlugins.values()){
+        for(pluginKey in wantedPlugins.sort()*.key){
+            plugin = wantedPlugins[pluginKey]
             printDependencyTree(plugin, 0, "wanted")
         }
         println("--- Statistics -------------------------")
