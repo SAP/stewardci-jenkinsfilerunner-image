@@ -13,4 +13,4 @@ echo "##PLUGINS-START (do not remove!)" >> "${packagerConfig}"
 groovy "${PROJECT_ROOT}/update/generate.groovy" "${pluginList}" -cwp >> "${packagerConfig}"
 echo "##PLUGINS-END (do not remove!)" >> "${packagerConfig}"
 
-echo "Updated ${packagerConfig}"
+echo "Updated plugins in ${packagerConfig}"

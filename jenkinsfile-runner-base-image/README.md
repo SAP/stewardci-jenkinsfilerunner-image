@@ -2,15 +2,19 @@
 
 Build the image using the `./build.sh`
 
-## Plugin versions
+## Update Plugin versions
 
-The [packager-config.yml](packager-config.yml) also contains the list of plugins to install. Creating the list manually, with groupId, artifactId, version of any plugin and the transitive dependencies, is very cumbersome.
+The [packager-config.yml](packager-config.yml) also contains the list of plugins to install. Creating the list manually, with groupId, artifactId, version of any plugin and the transitive dependencies, is too cumbersome.
 
-Below you find ways to generate this list.
+To update the plugins in `packager-config.yml` run the following command (from project root):
+```sh
+update/updatePlugins.sh
+```
 
 ### Plugins from existing Jenkins
 
-From the Script Console of a running Jenkins execute the following script to get the list of all installed plugins, preformatted for the `packager-config.yml`.
+Although not the recommended way, you can also generate the list from an existing Jenkins instance.<br>
+From the Script Console of this Jenkins execute the following script to get the list of all installed plugins, preformatted for the `packager-config.yml` and paste it manually.
 
 ```groovy
 import com.cloudbees.groovy.cps.NonCPS
