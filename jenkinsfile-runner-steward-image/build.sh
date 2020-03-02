@@ -47,4 +47,5 @@ if [[ ${1-} == "--push" ]]; then
   echo "Pushing ${docker_repo}/$name:$tag"
   docker tag "${name}-local" "${docker_repo}/$name:$tag" || die
   docker push "${docker_repo}/$name:$tag" || die
+  echo "${docker_repo}/$name:$tag" > deployInfo.txt || die
 fi
