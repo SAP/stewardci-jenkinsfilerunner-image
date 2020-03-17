@@ -16,7 +16,7 @@ buildSettings:
         noCache: true
       source:
         git: https://github.com/jenkinsci/jenkinsfile-runner.git
-        branch: master
+        branch: "1.0-beta-11"
     docker:
       base: "jenkins/jenkins:2.204.1-alpine"
       tag: "jenkinsfile-runner-base-local"
