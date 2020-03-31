@@ -25,13 +25,15 @@ _JENKINS_APP_DIR="/app/jenkins"
 _JENKINS_CASC_D="${_JENKINS_APP_DIR}/WEB-INF/jenkins.yaml.d"
 _JENKINS_HOME="/jenkins_home"
 
+_TERMINATION_LOG_PATH="/tekton/results/termination-log"
+
 function check_required_env_vars() {
   local rc=0 var
   for var in "$@"; do
     if [[ -z ${!var-} ]]; then
       message="error: environment variable not set or empty: $var"
       echo "$message" >&2
-      echo "$message" >> /run/termination-log
+      echo "$message" >> "${_TERMINATION_LOG_PATH}"
       rc=1
     fi
   done
@@ -78,7 +80,7 @@ function log_failed_command_to_termination_log() {
     echo "Command [${cmd[@]@Q}] failed with exit code $rc"
     echo "Error output:"
     cat "$err_log"
-  } >> /run/termination-log
+  } >> "${_TERMINATION_LOG_PATH}"
 }
 
 function make_jfr_pipeline_param_args() {
@@ -129,7 +131,7 @@ function configure_log_elasticsearch() {
 casc_yml="${_JENKINS_CASC_D}/casc.yml"
 build_xml="${_JENKINS_HOME}/jobs/${JOB_NAME:-job}/builds/${RUN_NUMBER:-1}/build.xml"
 
-truncate -c -s 0 /run/termination-log || exit 1
+truncate -c -s 0 "${_TERMINATION_LOG_PATH}" || exit 1
 check_required_env_vars "${PARAM_VARS_MANDATORY[@]}" || exit 1
 
 echo "Cloning pipeline repository $PIPELINE_GIT_URL"
@@ -178,14 +180,14 @@ rm -f "$jfr_err_log" &> /dev/null
 completed=$(with_termination_log xmlstarlet sel -t -v /flow-build/completed "$build_xml") || exit 1
 result=$(with_termination_log xmlstarlet sel -t -v /flow-build/result "$build_xml") || exit 1
 if [[ $completed != "true" ]]; then
-  echo "Pipeline not completed" | tee -a /run/termination-log
+  echo "Pipeline not completed" | tee -a "${_TERMINATION_LOG_PATH}"
   exit "$jfr_rc"
 fi
 if [[ -z $result ]]; then
-  echo "No pipeline result in build.xml" | tee -a /run/termination-log
+  echo "No pipeline result in build.xml" | tee -a "${_TERMINATION_LOG_PATH}"
   exit "$jfr_rc"
 fi
-echo "Pipeline completed with result: $result" | tee -a /run/termination-log
+echo "Pipeline completed with result: $result" | tee -a "${_TERMINATION_LOG_PATH}"
 if [[ $result != "SUCCESS" ]]; then
   exit 1
 fi
