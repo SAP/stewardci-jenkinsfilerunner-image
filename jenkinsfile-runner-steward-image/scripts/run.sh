@@ -25,7 +25,11 @@ _JENKINS_APP_DIR="/app/jenkins"
 _JENKINS_CASC_D="${_JENKINS_APP_DIR}/WEB-INF/jenkins.yaml.d"
 _JENKINS_HOME="/jenkins_home"
 
-_TERMINATION_LOG_PATH="/tekton/results/termination-log"
+# This is only usable with tekton 0.11.x if running in non root mode.
+# See https://github.com/tektoncd/pipeline/issues/2131
+#_TERMINATION_LOG_PATH="/tekton/results/termination-log"
+
+_TERMINATION_LOG_PATH="/run/termination-log"
 
 function check_required_env_vars() {
   local rc=0 var
