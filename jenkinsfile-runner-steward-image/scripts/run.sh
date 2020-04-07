@@ -1,7 +1,7 @@
 #!/bin/bash
 set -u -o pipefail
 
-HERE=$(cd "$(dirname "$BASH_SOURCE")"; pwd)
+HERE=$(cd "$(dirname "$BASH_SOURCE")" && pwd) || exit 1
 
 PARAM_VARS_MANDATORY=(
   'PIPELINE_GIT_URL'
