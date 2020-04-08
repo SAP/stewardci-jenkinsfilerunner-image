@@ -142,6 +142,8 @@ echo "Cloning pipeline repository $PIPELINE_GIT_URL"
 with_termination_log git clone "$PIPELINE_GIT_URL" . || exit 1
 echo "Checking out pipeline from revision $PIPELINE_GIT_REVISION"
 with_termination_log git checkout "$PIPELINE_GIT_REVISION" || exit 1
+echo "Delete pipeline git clone credentials"
+with_termination_log rm -f ~/.git-credentials || exit 1
 
 with_termination_log sed -i "s/0.0.0.0/$(hostname -i)/g" "$casc_yml" || exit 1
 with_termination_log sed -i "s/xxx/$RUN_NAMESPACE/" "$casc_yml" || exit 1
