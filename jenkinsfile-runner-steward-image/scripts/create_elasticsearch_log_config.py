@@ -28,6 +28,7 @@ if url:
                 "elasticSearch": {
                     "certificateId": certificateId if certificateId else None,
                     "credentialsId": credentialsId if credentialsId else None,
+                    "elasticsearchWriteAccess": "esDirectWrite",
                     "runIdProvider": {
                         "json": {
                             "jsonSource": {
