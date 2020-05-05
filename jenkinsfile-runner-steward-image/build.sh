@@ -11,7 +11,6 @@ function die() {
 }
 
 name=stewardci-jenkinsfile-runner
-tagPrefix="${5-}"
 
 cd "$(dirname "$BASH_SOURCE")" || die
 
@@ -19,8 +18,6 @@ git rev-parse --git-dir
 if [[ $? == 128 ]]; then
   # not in a Git checkout
   tag="localbuild-$(date +%y%m%d)" || die
-elif [[ -n "${tagPrefix}" ]]; then
-  tag="${tagPrefix}_$(date +%y%m%d)_$(git log --format='%h' -n 1)" || die
 else
   tag="$(date +%y%m%d)_$(git log --format='%h' -n 1)" || die
 fi
@@ -47,5 +44,4 @@ if [[ ${1-} == "--push" ]]; then
   echo "Pushing ${docker_repo}/$name:$tag"
   docker tag "${name}-local" "${docker_repo}/$name:$tag" || die
   docker push "${docker_repo}/$name:$tag" || die
-  echo "${docker_repo}/$name:$tag" > deployInfo.txt || die
 fi
