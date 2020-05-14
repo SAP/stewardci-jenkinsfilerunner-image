@@ -140,17 +140,17 @@ docker build . -t ${IMAGE_NAME}-local || die
 
 if [[ ${P_PUSH-} == "--push" ]]; then
 
-  if [[ $P_DOCKER_ORG == *"gcr.io"* ]]; then
+  if [[ ${P_DOCKER_ORG} == *"gcr.io"* ]]; then
     docker login -u _json_key -p "$(cat "${GOOGLE_APPLICATION_CREDENTIALS}")" "${P_DOCKER_ORG}" || die
   else
-    if [[ -n $P_USERNAME ]]; then
-        [[ -n $P_PASSWORD ]] || die "error: password parameter missing"
-        docker login -u "$P_USERNAME" -p "$P_PASSWORD"
+    if [[ -n "${P_USERNAME-}" ]]; then
+        [[ -n "${P_PASSWORD-}" ]] || die "error: password parameter missing"
+        docker login -u "${P_USERNAME}" -p "${P_PASSWORD}"
     fi
   fi
 
-  echo "Pushing ${P_DOCKER_ORG}/${IMAGE_NAME}:$TAG"
-  docker tag "${IMAGE_NAME}-local" "${P_DOCKER_ORG}/${IMAGE_NAME}:$TAG" || die
-  docker push "${P_DOCKER_ORG}/${IMAGE_NAME}:$TAG" || die
-  echo "${P_DOCKER_ORG}/${IMAGE_NAME}:$TAG" > deployInfo.txt || die
+  echo "Pushing ${P_DOCKER_ORG}/${IMAGE_NAME}:${TAG}"
+  docker tag "${IMAGE_NAME}-local" "${P_DOCKER_ORG}/${IMAGE_NAME}:${TAG}" || die
+  docker push "${P_DOCKER_ORG}/${IMAGE_NAME}:${TAG}" || die
+  echo "${P_DOCKER_ORG}/${IMAGE_NAME}:${TAG}" > deployInfo.txt || die
 fi
