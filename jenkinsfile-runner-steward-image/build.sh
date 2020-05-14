@@ -19,19 +19,25 @@ Usage
 OPTIONS
     -h, --help
         Print help and quit without doing anything. The exit code is 0.
-    --tag-prefix string (optional)
-        TODO
     --push (optional)
-        TODO
+        If this option is set the image will be pushed to the specified registry.
     --docker-org string (mandatory for --push)
-        TODO
+        The docker organziation the image 'stewardci-jenkinsfile-runner' shall be pushed to.
     --docker-creds string string (mandatory for --push)
-        TODO
+        User and password/token credentials to push to the repo.
+    --tag-prefix string (optional)
+        Without any tag spec the tag will be generated as <YYMMDD>_<commit>.
+        If a tag-prefix is configured this prefix will be prepended: <prefix>_<YYMMDD>_<commit>.
+    --tag string (optional)
+        Without any tag spec the tag will be generated as <YYMMDD>_<commit>.
+        If a tag is specified exactly this tag will be used.
+        --tag precedes --tag-prefix if both are specified.
 EOF
 }
 
 # set from args/options
 unset P_TAG_PREFIX
+unset P_TAG
 unset P_PUSH
 unset P_DOCKER_ORG
 unset P_USERNAME
@@ -57,6 +63,11 @@ function parse_args() {
                 P_USERNAME="$2"
                 P_PASSWORD="$3"
                 shift 2
+                ;;
+            "--tag" )
+                [[ ${2-} ]] || die "error: option $1 requires a non-empty argument"
+                P_TAG="$2"
+                shift
                 ;;
             "--tag-prefix" )
                 [[ ${2-} ]] || die "error: option $1 requires a non-empty argument"
@@ -88,9 +99,11 @@ function check_args() {
 }
 
 function calculate_tag() {
-  TAG=""
   git rev-parse --git-dir
-  if [[ $? == 128 ]]; then
+  git_result=$?
+  if [[ -n "${P_TAG-}" ]]; then
+    TAG="${P_TAG-}" || die
+  elif [[ $git_result == 128 ]]; then
     # not in a Git checkout
     TAG="localbuild-$(date +%y%m%d)" || die
   elif [[ -n "${P_TAG_PREFIX-}" ]]; then
@@ -101,12 +114,13 @@ function calculate_tag() {
 }
 
 function print_params() {
-  echo "IMAGE_NAME: ${IMAGE_NAME-}"
-  echo "TAG:        ${TAG-}"
-  echo "TAG_PREFIX: ${P_TAG_PREFIX-}"
-  echo "PUSH:       ${P_PUSH-}"
-  echo "DOCKER_ORG: ${P_DOCKER_ORG-}"
-  echo "USER:       ${P_USERNAME-}"
+  echo "IMAGE_NAME:    ${IMAGE_NAME-}"
+  echo "TAG:           ${P_TAG-}"
+  echo "TAG_PREFIX:    ${P_TAG_PREFIX-}"
+  echo "Effective tag: ${TAG-}"
+  echo "PUSH:          ${P_PUSH-}"
+  echo "DOCKER_ORG:    ${P_DOCKER_ORG-}"
+  echo "USER:          ${P_USERNAME-}"
 }
 
 parse_args "$@"
