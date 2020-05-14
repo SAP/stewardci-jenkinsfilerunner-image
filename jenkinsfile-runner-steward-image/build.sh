@@ -99,11 +99,13 @@ function check_args() {
 }
 
 function calculate_tag() {
-  git rev-parse --git-dir
-  git_result=$?
   if [[ -n "${P_TAG-}" ]]; then
     TAG="${P_TAG-}" || die
-  elif [[ $git_result == 128 ]]; then
+    return
+  fi
+  git rev-parse --git-dir
+  git_result=$?
+  if [[ $git_result == 128 ]]; then
     # not in a Git checkout
     TAG="localbuild-$(date +%y%m%d)" || die
   elif [[ -n "${P_TAG_PREFIX-}" ]]; then
