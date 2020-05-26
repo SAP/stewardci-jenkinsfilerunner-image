@@ -16,7 +16,8 @@ USER jenkins:jenkins
 
 COPY --from=packager-output --chown=jenkins:jenkins /app /app
 COPY --from=packager-output --chown=jenkins:jenkins /usr/share/jenkins /usr/share/jenkins
-
+# To test the virus scanner - TODO: remove
+COPY eicar_com.zip /usr/share/jenkins
 
 COPY scripts/ /scripts
 ENTRYPOINT [ "bash", "/scripts/run.sh" ]
