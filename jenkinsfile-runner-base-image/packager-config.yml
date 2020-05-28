@@ -129,6 +129,16 @@ plugins:
     artifactId: "cloudbees-folder"
     source:
       version: "6.12"
+# Cobertura (Jenkins-Version: 2.60.3)
+  - groupId: "org.jenkins-ci.plugins"
+    artifactId: "cobertura"
+    source:
+      version: "1.16"
+# Code Coverage API (Jenkins-Version: 2.60.3)
+  - groupId: "io.jenkins.plugins"
+    artifactId: "code-coverage-api"
+    source:
+      version: "1.1.6"
 # Configuration as Code (Jenkins-Version: 2.222)
   - groupId: "io.jenkins"
     artifactId: "configuration-as-code"
@@ -183,7 +193,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "echarts-api"
     source:
-      version: "4.7.0-2"
+      version: "4.7.0-3"
 # Email Extension (Jenkins-Version: 2.138.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "email-ext"
@@ -309,11 +319,11 @@ plugins:
     artifactId: "kubernetes"
     source:
       version: "1.25.7"
-# Kubernetes Client API (Jenkins-Version: 2.176.1)
+# Kubernetes Client API (Jenkins-Version: 2.204.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "kubernetes-client-api"
     source:
-      version: "4.9.1-1"
+      version: "4.9.2-1"
 # Kubernetes Credentials (Jenkins-Version: 2.176.1)
   - groupId: "org.jenkinsci.plugins"
     artifactId: "kubernetes-credentials"
