@@ -1,4 +1,5 @@
 #!/bin/bash
+set -eu -o pipefail
 
 PROJECT_ROOT=$(cd "$(dirname "$BASH_SOURCE")/.."; pwd)
 packagerConfig="${PROJECT_ROOT}/jenkinsfile-runner-base-image/packager-config.yml"
