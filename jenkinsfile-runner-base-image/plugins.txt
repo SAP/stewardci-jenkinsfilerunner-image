@@ -1,5 +1,3 @@
-ant
-badge
 build-timeout
 cobertura
 configuration-as-code
@@ -23,9 +21,6 @@ pipeline-github
 pipeline-github-lib
 pipeline-utility-steps
 pmd
-ssh-agent
 timestamper
-warnings
-warnings-ng
 workflow-aggregator
 ws-cleanup
