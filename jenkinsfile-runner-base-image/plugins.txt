@@ -24,7 +24,6 @@ pipeline-github-lib
 pipeline-utility-steps
 pmd
 ssh-agent
-subversion
 timestamper
 warnings
 warnings-ng
