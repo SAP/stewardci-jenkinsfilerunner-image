@@ -1,7 +1,6 @@
 ant
 badge
 build-timeout
-checkmarx
 cobertura
 configuration-as-code
 configuration-as-code-groovy
