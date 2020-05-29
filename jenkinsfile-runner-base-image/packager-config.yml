@@ -18,7 +18,7 @@ buildSettings:
         git: https://github.com/jenkinsci/jenkinsfile-runner.git
         branch: "1.0-beta-12"
     docker:
-      base: "jenkins/jenkins:2.222.3-alpine"
+      base: "jenkins/jenkins:2.222.4-alpine"
       tag: "jenkinsfile-runner-base-local"
       build: true
 
@@ -26,7 +26,7 @@ war:
   groupId: "org.jenkins-ci.main"
   artifactId: "jenkins-war"
   source:
-    version: "2.222.3"
+    version: "2.222.4"
 
 systemProperties:
     jenkins.model.Jenkins.slaveAgentPort: "50000"
