@@ -1,3 +1,4 @@
+badge
 build-timeout
 cobertura
 configuration-as-code
