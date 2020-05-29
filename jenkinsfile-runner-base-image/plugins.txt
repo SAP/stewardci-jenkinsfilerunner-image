@@ -19,7 +19,6 @@ influxdb
 jacoco
 kubernetes
 kubernetes-credentials-provider
-nexus-artifact-uploader
 pipeline-github
 pipeline-github-lib
 pipeline-utility-steps
