@@ -23,7 +23,7 @@ pipeline-github-lib
 pipeline-utility-steps
 pmd
 timestamper
-workflow-aggregator
 warnings
 warnings-ng
+workflow-aggregator
 ws-cleanup

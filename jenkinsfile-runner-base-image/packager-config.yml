@@ -169,11 +169,6 @@ plugins:
     artifactId: "docker-commons"
     source:
       version: "1.16"
-# Docker Pipeline (Jenkins-Version: 2.150.3)
-  - groupId: "org.jenkins-ci.plugins"
-    artifactId: "docker-workflow"
-    source:
-      version: "1.23"
 # Durable Task (Jenkins-Version: 2.150.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "durable-task"
@@ -229,16 +224,16 @@ plugins:
     artifactId: "github"
     source:
       version: "1.30.0"
-# GitHub API (Jenkins-Version: 2.150.3)
+# GitHub API (Jenkins-Version: 2.164.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "github-api"
     source:
-      version: "1.111"
+      version: "1.111.4"
 # GitHub Branch Source (Jenkins-Version: 2.164.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "github-branch-source"
     source:
-      version: "2.7.1"
+      version: "2.7.2"
 # Google OAuth Credentials (Jenkins-Version: 2.138.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "google-oauth-plugin"
@@ -384,26 +379,21 @@ plugins:
     artifactId: "pipeline-milestone-step"
     source:
       version: "1.3.1"
-# Pipeline: Model API (Jenkins-Version: 2.150.3)
+# Pipeline: Model API (Jenkins-Version: 2.176.4)
   - groupId: "org.jenkinsci.plugins"
     artifactId: "pipeline-model-api"
     source:
-      version: "1.6.0"
-# Pipeline: Declarative Agent API (Jenkins-Version: 2.7.1)
-  - groupId: "org.jenkinsci.plugins"
-    artifactId: "pipeline-model-declarative-agent"
-    source:
-      version: "1.1.1"
-# Pipeline: Declarative (Jenkins-Version: 2.150.3)
+      version: "1.7.0"
+# Pipeline: Declarative (Jenkins-Version: 2.176.4)
   - groupId: "org.jenkinsci.plugins"
     artifactId: "pipeline-model-definition"
     source:
-      version: "1.6.0"
-# Pipeline: Declarative Extension Points API (Jenkins-Version: 2.150.3)
+      version: "1.7.0"
+# Pipeline: Declarative Extension Points API (Jenkins-Version: 2.176.4)
   - groupId: "org.jenkinsci.plugins"
     artifactId: "pipeline-model-extensions"
     source:
-      version: "1.6.0"
+      version: "1.7.0"
 # Pipeline: REST API (Jenkins-Version: 2.60.3)
   - groupId: "org.jenkins-ci.plugins.pipeline-stage-view"
     artifactId: "pipeline-rest-api"
@@ -414,11 +404,11 @@ plugins:
     artifactId: "pipeline-stage-step"
     source:
       version: "2.3"
-# Pipeline: Stage Tags Metadata (Jenkins-Version: 2.150.3)
+# Pipeline: Stage Tags Metadata (Jenkins-Version: 2.176.4)
   - groupId: "org.jenkinsci.plugins"
     artifactId: "pipeline-stage-tags-metadata"
     source:
-      version: "1.6.0"
+      version: "1.7.0"
 # Pipeline: Stage View (Jenkins-Version: 2.60.3)
   - groupId: "org.jenkins-ci.plugins.pipeline-stage-view"
     artifactId: "pipeline-stage-view"
