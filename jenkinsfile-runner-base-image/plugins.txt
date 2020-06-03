@@ -1,7 +1,6 @@
-ant
 badge
 build-timeout
-checkmarx
+cobertura
 configuration-as-code
 configuration-as-code-groovy
 credentials
@@ -19,13 +18,10 @@ influxdb
 jacoco
 kubernetes
 kubernetes-credentials-provider
-nexus-artifact-uploader
 pipeline-github
 pipeline-github-lib
 pipeline-utility-steps
 pmd
-ssh-agent
-subversion
 timestamper
 warnings
 warnings-ng

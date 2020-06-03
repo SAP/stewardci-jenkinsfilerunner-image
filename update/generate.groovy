@@ -4,7 +4,7 @@ import groovy.json.JsonOutput
 wantedPlugins = [:]
 resultingPlugins = [:]
 updateCenter = null
-debug = false
+verbose = true
 
 if(args.length == 1) {
     process(args[0], "-cwp")
@@ -13,17 +13,17 @@ if(args.length == 1) {
         skipOptional = (args.length == 3 && args[2] == "--skip-optional")
         process(args[0], args[1], skipOptional)
     } else {
-        println("Unknown argument " + args[1])
+        System.err.println("Unknown argument " + args[1])
     }
 } else {
-    println "Usage: groovy generate.groovy <pluginsListFile> <outputFormat> [--skip-optional]"
-    println "    pluginsListFile         Path to a file with plugin names (new line separated) of wanted plugins"
-    println "    outputFormat    -cwp    Custom War Packager packager-config.yml format (default)"
-    println "                    -list   Simple list of plugin names"
-    println "                    -tree   Print the dependency tree of each plugin"
-    println "    --skip-optional         Do not include optional plugin dependencies"
-    println ""
-    println "e.g. groovy generate.groovy plugins.txt -cwp"
+    System.err.println "Usage: groovy generate.groovy <pluginsListFile> <outputFormat> [--skip-optional]"
+    System.err.println "    pluginsListFile         Path to a file with plugin names (new line separated) of wanted plugins"
+    System.err.println "    outputFormat    -cwp    Custom War Packager packager-config.yml format (default)"
+    System.err.println "                    -list   Simple list of plugin names"
+    System.err.println "                    -tree   Print the dependency tree of each plugin"
+    System.err.println "    --skip-optional         Do not include optional plugin dependencies"
+    System.err.println ""
+    System.err.println "e.g. groovy generate.groovy plugins.txt -cwp"
 }
 
 def process(wantedPluginsFile, outFormat, skipOptional) {
@@ -45,8 +45,8 @@ def process(wantedPluginsFile, outFormat, skipOptional) {
         def wantedPlugin = updateCenter.plugins[wanted]
         wantedPlugins[wantedPlugin.name] = wantedPlugin
         resultingPlugins[wantedPlugin.name] = wantedPlugin
-        if(debug) println "Added: " + wantedPlugin.name
-        addDependencies(wantedPlugin, skipOptional)
+        if(verbose) System.err.println "Added: " + wantedPlugin.name
+        addDependencies(wantedPlugin, skipOptional, "  ")
     }
 
     if(outFormat == "-list") {
@@ -77,27 +77,28 @@ def process(wantedPluginsFile, outFormat, skipOptional) {
             plugin = wantedPlugins[pluginKey]
             printDependencyTree(plugin, 0, "wanted")
         }
-        println("--- Statistics -------------------------")
-        println("Wanted plugins:    " + wantedPlugins.size())
-        println("Resulting plugins: " + resultingPlugins.size())
+        System.err.println("--- Statistics -------------------------")
+        System.err.println("Wanted plugins:    " + wantedPlugins.size())
+        System.err.println("Resulting plugins: " + resultingPlugins.size())
     }
 
 }
 
-def addDependencies(plugin, skipOptional) {
+def addDependencies(plugin, skipOptional, indent) {
     //println "addDependencies(" + plugin + ")"
     for(dependency in plugin.dependencies){
         if(skipOptional && dependency.optional) {
+            if(verbose) System.err.println indent + "- Skipped dependency (of " + plugin.name + "): " + dependency.name + " [optional]"
             continue;
         }
         def dependencyPlugin = updateCenter.plugins[dependency.name]
         if(dependencyPlugin) {
             resultingPlugins[dependency.name] = dependencyPlugin
-            if(debug) println "Added dependency (of " + plugin.name + "): " + dependencyPlugin.name
-            addDependencies(dependencyPlugin, skipOptional)
+            if(verbose) System.err.println indent + "- Added dependency (of " + plugin.name + "): " + dependencyPlugin.name
+            addDependencies(dependencyPlugin, skipOptional, indent+"  ")
         } else {
             if(dependency.optional) {
-                println "ERROR: Could not find (optional) dependency " + dependency
+                System.err.println indent + "- ERROR: Could not find (optional) dependency " + dependency
             } else {
                 throw new RuntimeException("Could not find (required) dependency " + dependency)
             }
