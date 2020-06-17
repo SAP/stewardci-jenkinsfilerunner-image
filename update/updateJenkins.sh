@@ -6,7 +6,7 @@ ROOT=$(cd "$(dirname "$BASH_SOURCE")"; pwd)
 printf "This is not automated yet - update packager-config.yml manually!\n"
 
 
-latestLTSLine=`curl https://www.jenkins.io/changelog-stable/ | grep "^What's new in" -m1`
+latestLTSLine=`curl https://www.jenkins.io/changelog/ | grep "^What's new in" -m1`
 latestMessage=`echo $latestLTSLine | sed s/'.*in '/'Latest LTS: '/g`
 echo $latestMessage
 
