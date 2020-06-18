@@ -18,7 +18,7 @@ buildSettings:
         git: https://github.com/jenkinsci/jenkinsfile-runner.git
         branch: "1.0-beta-12"
     docker:
-      base: "jenkins/jenkins:2.241-alpine"
+      base: "jenkins/jenkins:2.235.1-alpine"
       tag: "jenkinsfile-runner-base-local"
       build: true
 
@@ -26,7 +26,7 @@ war:
   groupId: "org.jenkins-ci.main"
   artifactId: "jenkins-war"
   source:
-    version: "2.241"
+    version: "2.235.1"
 
 systemProperties:
     jenkins.model.Jenkins.slaveAgentPort: "50000"
@@ -164,11 +164,6 @@ plugins:
     artifactId: "display-url-api"
     source:
       version: "2.3.2"
-# Docker Commons (Jenkins-Version: 2.150.1)
-  - groupId: "org.jenkins-ci.plugins"
-    artifactId: "docker-commons"
-    source:
-      version: "1.16"
 # Durable Task (Jenkins-Version: 2.150.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "durable-task"
@@ -234,11 +229,6 @@ plugins:
     artifactId: "github-branch-source"
     source:
       version: "2.8.2"
-# Google OAuth Credentials (Jenkins-Version: 2.138.4)
-  - groupId: "org.jenkins-ci.plugins"
-    artifactId: "google-oauth-plugin"
-    source:
-      version: "1.0.0"
 # Gradle (Jenkins-Version: 2.138.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "gradle"
@@ -309,11 +299,11 @@ plugins:
     artifactId: "kubernetes-client-api"
     source:
       version: "4.9.2-2"
-# Kubernetes Credentials (Jenkins-Version: 2.176.1)
+# Kubernetes Credentials (Jenkins-Version: 2.204.6)
   - groupId: "org.jenkinsci.plugins"
     artifactId: "kubernetes-credentials"
     source:
-      version: "0.6.2"
+      version: "0.7.0"
 # Kubernetes Credentials Provider (Jenkins-Version: 2.190.1)
   - groupId: "com.cloudbees.jenkins.plugins"
     artifactId: "kubernetes-credentials-provider"
@@ -344,11 +334,6 @@ plugins:
     artifactId: "momentjs"
     source:
       version: "1.1.1"
-# OAuth Credentials (Jenkins-Version: 2.138.4)
-  - groupId: "org.jenkins-ci.plugins"
-    artifactId: "oauth-credentials"
-    source:
-      version: "0.4"
 # OkHttp (Jenkins-Version: 2.164.3)
   - groupId: "io.jenkins.plugins"
     artifactId: "okhttp-api"
