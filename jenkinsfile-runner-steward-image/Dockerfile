@@ -1,5 +1,5 @@
 FROM jenkinsfile-runner-base-local as packager-output
-FROM openjdk:8-alpine
+FROM openjdk:8-alpine3.9
 
 RUN apk add jq python3 xmlstarlet bash git
 RUN addgroup -g 1000 jenkins && adduser -D -u 1000 -G jenkins jenkins
