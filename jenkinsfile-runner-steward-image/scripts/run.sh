@@ -129,15 +129,17 @@ function random_alnum() {
 }
 
 function configure_log_elasticsearch() {
-  if [[ -z "${PIPELINE_LOG_ELASTICSEARCH_INDEX_URL}" ]]; then
-    echo "{}" > "${_JENKINS_CASC_D}/log-elasticsearch.yml"
-  else
-    if [[ -z "${PIPELINE_LOG_ELASTICSEARCH_RUN_ID_JSON}" ]]; then
-      >&2 echo "error: parameter PIPELINE_LOG_ELASTICSEARCH_RUN_ID_JSON is not specified"
-      return 1
+  {
+    if [[ $PIPELINE_LOG_ELASTICSEARCH_INDEX_URL ]]; then
+      if [[ ! $PIPELINE_LOG_ELASTICSEARCH_RUN_ID_JSON ]]; then
+        echo "error: parameter PIPELINE_LOG_ELASTICSEARCH_RUN_ID_JSON is not specified" >&2
+        return 1
+      fi
+      jq -n -f "${HERE}/elasticsearch-log-config.jq"
+    else
+      echo "{}"
     fi
-    jq -n -f "${HERE}/elastic_search_config.json" > "${_JENKINS_CASC_D}/log-elasticsearch.yml" || return 1
-  fi
+  } >"${_JENKINS_CASC_D}/log-elasticsearch.yml" || return 1
 }
 
 casc_yml="${_JENKINS_CASC_D}/casc.yml"
