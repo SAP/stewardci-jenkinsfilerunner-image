@@ -157,7 +157,7 @@ with_termination_log rm -f ~/.git-credentials || exit 1
 
 with_termination_log sed -i "s/0.0.0.0/$(hostname -i)/g" "$casc_yml" || exit 1
 with_termination_log sed -i "s/xxx/$RUN_NAMESPACE/" "$casc_yml" || exit 1
-configure_log_elasticsearch || exit 1
+with_termination_log configure_log_elasticsearch || exit 1
 
 with_termination_log mkdir -p "${_JENKINS_HOME}" || exit 1
 
