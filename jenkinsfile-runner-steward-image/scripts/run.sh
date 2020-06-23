@@ -131,10 +131,6 @@ function random_alnum() {
 function configure_log_elasticsearch() {
   {
     if [[ $PIPELINE_LOG_ELASTICSEARCH_INDEX_URL ]]; then
-      if [[ ! $PIPELINE_LOG_ELASTICSEARCH_RUN_ID_JSON ]]; then
-        echo "error: parameter PIPELINE_LOG_ELASTICSEARCH_RUN_ID_JSON is not specified" >&2
-        return 1
-      fi
       jq -n -f "${HERE}/elasticsearch-log-config.jq"
     else
       echo "{}"
