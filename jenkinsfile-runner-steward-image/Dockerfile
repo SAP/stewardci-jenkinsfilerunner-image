@@ -1,7 +1,7 @@
 FROM jenkinsfile-runner-base-local as packager-output
 FROM openjdk:8-alpine3.9
 
-RUN apk add jq python3 xmlstarlet bash git
+RUN apk add jq xmlstarlet bash git
 RUN addgroup -g 1000 jenkins && adduser -D -u 1000 -G jenkins jenkins
 RUN mkdir -p /run && chmod o+w /run
 RUN mkdir /jenkins_home && chown jenkins:jenkins /jenkins_home

@@ -129,7 +129,13 @@ function random_alnum() {
 }
 
 function configure_log_elasticsearch() {
-  with_termination_log python3 -b -B -E -I "${HERE}/create_elasticsearch_log_config.py" > "${_JENKINS_CASC_D}/log-elasticsearch.yml" || return 1
+  {
+    if [[ $PIPELINE_LOG_ELASTICSEARCH_INDEX_URL ]]; then
+      jq -n -f "${HERE}/elasticsearch-log-config.jq"
+    else
+      echo "{}"
+    fi
+  } >"${_JENKINS_CASC_D}/log-elasticsearch.yml" || return 1
 }
 
 casc_yml="${_JENKINS_CASC_D}/casc.yml"
@@ -147,7 +153,7 @@ with_termination_log rm -f ~/.git-credentials || exit 1
 
 with_termination_log sed -i "s/0.0.0.0/$(hostname -i)/g" "$casc_yml" || exit 1
 with_termination_log sed -i "s/xxx/$RUN_NAMESPACE/" "$casc_yml" || exit 1
-configure_log_elasticsearch || exit 1
+with_termination_log configure_log_elasticsearch || exit 1
 
 with_termination_log mkdir -p "${_JENKINS_HOME}" || exit 1
 
