@@ -84,11 +84,11 @@ plugins:
     artifactId: "apache-httpcomponents-client-4-api"
     source:
       version: "4.5.10-2.0"
-# Authentication Tokens API (Jenkins-Version: 1.580.1)
+# Authentication Tokens API (Jenkins-Version: 2.176.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "authentication-tokens"
     source:
-      version: "1.3"
+      version: "1.4"
 # Badge (Jenkins-Version: 2.60.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "badge"
@@ -143,7 +143,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "credentials"
     source:
-      version: "2.3.9"
+      version: "2.3.10"
 # Credentials Binding (Jenkins-Version: 2.164.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "credentials-binding"
@@ -173,7 +173,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "echarts-api"
     source:
-      version: "4.7.0-4"
+      version: "4.8.0-1"
 # Email Extension (Jenkins-Version: 2.138.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "email-ext"
@@ -199,16 +199,16 @@ plugins:
     artifactId: "gatling"
     source:
       version: "1.3.0"
-# Git (Jenkins-Version: 2.138.4)
+# Git (Jenkins-Version: 2.204.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "git"
     source:
-      version: "4.2.2"
-# Git client (Jenkins-Version: 2.138.4)
+      version: "4.3.0"
+# Git client (Jenkins-Version: 2.204.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "git-client"
     source:
-      version: "3.2.1"
+      version: "3.3.0"
 # GIT server (Jenkins-Version: 2.138.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "git-server"
@@ -223,7 +223,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "github-api"
     source:
-      version: "1.114.2"
+      version: "1.114.3"
 # GitHub Branch Source (Jenkins-Version: 2.164.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "github-branch-source"
@@ -263,7 +263,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "jacoco"
     source:
-      version: "3.0.6"
+      version: "3.0.7"
 # Javadoc (Jenkins-Version: 2.60.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "javadoc"
@@ -293,7 +293,7 @@ plugins:
   - groupId: "org.csanchez.jenkins.plugins"
     artifactId: "kubernetes"
     source:
-      version: "1.26.1"
+      version: "1.26.2"
 # Kubernetes Client API (Jenkins-Version: 2.204.6)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "kubernetes-client-api"
@@ -338,7 +338,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "okhttp-api"
     source:
-      version: "3.12.12.2"
+      version: "3.14.9"
 # Pipeline: Build Step (Jenkins-Version: 2.138.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "pipeline-build-step"
@@ -389,11 +389,11 @@ plugins:
     artifactId: "pipeline-rest-api"
     source:
       version: "2.13"
-# Pipeline: Stage Step (Jenkins-Version: 1.642.3)
+# Pipeline: Stage Step (Jenkins-Version: 2.60.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "pipeline-stage-step"
     source:
-      version: "2.3"
+      version: "2.4"
 # Pipeline: Stage Tags Metadata (Jenkins-Version: 2.176.4)
   - groupId: "org.jenkinsci.plugins"
     artifactId: "pipeline-stage-tags-metadata"
@@ -484,11 +484,11 @@ plugins:
     artifactId: "warnings"
     source:
       version: "5.0.1"
-# Warnings Next Generation (Jenkins-Version: 2.138.4)
+# Warnings Next Generation (Jenkins-Version: 2.204.4)
   - groupId: "io.jenkins.plugins"
     artifactId: "warnings-ng"
     source:
-      version: "8.1.0"
+      version: "8.2.0"
 # Pipeline (Jenkins-Version: 2.130)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-aggregator"
