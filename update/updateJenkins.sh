@@ -1,15 +1,43 @@
 #!/bin/bash
-exec 2> /dev/null
+set -eu -o pipefail
+exec <&-
 
-ROOT=$(cd "$(dirname "$BASH_SOURCE")"; pwd)
+PROJECT_ROOT=$(cd "$(dirname "$BASH_SOURCE")/.." && pwd) || {
+    echo >&2 "failed to determine script location"
+    exit 1
+}
 
-printf "This is not automated yet - update packager-config.yml manually!\n"
+packagerConfig="${PROJECT_ROOT}/jenkinsfile-runner-base-image/packager-config.yml"
 
 
-latestLTSLine=`curl https://www.jenkins.io/changelog-stable/ | grep "^What's new in" -m1`
-latestMessage=`echo $latestLTSLine | sed s/'.*in '/'Latest LTS: '/g`
-echo $latestMessage
+function main() {
+    echo "This is not automated yet - update packager-config.yml manually!"
 
-currentVersion=`cat ${ROOT}/../jenkinsfile-runner-base-image/packager-config.yml | grep "base:"`
-currentMessage=`echo $currentVersion | sed s/'.*base: '/'Current base: '/g`
-echo $currentMessage
+    printLatestLTSVersion
+    printCurrentBase
+}
+
+function printLatestLTSVersion() {
+    local s
+    s=$(curl -sL 'https://www.jenkins.io/changelog-stable/') || {
+        echo >&2 "failed to download Jenkins LTS changelog"
+        exit 1
+    }
+    s=$(<<<"$s" grep "^What's new in" -m1) || {
+        echo >&2 "failed to extract version from Jenkins LTS changelog"
+        exit 1
+    }
+    <<<"$s" sed -e 's/.*in /Latest LTS: /g'
+}
+
+function printCurrentBase() {
+    local s
+    s=$(grep -e "base:" "$packagerConfig") || {
+        echo >&2 "failed to extract base version from $packagerConfig"
+        exit 1
+    }
+    <<<"$s" sed -e 's/.*base: /Current base: /'
+}
+
+
+main "$@"
