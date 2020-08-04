@@ -64,6 +64,11 @@ plugins:
     artifactId: "ace-editor"
     source:
       version: "1.1"
+# Static Analysis Collector (Jenkins-Version: 1.625.1)
+  - groupId: "org.jvnet.hudson.plugins"
+    artifactId: "analysis-collector"
+    source:
+      version: "2.0.0"
 # Static Analysis Utilities (Jenkins-Version: 1.625.1)
   - groupId: "org.jvnet.hudson.plugins"
     artifactId: "analysis-core"
@@ -114,6 +119,11 @@ plugins:
     artifactId: "build-timeout"
     source:
       version: "1.20"
+# Checks API (Jenkins-Version: 2.204.4)
+  - groupId: "io.jenkins.plugins"
+    artifactId: "checks-api"
+    source:
+      version: "0.2.0"
 # Folders (Jenkins-Version: 2.176.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "cloudbees-folder"
@@ -133,7 +143,7 @@ plugins:
   - groupId: "io.jenkins"
     artifactId: "configuration-as-code"
     source:
-      version: "1.41"
+      version: "1.43"
 # Configuration as Code Plugin - Groovy Scripting Extension (Jenkins-Version: 2.60.3)
   - groupId: "io.jenkins.plugins"
     artifactId: "configuration-as-code-groovy"
@@ -174,11 +184,11 @@ plugins:
     artifactId: "echarts-api"
     source:
       version: "4.8.0-2"
-# Email Extension (Jenkins-Version: 2.138.4)
+# Email Extension (Jenkins-Version: 2.164.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "email-ext"
     source:
-      version: "2.69"
+      version: "2.72"
 # FindBugs (Jenkins-Version: 1.625.1)
   - groupId: "org.jvnet.hudson.plugins"
     artifactId: "findbugs"
@@ -208,7 +218,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "git-client"
     source:
-      version: "3.3.1"
+      version: "3.3.2"
 # GIT server (Jenkins-Version: 2.138.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "git-server"
@@ -228,7 +238,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "github-branch-source"
     source:
-      version: "2.8.2"
+      version: "2.8.3"
 # Gradle (Jenkins-Version: 2.138.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "gradle"
@@ -253,12 +263,12 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "influxdb"
     source:
-      version: "2.3"
-# Jackson 2 API (Jenkins-Version: 2.164.3)
+      version: "2.4"
+# Jackson 2 API (Jenkins-Version: 2.222.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "jackson2-api"
     source:
-      version: "2.11.1"
+      version: "2.11.2"
 # JaCoCo (Jenkins-Version: 2.150.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "jacoco"
@@ -268,7 +278,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "javadoc"
     source:
-      version: "1.5"
+      version: "1.6"
 # JavaScript GUI Lib: jQuery bundles (jQuery and jQuery UI) (Jenkins-Version: 1.580.1)
   - groupId: "org.jenkins-ci.ui"
     artifactId: "jquery-detached"
@@ -284,11 +294,11 @@ plugins:
     artifactId: "jsch"
     source:
       version: "0.1.55.2"
-# JUnit (Jenkins-Version: 2.164.3)
+# JUnit (Jenkins-Version: 2.204.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "junit"
     source:
-      version: "1.29"
+      version: "1.30"
 # Kubernetes (Jenkins-Version: 2.222.4)
   - groupId: "org.csanchez.jenkins.plugins"
     artifactId: "kubernetes"
@@ -463,7 +473,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "timestamper"
     source:
-      version: "1.11.3"
+      version: "1.11.5"
 # Token Macro (Jenkins-Version: 2.121.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "token-macro"
@@ -488,7 +498,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "warnings-ng"
     source:
-      version: "8.3.0"
+      version: "8.4.0"
 # Pipeline (Jenkins-Version: 2.130)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-aggregator"
@@ -508,7 +518,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-cps"
     source:
-      version: "2.81"
+      version: "2.82"
 # Pipeline: Shared Groovy Libraries (Jenkins-Version: 2.176.4)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-cps-global-lib"
@@ -524,11 +534,11 @@ plugins:
     artifactId: "workflow-job"
     source:
       version: "2.39"
-# Pipeline: Multibranch (Jenkins-Version: 2.121.1)
+# Pipeline: Multibranch (Jenkins-Version: 2.176.4)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-multibranch"
     source:
-      version: "2.21"
+      version: "2.22"
 # Pipeline: SCM Step (Jenkins-Version: 2.60)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-scm-step"

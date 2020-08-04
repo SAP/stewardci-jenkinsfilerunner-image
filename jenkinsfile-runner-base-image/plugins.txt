@@ -1,3 +1,4 @@
+analysis-collector
 badge
 build-timeout
 cobertura
