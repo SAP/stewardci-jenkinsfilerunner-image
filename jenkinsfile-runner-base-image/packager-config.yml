@@ -64,6 +64,11 @@ plugins:
     artifactId: "ace-editor"
     source:
       version: "1.1"
+# Static Analysis Collector (Jenkins-Version: 1.625.1)
+  - groupId: "org.jvnet.hudson.plugins"
+    artifactId: "analysis-collector"
+    source:
+      version: "2.0.0"
 # Static Analysis Utilities (Jenkins-Version: 1.625.1)
   - groupId: "org.jvnet.hudson.plugins"
     artifactId: "analysis-core"
@@ -184,11 +189,6 @@ plugins:
     artifactId: "email-ext"
     source:
       version: "2.72"
-# FindBugs (Jenkins-Version: 1.625.1)
-  - groupId: "org.jvnet.hudson.plugins"
-    artifactId: "findbugs"
-    source:
-      version: "5.0.0"
 # Font Awesome API (Jenkins-Version: 2.138.4)
   - groupId: "io.jenkins.plugins"
     artifactId: "font-awesome-api"
@@ -344,6 +344,11 @@ plugins:
     artifactId: "okhttp-api"
     source:
       version: "3.14.9"
+# Performance (Jenkins-Version: 1.642.3)
+  - groupId: "org.jenkins-ci.plugins"
+    artifactId: "performance"
+    source:
+      version: "3.18"
 # Pipeline: Build Step (Jenkins-Version: 2.138.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "pipeline-build-step"

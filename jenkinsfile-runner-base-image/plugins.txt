@@ -1,3 +1,4 @@
+analysis-collector
 badge
 build-timeout
 cobertura
@@ -7,7 +8,6 @@ credentials
 credentials-binding
 cucumber-testresult-plugin
 email-ext
-findbugs
 gatling
 git
 github
@@ -18,6 +18,7 @@ influxdb
 jacoco
 kubernetes
 kubernetes-credentials-provider
+performance
 pipeline-github
 pipeline-github-lib
 pipeline-utility-steps
