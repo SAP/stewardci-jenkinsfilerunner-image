@@ -21,7 +21,6 @@ kubernetes-credentials-provider
 pipeline-github
 pipeline-github-lib
 pipeline-utility-steps
-pmd
 timestamper
 warnings
 warnings-ng
