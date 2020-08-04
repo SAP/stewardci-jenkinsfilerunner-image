@@ -7,7 +7,6 @@ credentials
 credentials-binding
 cucumber-testresult-plugin
 email-ext
-findbugs
 gatling
 git
 github
