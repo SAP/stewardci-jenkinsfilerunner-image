@@ -123,7 +123,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "checks-api"
     source:
-      version: "0.2.0"
+      version: "0.2.2"
 # Folders (Jenkins-Version: 2.176.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "cloudbees-folder"
@@ -134,11 +134,11 @@ plugins:
     artifactId: "cobertura"
     source:
       version: "1.16"
-# Code Coverage API (Jenkins-Version: 2.60.3)
+# Code Coverage API (Jenkins-Version: 2.204.6)
   - groupId: "io.jenkins.plugins"
     artifactId: "code-coverage-api"
     source:
-      version: "1.1.6"
+      version: "1.2.0"
 # Configuration as Code (Jenkins-Version: 2.222)
   - groupId: "io.jenkins"
     artifactId: "configuration-as-code"
@@ -349,11 +349,11 @@ plugins:
     artifactId: "performance"
     source:
       version: "3.18"
-# Pipeline: Build Step (Jenkins-Version: 2.138.4)
+# Pipeline: Build Step (Jenkins-Version: 2.176.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "pipeline-build-step"
     source:
-      version: "2.12"
+      version: "2.13"
 # Pipeline: GitHub (Jenkins-Version: 2.164.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "pipeline-github"
