@@ -18,7 +18,6 @@ influxdb
 jacoco
 kubernetes
 kubernetes-credentials-provider
-performance
 pipeline-github
 pipeline-github-lib
 pipeline-utility-steps

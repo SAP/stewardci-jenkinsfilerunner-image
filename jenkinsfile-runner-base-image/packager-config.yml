@@ -18,7 +18,7 @@ buildSettings:
         git: https://github.com/jenkinsci/jenkinsfile-runner.git
         branch: "1.0-beta-12"
     docker:
-      base: "jenkins/jenkins:2.235.2-alpine"
+      base: "jenkins/jenkins:2.235.3-alpine"
       tag: "jenkinsfile-runner-base-local"
       build: true
 
@@ -26,7 +26,7 @@ war:
   groupId: "org.jenkins-ci.main"
   artifactId: "jenkins-war"
   source:
-    version: "2.235.2"
+    version: "2.235.3"
 
 systemProperties:
     jenkins.model.Jenkins.slaveAgentPort: "50000"
@@ -188,7 +188,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "email-ext"
     source:
-      version: "2.72"
+      version: "2.73"
 # Font Awesome API (Jenkins-Version: 2.138.4)
   - groupId: "io.jenkins.plugins"
     artifactId: "font-awesome-api"
@@ -344,11 +344,6 @@ plugins:
     artifactId: "okhttp-api"
     source:
       version: "3.14.9"
-# Performance (Jenkins-Version: 1.642.3)
-  - groupId: "org.jenkins-ci.plugins"
-    artifactId: "performance"
-    source:
-      version: "3.18"
 # Pipeline: Build Step (Jenkins-Version: 2.176.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "pipeline-build-step"
