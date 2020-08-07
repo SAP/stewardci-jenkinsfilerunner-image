@@ -160,11 +160,8 @@ with_termination_log mkdir -p "${_JENKINS_HOME}" || exit 1
 export -n "${PARAM_VARS_MANDATORY[@]}" "${PARAM_VARS_OPTIONAL[@]}" || exit 1 # do not pass to subprocesses
 make_jfr_pipeline_param_args JFR_PIPELINE_PARAM_ARGS || exit 1
 jfr_err_log=$(mktempfile "error-" ".log") || exit 1
-export JAVA_OPTS="-Dhudson.TcpSlaveAgentListener.hostName=$(hostname -i)"
 
-# The following is a workaround until this PR is released: https://github.com/jenkinsci/kubernetes-plugin/pull/628
-# Jenkinsfile Runner does not expose a UI, so this URL is fake...
-export JAVA_OPTS="${JAVA_OPTS} -DKUBERNETES_JENKINS_URL=http://jenkinsfilerunner/"
+export JAVA_OPTS="${JAVA_OPTS:+$JAVA_OPTS }-Dhudson.TcpSlaveAgentListener.hostName=$(hostname -i)"
 
 jfr_cmd=(
   /app/bin/jenkinsfile-runner
