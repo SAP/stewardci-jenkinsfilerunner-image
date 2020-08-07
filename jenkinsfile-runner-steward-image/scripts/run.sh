@@ -161,7 +161,7 @@ export -n "${PARAM_VARS_MANDATORY[@]}" "${PARAM_VARS_OPTIONAL[@]}" || exit 1 # d
 make_jfr_pipeline_param_args JFR_PIPELINE_PARAM_ARGS || exit 1
 jfr_err_log=$(mktempfile "error-" ".log") || exit 1
 
-export JAVA_OPTS="${JAVA_OPTS} -Dhudson.TcpSlaveAgentListener.hostName=$(hostname -i)"
+export JAVA_OPTS="${JAVA_OPTS:-} -Dhudson.TcpSlaveAgentListener.hostName=$(hostname -i)"
 
 jfr_cmd=(
   /app/bin/jenkinsfile-runner
