@@ -1,3 +1,4 @@
+analysis-collector
 badge
 build-timeout
 cobertura
@@ -7,7 +8,6 @@ credentials
 credentials-binding
 cucumber-testresult-plugin
 email-ext
-findbugs
 gatling
 git
 github
@@ -21,7 +21,6 @@ kubernetes-credentials-provider
 pipeline-github
 pipeline-github-lib
 pipeline-utility-steps
-pmd
 timestamper
 warnings
 warnings-ng
