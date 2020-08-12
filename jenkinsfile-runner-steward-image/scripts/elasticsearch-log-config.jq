@@ -24,8 +24,8 @@ def mandatory_param(name):
   "unclassified": {
     "elasticSearchLogs": {
       "elasticSearch": {
-        "certificateId": ( $certificateId | null_if_empty ),
-        "credentialsId": ( $credentialsId | null_if_empty ),
+        "certificateId": null,
+        "credentialsId": null,
         "elasticsearchWriteAccess": "esDirectWrite",
         "runIdProvider": {
           "json": {
@@ -37,7 +37,7 @@ def mandatory_param(name):
           }
         },
         "saveAnnotations": false,
-        "writeAnnotationsToLogFile": false,
+        "writeAnnotationsToLogFile": true,
         "url": $indexURL
       }
     }
