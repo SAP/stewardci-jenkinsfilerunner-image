@@ -37,7 +37,7 @@ def mandatory_param(name):
           }
         },
         "saveAnnotations": false,
-        "writeAnnotationsToLogFile": true,
+        "writeAnnotationsToLogFile": false,
         "url": $indexURL
       }
     }
