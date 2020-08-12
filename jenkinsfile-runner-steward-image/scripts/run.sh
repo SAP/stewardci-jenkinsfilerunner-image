@@ -16,6 +16,9 @@ PARAM_VARS_OPTIONAL=(
   'PIPELINE_LOG_ELASTICSEARCH_AUTH_SECRET'
   'PIPELINE_LOG_ELASTICSEARCH_TRUSTEDCERTS_SECRET'
   'PIPELINE_LOG_ELASTICSEARCH_RUN_ID_JSON'
+  'PIPELINE_LOG_FLUENTD_HOST'
+  'PIPELINE_LOG_FLUENTD_PORT'
+  'PIPELINE_LOG_FLUENTD_TAG'
   'JOB_NAME'
   'RUN_NUMBER'
   'RUN_CAUSE'
@@ -133,6 +136,9 @@ function configure_log_elasticsearch() {
     if [[ $PIPELINE_LOG_ELASTICSEARCH_INDEX_URL ]]; then
       jq -n -f "${HERE}/elasticsearch-log-config.jq"
     else
+      if [[ $PIPELINE_LOG_FLUENTD_HOST ]]; then
+        jq -n -f "${HERE}/fluentd-log-config.jq"
+      fi
       echo "{}"
     fi
   } >"${_JENKINS_CASC_D}/log-elasticsearch.yml" || return 1
