@@ -9,3 +9,6 @@ jenkins:
       name: "kubernetes"
       namespace: "xxx"
       serverUrl: "https://kubernetes.default"
+unclassified:
+  location:
+    adminAddress: "noreply@sap.com"
