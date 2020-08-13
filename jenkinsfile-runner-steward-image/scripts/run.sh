@@ -133,10 +133,10 @@ function random_alnum() {
 
 function configure_log_elasticsearch() {
   {
-    if [[ $PIPELINE_LOG_ELASTICSEARCH_INDEX_URL ]]; then
+    if [[ -n "${PIPELINE_LOG_ELASTICSEARCH_INDEX_URL:-}" ]]; then
       jq -n -f "${HERE}/elasticsearch-log-config.jq"
     else
-      if [[ $PIPELINE_LOG_FLUENTD_HOST ]]; then
+      if [[ -n "${PIPELINE_LOG_FLUENTD_HOST:-}" ]]; then
         jq -n -f "${HERE}/fluentd-log-config.jq"
       fi
       echo "{}"
