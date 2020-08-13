@@ -22,7 +22,6 @@ pipeline-github
 pipeline-github-lib
 pipeline-utility-steps
 timestamper
-warnings
 warnings-ng
 workflow-aggregator
 ws-cleanup

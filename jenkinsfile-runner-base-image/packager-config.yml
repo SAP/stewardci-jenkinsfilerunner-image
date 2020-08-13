@@ -18,7 +18,7 @@ buildSettings:
         git: https://github.com/jenkinsci/jenkinsfile-runner.git
         branch: "1.0-beta-12"
     docker:
-      base: "jenkins/jenkins:2.235.3-alpine"
+      base: "jenkins/jenkins:2.235.4-alpine"
       tag: "jenkinsfile-runner-base-local"
       build: true
 
@@ -26,7 +26,7 @@ war:
   groupId: "org.jenkins-ci.main"
   artifactId: "jenkins-war"
   source:
-    version: "2.235.3"
+    version: "2.235.4"
 
 systemProperties:
     jenkins.model.Jenkins.slaveAgentPort: "50000"
@@ -78,7 +78,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "analysis-model-api"
     source:
-      version: "8.2.0"
+      version: "8.2.1"
 # OWASP Markup Formatter (Jenkins-Version: 2.121.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "antisamy-markup-formatter"
@@ -113,7 +113,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "branch-api"
     source:
-      version: "2.5.8"
+      version: "2.5.9"
 # Build Timeout (Jenkins-Version: 2.222.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "build-timeout"
@@ -123,7 +123,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "checks-api"
     source:
-      version: "0.2.2"
+      version: "0.2.3"
 # Folders (Jenkins-Version: 2.176.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "cloudbees-folder"
@@ -188,7 +188,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "email-ext"
     source:
-      version: "2.73"
+      version: "2.74"
 # Font Awesome API (Jenkins-Version: 2.138.4)
   - groupId: "io.jenkins.plugins"
     artifactId: "font-awesome-api"
@@ -293,7 +293,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "junit"
     source:
-      version: "1.30"
+      version: "1.31"
 # Kubernetes (Jenkins-Version: 2.222.4)
   - groupId: "org.csanchez.jenkins.plugins"
     artifactId: "kubernetes"
@@ -393,7 +393,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins.pipeline-stage-view"
     artifactId: "pipeline-rest-api"
     source:
-      version: "2.13"
+      version: "2.14"
 # Pipeline: Stage Step (Jenkins-Version: 2.176.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "pipeline-stage-step"
@@ -408,7 +408,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins.pipeline-stage-view"
     artifactId: "pipeline-stage-view"
     source:
-      version: "2.13"
+      version: "2.14"
 # Pipeline Utility Steps (Jenkins-Version: 2.121.2)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "pipeline-utility-steps"
@@ -479,16 +479,11 @@ plugins:
     artifactId: "variant"
     source:
       version: "1.3"
-# Warnings (Jenkins-Version: 2.89.1)
-  - groupId: "org.jvnet.hudson.plugins"
-    artifactId: "warnings"
-    source:
-      version: "5.0.1"
-# Warnings Next Generation (Jenkins-Version: 2.204.4)
+# Warnings Next Generation (Jenkins-Version: 2.204.6)
   - groupId: "io.jenkins.plugins"
     artifactId: "warnings-ng"
     source:
-      version: "8.3.0"
+      version: "8.4.1"
 # Pipeline (Jenkins-Version: 2.130)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-aggregator"
