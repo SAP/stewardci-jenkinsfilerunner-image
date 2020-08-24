@@ -1,9 +1,13 @@
 #!/bin/bash
 set -u -o pipefail
 
-HERE=$(cd "$(dirname "$BASH_SOURCE")" && pwd) || exit 1
+HERE=$(cd "$(dirname "$BASH_SOURCE")" && pwd) || {
+  echo >&2 "error: failed to determine script location"
+  exit 1
+}
+declare -r HERE
 
-PARAM_VARS_MANDATORY=(
+declare -r PARAM_VARS_MANDATORY=(
   'PIPELINE_GIT_URL'
   'PIPELINE_GIT_REVISION'
   'PIPELINE_FILE'
@@ -11,7 +15,7 @@ PARAM_VARS_MANDATORY=(
   'RUN_NAMESPACE'
 )
 
-PARAM_VARS_OPTIONAL=(
+declare -r PARAM_VARS_OPTIONAL=(
   'PIPELINE_LOG_ELASTICSEARCH_INDEX_URL'
   'PIPELINE_LOG_ELASTICSEARCH_AUTH_SECRET'
   'PIPELINE_LOG_ELASTICSEARCH_TRUSTEDCERTS_SECRET'
@@ -24,15 +28,15 @@ PARAM_VARS_OPTIONAL=(
   'RUN_CAUSE'
 )
 
-_JENKINS_APP_DIR="/app/jenkins"
-_JENKINS_CASC_D="${_JENKINS_APP_DIR}/WEB-INF/jenkins.yaml.d"
-_JENKINS_HOME="/jenkins_home"
+declare -r _JENKINS_APP_DIR="/app/jenkins"
+declare -r _JENKINS_CASC_D="${_JENKINS_APP_DIR}/WEB-INF/jenkins.yaml.d"
+declare -r _JENKINS_HOME="/jenkins_home"
 
 # This is only usable with tekton 0.11.x if running in non root mode.
 # See https://github.com/tektoncd/pipeline/issues/2131
 #_TERMINATION_LOG_PATH="/tekton/results/termination-log"
 
-_TERMINATION_LOG_PATH="/run/termination-log"
+declare -r _TERMINATION_LOG_PATH="/run/termination-log"
 
 function check_required_env_vars() {
   local rc=0 var
