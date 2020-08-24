@@ -38,6 +38,78 @@ declare -r _JENKINS_HOME="/jenkins_home"
 
 declare -r _TERMINATION_LOG_PATH="/run/termination-log"
 
+
+function main() {
+  local -r casc_yml="${_JENKINS_CASC_D}/casc.yml"
+  local -r build_xml="${_JENKINS_HOME}/jobs/${JOB_NAME:-job}/builds/${RUN_NUMBER:-1}/build.xml"
+
+  truncate -c -s 0 "${_TERMINATION_LOG_PATH}" || exit 1
+  check_required_env_vars "${PARAM_VARS_MANDATORY[@]}" || exit 1
+
+  echo "Cloning pipeline repository $PIPELINE_GIT_URL"
+  with_termination_log git clone "$PIPELINE_GIT_URL" . || exit 1
+  echo "Checking out pipeline from revision $PIPELINE_GIT_REVISION"
+  with_termination_log git checkout "$PIPELINE_GIT_REVISION" || exit 1
+  echo "Delete pipeline git clone credentials"
+  with_termination_log rm -f ~/.git-credentials || exit 1
+
+  with_termination_log sed -i "s/0.0.0.0/$(hostname -i)/g" "$casc_yml" || exit 1
+  with_termination_log sed -i "s/xxx/$RUN_NAMESPACE/" "$casc_yml" || exit 1
+  with_termination_log configure_log_elasticsearch || exit 1
+
+  with_termination_log mkdir -p "${_JENKINS_HOME}" || exit 1
+
+  export -n "${PARAM_VARS_MANDATORY[@]}" "${PARAM_VARS_OPTIONAL[@]}" || exit 1 # do not pass to subprocesses
+  local -a JFR_PIPELINE_PARAM_ARGS
+  make_jfr_pipeline_param_args JFR_PIPELINE_PARAM_ARGS || exit 1
+  local jfr_err_log
+  jfr_err_log=$(mktempfile "error-" ".log") || exit 1
+
+  export JAVA_OPTS="${JAVA_OPTS:+$JAVA_OPTS }-Dhudson.TcpSlaveAgentListener.hostName=$(hostname -i)"
+
+  local jfr_cmd=(
+    /app/bin/jenkinsfile-runner
+      -w "$_JENKINS_APP_DIR"
+      -p /usr/share/jenkins/ref/plugins
+      --runHome "${_JENKINS_HOME}"
+      --no-sandbox
+      ${JOB_NAME:+--job-name "${JOB_NAME}"}
+      ${RUN_NUMBER:+--build-number "${RUN_NUMBER}"}
+      ${RUN_CAUSE:+--cause "${RUN_CAUSE}"}
+      -f "$PIPELINE_FILE"
+      "${JFR_PIPELINE_PARAM_ARGS[@]}"
+  )
+  with_error_log "$jfr_err_log" "${jfr_cmd[@]}" || exit 1
+  local jfr_rc=$?
+  if [[ ! -f $build_xml ]]; then
+    log_failed_command_to_termination_log "$jfr_err_log" "$jfr_rc" "${jfr_cmd[@]}" || {
+      echo >&2 "error: could not log failed command to termination log"
+    }
+    rm -f "$jfr_err_log" &> /dev/null
+    exit 1
+  fi
+  rm -f "$jfr_err_log" &> /dev/null
+
+  #TODO: Define proper exit codes
+  #TODO: Do not rely on exit codes but return something more structured. E.g. copy builds folder out of container and evaluate further.
+  local completed result
+  completed=$(with_termination_log xmlstarlet sel -t -v /flow-build/completed "$build_xml") || exit 1
+  result=$(with_termination_log xmlstarlet sel -t -v /flow-build/result "$build_xml") || exit 1
+  if [[ $completed != "true" ]]; then
+    echo "Pipeline not completed" | tee -a "${_TERMINATION_LOG_PATH}"
+    exit "$jfr_rc"
+  fi
+  if [[ ! $result ]]; then
+    echo "No pipeline result in build.xml" | tee -a "${_TERMINATION_LOG_PATH}"
+    exit "$jfr_rc"
+  fi
+  echo "Pipeline completed with result: $result" | tee -a "${_TERMINATION_LOG_PATH}"
+  if [[ $result != "SUCCESS" ]]; then
+    exit 1
+  fi
+  exit 0
+}
+
 function check_required_env_vars() {
   local rc=0 var
   for var in "$@"; do
@@ -148,66 +220,5 @@ function configure_log_elasticsearch() {
   } >"${_JENKINS_CASC_D}/log-elasticsearch.yml" || return 1
 }
 
-casc_yml="${_JENKINS_CASC_D}/casc.yml"
-build_xml="${_JENKINS_HOME}/jobs/${JOB_NAME:-job}/builds/${RUN_NUMBER:-1}/build.xml"
 
-truncate -c -s 0 "${_TERMINATION_LOG_PATH}" || exit 1
-check_required_env_vars "${PARAM_VARS_MANDATORY[@]}" || exit 1
-
-echo "Cloning pipeline repository $PIPELINE_GIT_URL"
-with_termination_log git clone "$PIPELINE_GIT_URL" . || exit 1
-echo "Checking out pipeline from revision $PIPELINE_GIT_REVISION"
-with_termination_log git checkout "$PIPELINE_GIT_REVISION" || exit 1
-echo "Delete pipeline git clone credentials"
-with_termination_log rm -f ~/.git-credentials || exit 1
-
-with_termination_log sed -i "s/0.0.0.0/$(hostname -i)/g" "$casc_yml" || exit 1
-with_termination_log sed -i "s/xxx/$RUN_NAMESPACE/" "$casc_yml" || exit 1
-with_termination_log configure_log_elasticsearch || exit 1
-
-with_termination_log mkdir -p "${_JENKINS_HOME}" || exit 1
-
-export -n "${PARAM_VARS_MANDATORY[@]}" "${PARAM_VARS_OPTIONAL[@]}" || exit 1 # do not pass to subprocesses
-make_jfr_pipeline_param_args JFR_PIPELINE_PARAM_ARGS || exit 1
-jfr_err_log=$(mktempfile "error-" ".log") || exit 1
-
-export JAVA_OPTS="${JAVA_OPTS:+$JAVA_OPTS }-Dhudson.TcpSlaveAgentListener.hostName=$(hostname -i)"
-
-jfr_cmd=(
-  /app/bin/jenkinsfile-runner
-    -w "$_JENKINS_APP_DIR"
-    -p /usr/share/jenkins/ref/plugins
-    --runHome "${_JENKINS_HOME}"
-    --no-sandbox
-    ${JOB_NAME:+--job-name "${JOB_NAME}"}
-    ${RUN_NUMBER:+--build-number "${RUN_NUMBER}"}
-    ${RUN_CAUSE:+--cause "${RUN_CAUSE}"}
-    -f "$PIPELINE_FILE"
-    "${JFR_PIPELINE_PARAM_ARGS[@]}"
-)
-with_error_log "$jfr_err_log" "${jfr_cmd[@]}"
-jfr_rc=$?
-if [[ ! -f $build_xml ]]; then
-  log_failed_command_to_termination_log "$jfr_err_log" "$jfr_rc" "${jfr_cmd[@]}"
-  rm -f "$jfr_err_log" &> /dev/null
-  exit 1
-fi
-rm -f "$jfr_err_log" &> /dev/null
-
-#TODO: Define proper exit codes
-#TODO: Do not rely on exit codes but return something more structured. E.g. copy builds folder out of container and evaluate further.
-completed=$(with_termination_log xmlstarlet sel -t -v /flow-build/completed "$build_xml") || exit 1
-result=$(with_termination_log xmlstarlet sel -t -v /flow-build/result "$build_xml") || exit 1
-if [[ $completed != "true" ]]; then
-  echo "Pipeline not completed" | tee -a "${_TERMINATION_LOG_PATH}"
-  exit "$jfr_rc"
-fi
-if [[ -z $result ]]; then
-  echo "No pipeline result in build.xml" | tee -a "${_TERMINATION_LOG_PATH}"
-  exit "$jfr_rc"
-fi
-echo "Pipeline completed with result: $result" | tee -a "${_TERMINATION_LOG_PATH}"
-if [[ $result != "SUCCESS" ]]; then
-  exit 1
-fi
-exit 0
+main "$@"
