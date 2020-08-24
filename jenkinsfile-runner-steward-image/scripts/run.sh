@@ -63,7 +63,7 @@ function main() {
   local -a JFR_PIPELINE_PARAM_ARGS
   make_jfr_pipeline_param_args JFR_PIPELINE_PARAM_ARGS || exit 1
   local jfr_err_log
-  jfr_err_log=$(mktempfile "error-" ".log") || exit 1
+  jfr_err_log=$(mktemp 'error-log-XXXXXX') || exit 1
 
   export JAVA_OPTS="${JAVA_OPTS:+$JAVA_OPTS }-Dhudson.TcpSlaveAgentListener.hostName=$(hostname -i)"
 
@@ -150,7 +150,7 @@ function with_termination_log() {
   local cmd=("$@")
 
   local tmp_err_log
-  tmp_err_log=$(mktempfile "error-" ".log") || return 1
+  tmp_err_log=$(mktemp -t 'error-log-XXXXXX') || return 1
 
   # capture command's error stream while still writing to our stdout/strerr
   with_error_log "$tmp_err_log" "${cmd[@]}" || return 1
@@ -194,25 +194,6 @@ function make_jfr_pipeline_param_args() {
   for val_base64 in "${tmp_arr[@]}"; do
     dest_arr+=( "$(base64 -d <<<"$val_base64")" ) || return 1
   done
-}
-
-function mktempfile() {
-  local prefix=${1-} suffix=${2-}
-
-  local tmp_file
-  tmp_file="${TMP:-/tmp}/${prefix}$(random_alnum 8)${suffix}" || return 1
-  touch "$tmp_file" >/dev/null || return 1
-  echo "$tmp_file"
-}
-
-function random_alnum() {
-  local len=$1
-
-  local chars=""
-  while (( ${#chars} < $len )); do
-    chars+=$(head -c "$(( $len * 3 ))" /dev/urandom | tr -dc 'a-zA-Z0-9') || return $?
-  done
-  echo "${chars:0:$len}"
 }
 
 function configure_log_elasticsearch() {
