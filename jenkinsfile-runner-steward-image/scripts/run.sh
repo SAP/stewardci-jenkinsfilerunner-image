@@ -127,12 +127,22 @@ function with_error_log() {
   local err_log=$1
   shift; local cmd=("$@")
 
-  coproc TEE_COPROC { exec tee -a "$err_log" >&2; }
-  exec {TEE_COPROC[0]}<&- || exit 1  # we don't read stdout of TEE_COPROC -> close fd
-  "${cmd[@]}" 2>&${TEE_COPROC[1]} # run command with stderr redirected to TEE_COPROC
+  # use coprocess to capture error log stream to file
+  coproc TEE_COPROC { exec tee -a "$err_log" >&2; } || return 1
+
+  # we don't read stdout of TEE_COPROC -> close fd
+  exec {TEE_COPROC[0]}<&- || { kill -s SIGKILL %; return 1; }
+
+  # run command with stderr redirected to TEE_COPROC
+  "${cmd[@]}" 2>&${TEE_COPROC[1]}
   local rc="$?"
-  exec {TEE_COPROC[1]}>&- || exit 1  # EOF on TEE_COPROC's stdin
-  wait %  # wait until TEE_COPROC has terminated
+
+  # EOF on TEE_COPROC's stdin
+  exec {TEE_COPROC[1]}>&- || { kill -s SIGKILL %; return 1; }
+
+  # wait until TEE_COPROC has terminated
+  wait %
+
   return "$rc"
 }
 
@@ -143,7 +153,7 @@ function with_termination_log() {
   tmp_err_log=$(mktempfile "error-" ".log") || exit 1
 
   # capture command's error stream while still writing to our stdout/strerr
-  with_error_log "$tmp_err_log" "${cmd[@]}"
+  with_error_log "$tmp_err_log" "${cmd[@]}" || return 1
   local rc="$?"
   if [[ $rc != 0 ]]; then
     log_failed_command_to_termination_log "$tmp_err_log" "$rc" "${cmd[@]}"
