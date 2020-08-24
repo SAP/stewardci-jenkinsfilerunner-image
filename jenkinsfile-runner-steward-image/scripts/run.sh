@@ -150,13 +150,15 @@ function with_termination_log() {
   local cmd=("$@")
 
   local tmp_err_log
-  tmp_err_log=$(mktempfile "error-" ".log") || exit 1
+  tmp_err_log=$(mktempfile "error-" ".log") || return 1
 
   # capture command's error stream while still writing to our stdout/strerr
   with_error_log "$tmp_err_log" "${cmd[@]}" || return 1
   local rc="$?"
   if [[ $rc != 0 ]]; then
-    log_failed_command_to_termination_log "$tmp_err_log" "$rc" "${cmd[@]}"
+    log_failed_command_to_termination_log "$tmp_err_log" "$rc" "${cmd[@]}" || {
+      echo >&2 "error: could not log failed command to termination log"
+    }
   fi
   rm -f "$tmp_err_log" &> /dev/null
   return "$rc"
@@ -208,7 +210,7 @@ function random_alnum() {
 
   local chars=""
   while (( ${#chars} < $len )); do
-    chars+=$(head -c "$(( $len * 3 ))" /dev/urandom | tr -dc 'a-zA-Z0-9') || exit $?
+    chars+=$(head -c "$(( $len * 3 ))" /dev/urandom | tr -dc 'a-zA-Z0-9') || return $?
   done
   echo "${chars:0:$len}"
 }
