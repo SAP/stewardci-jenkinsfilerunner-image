@@ -219,10 +219,9 @@ function configure_log_elasticsearch() {
   {
     if [[ ${PIPELINE_LOG_ELASTICSEARCH_INDEX_URL-} ]]; then
       jq -n -f "${HERE}/elasticsearch-log-config.jq"
+    elif [[ ${PIPELINE_LOG_FLUENTD_HOST-} ]]; then
+      jq -n -f "${HERE}/fluentd-log-config.jq"
     else
-      if [[ -n "${PIPELINE_LOG_FLUENTD_HOST:-}" ]]; then
-        jq -n -f "${HERE}/fluentd-log-config.jq"
-      fi
       echo "{}"
     fi
   } >"${_JENKINS_CASC_D}/log-elasticsearch.yml" || return 1
