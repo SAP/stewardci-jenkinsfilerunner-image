@@ -124,9 +124,8 @@ function check_required_env_vars() {
 }
 
 function with_error_log() {
-  local err_log; local -a cmd
-  err_log=$1 || exit 1
-  shift; cmd=("$@")
+  local err_log=$1
+  shift; local cmd=("$@")
 
   coproc TEE_COPROC { exec tee -a "$err_log" >&2; }
   exec {TEE_COPROC[0]}<&- || exit 1  # we don't read stdout of TEE_COPROC -> close fd
@@ -138,7 +137,7 @@ function with_error_log() {
 }
 
 function with_termination_log() {
-  local -a cmd=("$@")
+  local cmd=("$@")
 
   local tmp_err_log
   tmp_err_log=$(mktempfile "error-" ".log") || exit 1
@@ -154,10 +153,8 @@ function with_termination_log() {
 }
 
 function log_failed_command_to_termination_log() {
-  local err_log rc; local -a cmd
-  err_log=$1 || exit 1
-  rc=$2 || exit 1
-  shift 2; cmd=("$@")
+  local err_log=$1 rc=$2
+  shift 2; local cmd=("$@")
 
   {
     echo "Command [${cmd[@]@Q}] failed with exit code $rc"
@@ -168,7 +165,8 @@ function log_failed_command_to_termination_log() {
 
 function make_jfr_pipeline_param_args() {
   local -n dest_arr=$1  # alias to named target variable
-  local -a tmp_arr=()
+
+  local tmp_arr=()
   local args_base64
   args_base64=$(
     <<<"$PIPELINE_PARAMS_JSON" \
@@ -187,9 +185,7 @@ function make_jfr_pipeline_param_args() {
 }
 
 function mktempfile() {
-  local prefix suffix
-  prefix=${1-} || exit 1  # optional
-  suffix=${2-} || exit 1  # optional
+  local prefix=${1-} suffix=${2-}
 
   local tmp_file
   tmp_file="${TMP:-/tmp}/${prefix}$(random_alnum 8)${suffix}" || return 1
