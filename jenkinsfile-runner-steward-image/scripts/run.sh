@@ -113,19 +113,19 @@ function main() {
 function check_required_env_vars() {
   local rc=0 var
   for var in "$@"; do
-    if [[ -z ${!var-} ]]; then
+    if [[ ! ${!var-} ]]; then
       message="error: environment variable not set or empty: $var"
       echo "$message" >&2
       echo "$message" >> "${_TERMINATION_LOG_PATH}"
       rc=1
     fi
   done
-  return $rc
+  return "$rc"
 }
 
 function with_error_log() {
   local err_log=$1
-  shift; local cmd=("$@")
+  local cmd=("${@:2}")
 
   # use coprocess to capture error log stream to file
   coproc TEE_COPROC { exec tee -a "$err_log" >&2; } || return 1
@@ -164,7 +164,7 @@ function with_termination_log() {
 
 function log_failed_command_to_termination_log() {
   local err_log=$1 rc=$2
-  shift 2; local cmd=("$@")
+  local cmd=("${@:3}")
 
   {
     echo "Command [${cmd[@]@Q}] failed with exit code $rc"
@@ -179,13 +179,13 @@ function make_jfr_pipeline_param_args() {
   local tmp_arr=()
   local args_base64
   args_base64=$(
-    <<<"$PIPELINE_PARAMS_JSON" \
     with_termination_log \
-    jq \
-    --raw-output \
-    'keys[] as $k | @base64 "\("-a")", @base64 "\($k + "=" + .[$k])"'
+        jq \
+            --raw-output \
+            'keys[] as $k | @base64 "\("-a")", @base64 "\($k + "=" + .[$k])"' \
+    <<<"$PIPELINE_PARAMS_JSON"
   ) || return 1
-  if [[ -n $args_base64 ]]; then
+  if [[ $args_base64 ]]; then
     readarray -t tmp_arr <<<"$args_base64" || return 1
   fi
   dest_arr=()
@@ -215,7 +215,7 @@ function random_alnum() {
 
 function configure_log_elasticsearch() {
   {
-    if [[ -n "${PIPELINE_LOG_ELASTICSEARCH_INDEX_URL:-}" ]]; then
+    if [[ ${PIPELINE_LOG_ELASTICSEARCH_INDEX_URL-} ]]; then
       jq -n -f "${HERE}/elasticsearch-log-config.jq"
     else
       if [[ -n "${PIPELINE_LOG_FLUENTD_HOST:-}" ]]; then
