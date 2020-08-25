@@ -4,6 +4,6 @@ Upstream-Contact: roman.isbrecht_at_sap.com
 Source: github.com/SAP/stewardci-jenkinsfilerunner-image
 
 Files: **
-Copyright:  2018-2020 SAP SE or an SAP affiliate company and project "Steward" contributors
+Copyright:  2019-2020 SAP SE or an SAP affiliate company and project "Steward" contributors
 License: Apache-2.0
 
