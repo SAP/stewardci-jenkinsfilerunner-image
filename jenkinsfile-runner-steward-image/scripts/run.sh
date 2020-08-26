@@ -197,15 +197,8 @@ function make_jfr_pipeline_param_args() {
 }
 
 function configure_log_elasticsearch() {
-  {
-    if [[ ${PIPELINE_LOG_ELASTICSEARCH_INDEX_URL-} ]]; then
-      jq -n -f "${HERE}/elasticsearch-log-config.jq"
-    elif [[ ${PIPELINE_LOG_FLUENTD_HOST-} ]]; then
-      jq -n -f "${HERE}/fluentd-log-config.jq"
-    else
-      echo "{}"
-    fi
-  } >"${_JENKINS_CASC_D}/log-elasticsearch.yml" || return 1
+  jq -n -S -f "${HERE}/elasticsearch-log-config.jq" \
+      >"${_JENKINS_CASC_D}/log-elasticsearch.yml" || return 1
 }
 
 
