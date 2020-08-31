@@ -42,6 +42,8 @@ declare -r _TERMINATION_LOG_PATH="/run/termination-log"
 function main() {
   local -r casc_yml="${_JENKINS_CASC_D}/casc.yml"
   local -r build_xml="${_JENKINS_HOME}/jobs/${JOB_NAME:-job}/builds/${RUN_NUMBER:-1}/build.xml"
+  local host_addr
+  host_addr=$(get_host_addr) || exit 1
 
   truncate -c -s 0 "${_TERMINATION_LOG_PATH}" || exit 1
   check_required_env_vars "${PARAM_VARS_MANDATORY[@]}" || exit 1
@@ -53,7 +55,7 @@ function main() {
   echo "Delete pipeline git clone credentials"
   with_termination_log rm -f ~/.git-credentials || exit 1
 
-  with_termination_log sed -i "s/0.0.0.0/$(hostname -i)/g" "$casc_yml" || exit 1
+  with_termination_log sed -i "s/0.0.0.0/$host_addr/g" "$casc_yml" || exit 1
   with_termination_log sed -i "s/xxx/$RUN_NAMESPACE/" "$casc_yml" || exit 1
   with_termination_log configure_log_elasticsearch || exit 1
 
@@ -65,7 +67,7 @@ function main() {
   local jfr_err_log
   jfr_err_log=$(mktemp 'error-log-XXXXXX') || exit 1
 
-  export JAVA_OPTS="${JAVA_OPTS:+$JAVA_OPTS }-Dhudson.TcpSlaveAgentListener.hostName=$(hostname -i)"
+  export JAVA_OPTS="${JAVA_OPTS:+$JAVA_OPTS }-Dhudson.TcpSlaveAgentListener.hostName=$host_addr" || exit 1
 
   local jfr_cmd=(
     /app/bin/jenkinsfile-runner
@@ -199,6 +201,10 @@ function make_jfr_pipeline_param_args() {
 function configure_log_elasticsearch() {
   jq -n -S -f "${HERE}/elasticsearch-log-config.jq" \
       >"${_JENKINS_CASC_D}/log-elasticsearch.yml" || return 1
+}
+
+function get_host_addr() {
+  hostname -i | sed -e '1!d; s/[[:space:]].*//'
 }
 
 
