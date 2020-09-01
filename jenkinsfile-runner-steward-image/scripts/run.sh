@@ -1,5 +1,5 @@
 #!/bin/bash
-set -u -o pipefail
+set -eu -o pipefail
 
 HERE=$(cd "$(dirname "$BASH_SOURCE")" && pwd) || {
   echo >&2 "error: failed to determine script location"
@@ -43,31 +43,31 @@ function main() {
   local -r casc_yml="${_JENKINS_CASC_D}/casc.yml"
   local -r build_xml="${_JENKINS_HOME}/jobs/${JOB_NAME:-job}/builds/${RUN_NUMBER:-1}/build.xml"
   local host_addr
-  host_addr=$(get_host_addr) || exit 1
+  host_addr=$(get_host_addr)
 
-  truncate -c -s 0 "${_TERMINATION_LOG_PATH}" || exit 1
-  check_required_env_vars "${PARAM_VARS_MANDATORY[@]}" || exit 1
+  truncate -c -s 0 "${_TERMINATION_LOG_PATH}"
+  check_required_env_vars "${PARAM_VARS_MANDATORY[@]}"
 
   echo "Cloning pipeline repository $PIPELINE_GIT_URL"
-  with_termination_log git clone "$PIPELINE_GIT_URL" . || exit 1
+  with_termination_log git clone "$PIPELINE_GIT_URL" .
   echo "Checking out pipeline from revision $PIPELINE_GIT_REVISION"
-  with_termination_log git checkout "$PIPELINE_GIT_REVISION" || exit 1
+  with_termination_log git checkout "$PIPELINE_GIT_REVISION"
   echo "Delete pipeline git clone credentials"
-  with_termination_log rm -f ~/.git-credentials || exit 1
+  with_termination_log rm -f ~/.git-credentials
 
-  with_termination_log sed -i "s/0.0.0.0/$host_addr/g" "$casc_yml" || exit 1
-  with_termination_log sed -i "s/xxx/$RUN_NAMESPACE/" "$casc_yml" || exit 1
-  with_termination_log configure_log_elasticsearch || exit 1
+  with_termination_log sed -i "s/0.0.0.0/$host_addr/g" "$casc_yml"
+  with_termination_log sed -i "s/xxx/$RUN_NAMESPACE/" "$casc_yml"
+  with_termination_log configure_log_elasticsearch
 
-  with_termination_log mkdir -p "${_JENKINS_HOME}" || exit 1
+  with_termination_log mkdir -p "${_JENKINS_HOME}"
 
-  export -n "${PARAM_VARS_MANDATORY[@]}" "${PARAM_VARS_OPTIONAL[@]}" || exit 1 # do not pass to subprocesses
+  export -n "${PARAM_VARS_MANDATORY[@]}" "${PARAM_VARS_OPTIONAL[@]}"  # do not pass to subprocesses
   local -a JFR_PIPELINE_PARAM_ARGS
-  make_jfr_pipeline_param_args JFR_PIPELINE_PARAM_ARGS || exit 1
+  make_jfr_pipeline_param_args JFR_PIPELINE_PARAM_ARGS
   local jfr_err_log
-  jfr_err_log=$(mktemp 'error-log-XXXXXX') || exit 1
+  jfr_err_log=$(mktemp 'error-log-XXXXXX')
 
-  export JAVA_OPTS="${JAVA_OPTS:+$JAVA_OPTS }-Dhudson.TcpSlaveAgentListener.hostName=$host_addr" || exit 1
+  export JAVA_OPTS="${JAVA_OPTS:+$JAVA_OPTS }-Dhudson.TcpSlaveAgentListener.hostName=$host_addr"
 
   local jfr_cmd=(
     /app/bin/jenkinsfile-runner
@@ -81,31 +81,31 @@ function main() {
       -f "$PIPELINE_FILE"
       "${JFR_PIPELINE_PARAM_ARGS[@]}"
   )
-  with_error_log "$jfr_err_log" "${jfr_cmd[@]}" || exit 1
+  with_error_log "$jfr_err_log" "${jfr_cmd[@]}"
   local jfr_rc=$?
   if [[ ! -f $build_xml ]]; then
     log_failed_command_to_termination_log "$jfr_err_log" "$jfr_rc" "${jfr_cmd[@]}" || {
       echo >&2 "error: could not log failed command to termination log"
     }
-    rm -f "$jfr_err_log" &> /dev/null
+    rm -f "$jfr_err_log" &> /dev/null || true
     exit 1
   fi
-  rm -f "$jfr_err_log" &> /dev/null
+  rm -f "$jfr_err_log" &> /dev/null || true
 
   #TODO: Define proper exit codes
   #TODO: Do not rely on exit codes but return something more structured. E.g. copy builds folder out of container and evaluate further.
   local completed result
-  completed=$(with_termination_log xmlstarlet sel -t -v /flow-build/completed "$build_xml") || exit 1
-  result=$(with_termination_log xmlstarlet sel -t -v /flow-build/result "$build_xml") || exit 1
+  completed=$(with_termination_log xmlstarlet sel -t -v /flow-build/completed "$build_xml")
+  result=$(with_termination_log xmlstarlet sel -t -v /flow-build/result "$build_xml")
   if [[ $completed != "true" ]]; then
-    echo "Pipeline not completed" | tee -a "${_TERMINATION_LOG_PATH}"
+    echo "Pipeline not completed" | tee -a "${_TERMINATION_LOG_PATH}" || true
     exit "$jfr_rc"
   fi
   if [[ ! $result ]]; then
-    echo "No pipeline result in build.xml" | tee -a "${_TERMINATION_LOG_PATH}"
+    echo "No pipeline result in build.xml" | tee -a "${_TERMINATION_LOG_PATH}" || true
     exit "$jfr_rc"
   fi
-  echo "Pipeline completed with result: $result" | tee -a "${_TERMINATION_LOG_PATH}"
+  echo "Pipeline completed with result: $result" | tee -a "${_TERMINATION_LOG_PATH}" || true
   if [[ $result != "SUCCESS" ]]; then
     exit 1
   fi
@@ -130,7 +130,7 @@ function with_error_log() {
   local cmd=("${@:2}")
 
   # use coprocess to capture error log stream to file
-  coproc TEE_COPROC { exec tee -a "$err_log" >&2; } || return 1
+  coproc TEE_COPROC { exec tee -a "$err_log" >&2; }
 
   # we don't read stdout of TEE_COPROC -> close fd
   exec {TEE_COPROC[0]}<&- || { kill -s SIGKILL %; return 1; }
@@ -152,17 +152,17 @@ function with_termination_log() {
   local cmd=("$@")
 
   local tmp_err_log
-  tmp_err_log=$(mktemp -t 'error-log-XXXXXX') || return 1
+  tmp_err_log=$(mktemp -t 'error-log-XXXXXX')
 
   # capture command's error stream while still writing to our stdout/strerr
-  with_error_log "$tmp_err_log" "${cmd[@]}" || return 1
-  local rc="$?"
+  local rc=0
+  with_error_log "$tmp_err_log" "${cmd[@]}" || rc=$?
   if [[ $rc != 0 ]]; then
     log_failed_command_to_termination_log "$tmp_err_log" "$rc" "${cmd[@]}" || {
       echo >&2 "error: could not log failed command to termination log"
     }
   fi
-  rm -f "$tmp_err_log" &> /dev/null
+  rm -f "$tmp_err_log" &> /dev/null || true
   return "$rc"
 }
 
@@ -188,19 +188,19 @@ function make_jfr_pipeline_param_args() {
             --raw-output \
             'keys[] as $k | @base64 "\("-a")", @base64 "\($k + "=" + .[$k])"' \
     <<<"$PIPELINE_PARAMS_JSON"
-  ) || return 1
+  )
   if [[ $args_base64 ]]; then
-    readarray -t tmp_arr <<<"$args_base64" || return 1
+    readarray -t tmp_arr <<<"$args_base64"
   fi
   dest_arr=()
   for val_base64 in "${tmp_arr[@]}"; do
-    dest_arr+=( "$(base64 -d <<<"$val_base64")" ) || return 1
+    dest_arr+=( "$(base64 -d <<<"$val_base64")" )
   done
 }
 
 function configure_log_elasticsearch() {
   jq -n -S -f "${HERE}/elasticsearch-log-config.jq" \
-      >"${_JENKINS_CASC_D}/log-elasticsearch.yml" || return 1
+      >"${_JENKINS_CASC_D}/log-elasticsearch.yml"
 }
 
 function get_host_addr() {
