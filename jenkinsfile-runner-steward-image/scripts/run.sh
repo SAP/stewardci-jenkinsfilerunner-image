@@ -33,7 +33,7 @@ declare -r _JENKINS_APP_DIR="/app/jenkins"
 declare -r _JENKINS_CASC_D="${_JENKINS_APP_DIR}/WEB-INF/jenkins.yaml.d"
 declare -r _JENKINS_HOME="/jenkins_home"
 
-declare -r TERMINATION_LOG_PATH_DEFAULT="/run/termination-log"
+declare -r TERMINATION_LOG_PATH=${TERMINATION_LOG_PATH:-/run/termination-log}
 
 
 function main() {
@@ -41,7 +41,6 @@ function main() {
   local -r build_xml="${_JENKINS_HOME}/jobs/${JOB_NAME:-job}/builds/${RUN_NUMBER:-1}/build.xml"
   local host_addr
   host_addr=$(get_host_addr)
-  TERMINATION_LOG_PATH=${TERMINATION_LOG_PATH:-$TERMINATION_LOG_PATH_DEFAULT}
   truncate -c -s 0 "${TERMINATION_LOG_PATH}"
   check_required_env_vars "${PARAM_VARS_MANDATORY[@]}"
 
