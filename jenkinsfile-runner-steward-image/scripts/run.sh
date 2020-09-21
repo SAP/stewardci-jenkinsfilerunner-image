@@ -78,8 +78,8 @@ function main() {
       -f "$PIPELINE_FILE"
       "${JFR_PIPELINE_PARAM_ARGS[@]}"
   )
-  with_error_log "$jfr_err_log" "${jfr_cmd[@]}"
-  local jfr_rc=$?
+  local jfr_rc=0
+  with_error_log "$jfr_err_log" "${jfr_cmd[@]}" || jfr_rc=$?
   if [[ ! -f $build_xml ]]; then
     log_failed_command_to_termination_log "$jfr_err_log" "$jfr_rc" "${jfr_cmd[@]}" || {
       echo >&2 "error: could not log failed command to termination log"
