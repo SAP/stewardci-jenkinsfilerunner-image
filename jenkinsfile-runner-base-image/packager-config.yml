@@ -26,7 +26,7 @@ war:
   groupId: "org.jenkins-ci.main"
   artifactId: "jenkins-war"
   source:
-    version: "2.249"
+    version: "2.235.4"
 
 systemProperties:
     jenkins.model.Jenkins.slaveAgentPort: "50000"
