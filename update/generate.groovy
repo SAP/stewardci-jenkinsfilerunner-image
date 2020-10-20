@@ -4,7 +4,7 @@ import groovy.json.JsonOutput
 wantedPlugins = [:]
 resultingPlugins = [:]
 updateCenter = null
-debug = true
+verbose = true
 
 if(args.length == 1) {
     process(args[0], "-cwp")
@@ -45,7 +45,7 @@ def process(wantedPluginsFile, outFormat, skipOptional) {
         def wantedPlugin = updateCenter.plugins[wanted]
         wantedPlugins[wantedPlugin.name] = wantedPlugin
         resultingPlugins[wantedPlugin.name] = wantedPlugin
-        if(debug) System.err.println "Added: " + wantedPlugin.name
+        if(verbose) System.err.println "Added: " + wantedPlugin.name
         addDependencies(wantedPlugin, skipOptional, "  ")
     }
 
@@ -88,13 +88,13 @@ def addDependencies(plugin, skipOptional, indent) {
     //println "addDependencies(" + plugin + ")"
     for(dependency in plugin.dependencies){
         if(skipOptional && dependency.optional) {
-            if(debug) System.err.println indent + "- Skipped dependency (of " + plugin.name + "): " + dependency.name + " [optional]"
+            if(verbose) System.err.println indent + "- Skipped dependency (of " + plugin.name + "): " + dependency.name + " [optional]"
             continue;
         }
         def dependencyPlugin = updateCenter.plugins[dependency.name]
         if(dependencyPlugin) {
             resultingPlugins[dependency.name] = dependencyPlugin
-            if(debug) System.err.println indent + "- Added dependency (of " + plugin.name + "): " + dependencyPlugin.name
+            if(verbose) System.err.println indent + "- Added dependency (of " + plugin.name + "): " + dependencyPlugin.name
             addDependencies(dependencyPlugin, skipOptional, indent+"  ")
         } else {
             if(dependency.optional) {

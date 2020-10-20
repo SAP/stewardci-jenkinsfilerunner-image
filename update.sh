@@ -1,7 +1,13 @@
 #!/bin/bash
+set -eu -o pipefail
 
-printf "Updating plugins\n"
-./update/updatePlugins.sh
+declare -r PROJECT_ROOT=$(cd "$(dirname "$BASH_SOURCE")" && pwd) || {
+    echo >&2 "failed to determine script location"
+    exit 1
+}
 
-printf "\nUpdating Jenkins LTS version\n"
-printf "(not automated yet - update packager-config.yml manually)\n"
+echo -e "\n### Updating plugins ###########\n"
+"$PROJECT_ROOT/update/updatePlugins.sh"
+
+echo -e "\n\n### Updating Jenkins LTS version ###########\n"
+"$PROJECT_ROOT/update/updateJenkins.sh"

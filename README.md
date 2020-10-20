@@ -65,8 +65,3 @@ You are welcome to contribute to this project via Pull Requests.
 
 see GitHub issues for planned changes
 
-## License
-
-Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved.
-This project is licensed under "Apache Software License, v. 2" except as noted otherwise in the LICENSE file.
-

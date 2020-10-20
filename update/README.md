@@ -1,9 +1,10 @@
 # Update Plugin List
 
-To update the plugin versions use the `generate.groovy` script to generate an updated list of plugins with dependencies based on the latest Update Site.
+To update the plugin versions use the `generate.groovy` script to generate an updated list of plugins with dependencies based on the latest update site.
 
 Usage:
-```groovy
+
+```
 Usage: groovy generate.groovy <pluginsListFile> <outputFormat> [--skip-optional]
     pluginsListFile         Path to a file with plugin names (new line separated) of wanted plugins
     outputFormat    -cwp    Custom War Packager packager-config.yml format (default)
@@ -12,9 +13,14 @@ Usage: groovy generate.groovy <pluginsListFile> <outputFormat> [--skip-optional]
     --skip-optional         Do not include optional plugin dependencies
 ```
 
-e.g. `groovy generate.groovy "../jenkinsfile-runner-base-image/plugins.txt" -cwp --skip-optional`
+Example:
 
-will produce:
+```sh
+groovy generate.groovy "../jenkinsfile-runner-base-image/plugins.txt" -cwp --skip-optional
+```
+
+produces:
+
 ```yaml
 # AnsiColor (Jenkins-Version: 2.145)
   - groupId: "org.jenkins-ci.plugins"
@@ -39,12 +45,15 @@ will produce:
 [...]
 ```
 
-This can be copied/pasted into the `plugins` section of a [Custom War Packager] `packager-config.yml`. Or better run the `update.sh` in the project root folder.
+This can be copied/pasted into the `plugins` section of a [Custom War Packager][] `packager-config.yml`.
+Or better run the `update.sh` in the project root folder.
 
 To print the dependency tree run e.g.
+
 ```sh
 groovy generate.groovy "../jenkinsfile-runner-base-image/plugins.txt" -tree --skip-optional
 ```
+
 
 
 [Custom War Packager]: https://github.com/jenkinsci/custom-war-packager
