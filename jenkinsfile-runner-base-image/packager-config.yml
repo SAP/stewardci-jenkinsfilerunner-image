@@ -16,9 +16,9 @@ buildSettings:
         noCache: true
       source:
         git: https://github.com/jenkinsci/jenkinsfile-runner.git
-        branch: "1.0-beta-12"
+        branch: "1.0-beta-19"
     docker:
-      base: "jenkins/jenkins:2.249.1-alpine"
+      base: "jenkins/jenkins:2.249.2-alpine"
       tag: "jenkinsfile-runner-base-local"
       build: true
 
@@ -26,7 +26,7 @@ war:
   groupId: "org.jenkins-ci.main"
   artifactId: "jenkins-war"
   source:
-    version: "2.249"
+    version: "2.249.2"
 
 systemProperties:
     jenkins.model.Jenkins.slaveAgentPort: "50000"
