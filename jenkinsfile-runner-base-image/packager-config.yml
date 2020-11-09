@@ -18,7 +18,7 @@ buildSettings:
         git: https://github.com/jenkinsci/jenkinsfile-runner.git
         branch: "1.0-beta-19"
     docker:
-      base: "jenkins/jenkins:2.249.2-alpine"
+      base: "jenkins/jenkins:2.249.3-alpine"
       tag: "jenkinsfile-runner-base-local"
       build: true
 
@@ -26,7 +26,7 @@ war:
   groupId: "org.jenkins-ci.main"
   artifactId: "jenkins-war"
   source:
-    version: "2.249.2"
+    version: "2.249.3"
 
 systemProperties:
     jenkins.model.Jenkins.slaveAgentPort: "50000"
@@ -78,7 +78,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "analysis-model-api"
     source:
-      version: "9.2.1"
+      version: "9.3.1"
 # OWASP Markup Formatter (Jenkins-Version: 2.121.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "antisamy-markup-formatter"
@@ -113,7 +113,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "branch-api"
     source:
-      version: "2.6.0"
+      version: "2.6.1"
 # Build Timeout (Jenkins-Version: 2.222.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "build-timeout"
@@ -123,7 +123,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "checks-api"
     source:
-      version: "1.0.3"
+      version: "1.1.0"
 # Folders (Jenkins-Version: 2.176.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "cloudbees-folder"
@@ -143,7 +143,7 @@ plugins:
   - groupId: "io.jenkins"
     artifactId: "configuration-as-code"
     source:
-      version: "1.45"
+      version: "1.46"
 # Configuration as Code Plugin - Groovy Scripting Extension (Jenkins-Version: 2.60.3)
   - groupId: "io.jenkins.plugins"
     artifactId: "configuration-as-code-groovy"
@@ -188,7 +188,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "email-ext"
     source:
-      version: "2.77"
+      version: "2.79"
 # Font Awesome API (Jenkins-Version: 2.204.6)
   - groupId: "io.jenkins.plugins"
     artifactId: "font-awesome-api"
@@ -223,7 +223,7 @@ plugins:
   - groupId: "com.coravy.hudson.plugins.github"
     artifactId: "github"
     source:
-      version: "1.31.0"
+      version: "1.32.0"
 # GitHub API (Jenkins-Version: 2.164.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "github-api"
@@ -249,11 +249,11 @@ plugins:
     artifactId: "htmlpublisher"
     source:
       version: "1.23"
-# HTTP Request (Jenkins-Version: 2.60.3)
+# HTTP Request (Jenkins-Version: 2.204.6)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "http_request"
     source:
-      version: "1.8.26"
+      version: "1.8.27"
 # InfluxDB (Jenkins-Version: 2.195)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "influxdb"
@@ -294,11 +294,11 @@ plugins:
     artifactId: "junit"
     source:
       version: "1.43"
-# Kubernetes (Jenkins-Version: 2.222.4)
+# Kubernetes (Jenkins-Version: 2.263)
   - groupId: "org.csanchez.jenkins.plugins"
     artifactId: "kubernetes"
     source:
-      version: "1.27.3"
+      version: "1.28.0"
 # Kubernetes Client API (Jenkins-Version: 2.222.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "kubernetes-client-api"
@@ -483,7 +483,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "warnings-ng"
     source:
-      version: "8.3.0"
+      version: "8.4.4"
 # Pipeline (Jenkins-Version: 2.130)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-aggregator"
@@ -494,16 +494,16 @@ plugins:
     artifactId: "workflow-api"
     source:
       version: "2.40"
-# Pipeline: Basic Steps (Jenkins-Version: 2.249.1)
+# Pipeline: Basic Steps (Jenkins-Version: 2.263)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-basic-steps"
     source:
-      version: "2.22"
+      version: "2.23"
 # Pipeline: Groovy (Jenkins-Version: 2.176.4)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-cps"
     source:
-      version: "2.83"
+      version: "2.84"
 # Pipeline: Shared Groovy Libraries (Jenkins-Version: 2.176.4)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-cps-global-lib"
@@ -538,7 +538,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-support"
     source:
-      version: "3.5"
+      version: "3.6"
 # Workspace Cleanup (Jenkins-Version: 2.121)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "ws-cleanup"
