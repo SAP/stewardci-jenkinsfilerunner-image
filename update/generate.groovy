@@ -43,6 +43,7 @@ def process(wantedPluginsFile, outFormat, skipOptional) {
 
     for(wanted in wantedPluginNames){
         def wantedPlugin = updateCenter.plugins[wanted]
+        if(wantedPlugin == null) throw new RuntimeException("Plugin '${wanted}' not in update-center.json!")
         wantedPlugins[wantedPlugin.name] = wantedPlugin
         resultingPlugins[wantedPlugin.name] = wantedPlugin
         if(verbose) System.err.println "Added: " + wantedPlugin.name
