@@ -65,6 +65,15 @@ function main() {
 
   export JAVA_OPTS="${JAVA_OPTS:+$JAVA_OPTS }-Dhudson.TcpSlaveAgentListener.hostName=$host_addr"
 
+  # Temporary workaround for https://github.com/SAP/stewardci-jenkinsfilerunner-image/issues/62
+  # Should be removed once the issue is fixed
+  (
+    ___LOCAL_BUILD_LOG_FILE_PATH="${_JENKINS_HOME}/jobs/${JOB_NAME:-job}/builds/${RUN_NUMBER:-1}/log"
+    mkdir -p "$(dirname "$___LOCAL_BUILD_LOG_FILE_PATH")"
+    touch "$___LOCAL_BUILD_LOG_FILE_PATH"
+  )
+  # End of workaround
+  
   local jfr_cmd=(
     /app/bin/jenkinsfile-runner
       -w "$_JENKINS_APP_DIR"
