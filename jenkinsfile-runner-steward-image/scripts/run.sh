@@ -45,17 +45,17 @@ function main() {
   check_required_env_vars "${PARAM_VARS_MANDATORY[@]}"
 
   echo "Cloning pipeline repository $PIPELINE_GIT_URL"
-  with_termination_log git clone "$PIPELINE_GIT_URL" .
+  with_termination_log 10 5 git clone "$PIPELINE_GIT_URL" .
   echo "Checking out pipeline from revision $PIPELINE_GIT_REVISION"
-  with_termination_log git checkout "$PIPELINE_GIT_REVISION"
+  with_termination_log 0 1 git checkout "$PIPELINE_GIT_REVISION"
   echo "Delete pipeline git clone credentials"
-  with_termination_log rm -f ~/.git-credentials
+  with_termination_log 0 1 rm -f ~/.git-credentials
 
-  with_termination_log sed -i "s/0.0.0.0/$host_addr/g" "$casc_yml"
-  with_termination_log sed -i "s/xxx/$RUN_NAMESPACE/" "$casc_yml"
-  with_termination_log configure_log_elasticsearch
+  with_termination_log 0 1 sed -i "s/0.0.0.0/$host_addr/g" "$casc_yml"
+  with_termination_log 0 1 sed -i "s/xxx/$RUN_NAMESPACE/" "$casc_yml"
+  with_termination_log 0 1 configure_log_elasticsearch
 
-  with_termination_log mkdir -p "${_JENKINS_HOME}"
+  with_termination_log 0 1 mkdir -p "${_JENKINS_HOME}"
 
   export -n "${PARAM_VARS_MANDATORY[@]}" "${PARAM_VARS_OPTIONAL[@]}"  # do not pass to subprocesses
   local -a JFR_PIPELINE_PARAM_ARGS
@@ -78,7 +78,7 @@ function main() {
       "${JFR_PIPELINE_PARAM_ARGS[@]}"
   )
   local jfr_rc=0
-  with_error_log "$jfr_err_log" "${jfr_cmd[@]}" || jfr_rc=$?
+  with_error_log "$jfr_err_log" 0 1 "${jfr_cmd[@]}" || jfr_rc=$?
   if [[ ! -f $build_xml ]]; then
     log_failed_command_to_termination_log "$jfr_err_log" "$jfr_rc" "${jfr_cmd[@]}" || {
       echo >&2 "error: could not log failed command to termination log"
@@ -91,8 +91,8 @@ function main() {
   #TODO: Define proper exit codes
   #TODO: Do not rely on exit codes but return something more structured. E.g. copy builds folder out of container and evaluate further.
   local completed result
-  completed=$(with_termination_log xmlstarlet sel -t -v /flow-build/completed "$build_xml")
-  result=$(with_termination_log xmlstarlet sel -t -v /flow-build/result "$build_xml")
+  completed=$(with_termination_log 0 1 xmlstarlet sel -t -v /flow-build/completed "$build_xml")
+  result=$(with_termination_log 0 1 xmlstarlet sel -t -v /flow-build/result "$build_xml")
   if [[ $completed != "true" ]]; then
     echo "Pipeline not completed" | tee -a "${TERMINATION_LOG_PATH}" || true
     exit "$jfr_rc"
@@ -122,8 +122,8 @@ function check_required_env_vars() {
 }
 
 function with_error_log() {
-  local err_log=$1
-  local cmd=("${@:2}")
+  local err_log=$1 retry_interval=$2 max_retries=$3
+  local cmd=("${@:4}")
 
   # use coprocess to capture error log stream to file
   coproc TEE_COPROC { exec tee -a "$err_log" >&2; }
@@ -132,8 +132,21 @@ function with_error_log() {
   exec {TEE_COPROC[0]}<&- || { kill -s SIGKILL %; return 1; }
 
   # run command with stderr redirected to TEE_COPROC
+  local retry=1
+  local splitter_line=$(printf "%-50s" "*")
+  echo "Try $retry out of $max_retries max retries..." >&${TEE_COPROC[1]}
   "${cmd[@]}" 2>&${TEE_COPROC[1]}
   local rc="$?"
+  while [[ $rc -ne 0 && $retry -lt $max_retries ]];
+  do
+    ((retry=retry+1))
+    echo "Sleep $retry_interval seconds between retries..." >&${TEE_COPROC[1]}
+    sleep ${retry_interval}s
+    echo "${splitter_line// /*}" >&${TEE_COPROC[1]}
+    echo "Try $retry out of $max_retries max retries..." >&${TEE_COPROC[1]}
+    "${cmd[@]}" 2>&${TEE_COPROC[1]}
+    rc="$?"
+  done
 
   # EOF on TEE_COPROC's stdin
   exec {TEE_COPROC[1]}>&- || { kill -s SIGKILL %; return 1; }
@@ -145,14 +158,15 @@ function with_error_log() {
 }
 
 function with_termination_log() {
-  local cmd=("$@")
+  local retry_interval=$1 max_retries=$2
+  local cmd=("${@:3}")
 
   local tmp_err_log
   tmp_err_log=$(mktemp -t 'error-log-XXXXXX')
 
   # capture command's error stream while still writing to our stdout/strerr
   local rc=0
-  with_error_log "$tmp_err_log" "${cmd[@]}" || rc=$?
+  with_error_log "$tmp_err_log" "$retry_interval" "$max_retries" "${cmd[@]}" || rc=$?
   if [[ $rc != 0 ]]; then
     log_failed_command_to_termination_log "$tmp_err_log" "$rc" "${cmd[@]}" || {
       echo >&2 "error: could not log failed command to termination log"
@@ -179,7 +193,7 @@ function make_jfr_pipeline_param_args() {
   local tmp_arr=()
   local args_base64
   args_base64=$(
-    with_termination_log \
+    with_termination_log 0 1 \
         jq \
             --raw-output \
             'keys[] as $k | @base64 "\("-a")", @base64 "\($k + "=" + .[$k])"' \
