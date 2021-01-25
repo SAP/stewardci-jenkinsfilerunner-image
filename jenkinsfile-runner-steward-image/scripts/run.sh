@@ -45,7 +45,7 @@ function main() {
   check_required_env_vars "${PARAM_VARS_MANDATORY[@]}"
 
   echo "Cloning pipeline repository $PIPELINE_GIT_URL"
-  with_termination_log_with_retries 10 5 git clone "$PIPELINE_GIT_URL" .
+  with_termination_log with_retries 10 5 git clone "$PIPELINE_GIT_URL" .
   echo "Checking out pipeline from revision $PIPELINE_GIT_REVISION"
   with_termination_log git checkout "$PIPELINE_GIT_REVISION"
   echo "Delete pipeline git clone credentials"
@@ -162,58 +162,26 @@ function with_termination_log() {
   return "$rc"
 }
 
-function with_error_log_with_retries() {
-  local err_log=$1 retry_interval=$2 max_retries=$3
-  local cmd=("${@:4}")
+function with_retries() {
+  local retry_interval=$1 max_retries=$2
+  local cmd=("${@:3}")
 
-  # use coprocess to capture error log stream to file
-  coproc TEE_COPROC { exec tee -a "$err_log" >&2; }
-
-  # we don't read stdout of TEE_COPROC -> close fd
-  exec {TEE_COPROC[0]}<&- || { kill -s SIGKILL %; return 1; }
-
-  # run command with stderr redirected to TEE_COPROC
   local retry=1
   local splitter_line=$(printf "%-50s" "*")
-  echo "Try $retry out of $max_retries max retries..." >&${TEE_COPROC[1]}
-  "${cmd[@]}" 2>&${TEE_COPROC[1]}
+  echo "Try $retry out of $max_retries max retries..."
+  "${cmd[@]}"
   local rc="$?"
   while [[ $rc -ne 0 && $retry -lt $max_retries ]];
   do
     ((retry=retry+1))
-    echo "Sleep $retry_interval seconds between retries..." >&${TEE_COPROC[1]}
+    echo "Sleep $retry_interval seconds between retries..."
     sleep ${retry_interval}s
-    echo "${splitter_line// /*}" >&${TEE_COPROC[1]}
-    echo "Try $retry out of $max_retries max retries..." >&${TEE_COPROC[1]}
-    "${cmd[@]}" 2>&${TEE_COPROC[1]}
+    echo "${splitter_line// /*}"
+    echo "Try $retry out of $max_retries max retries..."
+    "${cmd[@]}"
     rc="$?"
   done
 
-  # EOF on TEE_COPROC's stdin
-  exec {TEE_COPROC[1]}>&- || { kill -s SIGKILL %; return 1; }
-
-  # wait until TEE_COPROC has terminated
-  wait %
-
-  return "$rc"
-}
-
-function with_termination_log_with_retries() {
-  local retry_interval=$1 max_retries=$2
-  local cmd=("${@:3}")
-
-  local tmp_err_log
-  tmp_err_log=$(mktemp -t 'error-log-XXXXXX')
-
-  # capture command's error stream while still writing to our stdout/strerr
-  local rc=0
-  with_error_log_with_retries "$tmp_err_log" "$retry_interval" "$max_retries" "${cmd[@]}" || rc=$?
-  if [[ $rc != 0 ]]; then
-    log_failed_command_to_termination_log "$tmp_err_log" "$rc" "${cmd[@]}" || {
-      echo >&2 "error: could not log failed command to termination log"
-    }
-  fi
-  rm -f "$tmp_err_log" &> /dev/null || true
   return "$rc"
 }
 
