@@ -166,7 +166,7 @@ function with_retries() {
   local retry_interval=$1 max_retries=$2
   local cmd=("${@:3}")
 
-  local retry=1
+  local retry=0
   local splitter_line=$(printf "%-50s" "*")
   echo "Try $retry out of $max_retries max retries..."
   "${cmd[@]}"
