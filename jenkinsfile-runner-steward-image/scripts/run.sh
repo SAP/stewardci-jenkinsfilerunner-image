@@ -170,7 +170,7 @@ function with_retries() {
   local splitter_line=$(printf "%-50s" "*")
   local rc
   rc=0; "${cmd[@]}" || rc=$?
-  while [[ $rc -ne 0 && $retry -lt $max_retries ]];
+  while (( rc != 0 && retry < max_retries ));
   do
     ((retry=retry+1))
     echo "Sleep $retry_interval seconds between retries..."
