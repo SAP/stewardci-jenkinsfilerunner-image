@@ -167,7 +167,6 @@ function with_retries() {
   local cmd=("${@:3}")
 
   local retry=0
-  local splitter_line=$(printf "%-50s" "*")
   local rc
   rc=0; "${cmd[@]}" || rc=$?
   while (( rc != 0 && retry < max_retries ));
