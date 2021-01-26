@@ -172,7 +172,7 @@ function with_retries() {
   while (( rc != 0 && retry < max_retries ));
   do
     ((retry++))
-    printf "\nRetrying with delay of %s seconds (%s/%s)..." "$retry_interval" "$retry" "$max_retries"
+    printf "\nRetrying with delay of %s seconds (%s/%s)...\n" "$retry_interval" "$retry" "$max_retries" >&2
     sleep "${retry_interval}s"
     rc=0; "${cmd[@]}" || rc=$?
   done
