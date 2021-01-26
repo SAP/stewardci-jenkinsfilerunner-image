@@ -168,8 +168,8 @@ function with_retries() {
 
   local retry=0
   local splitter_line=$(printf "%-50s" "*")
-  "${cmd[@]}"
-  local rc="$?"
+  local rc
+  rc=0; "${cmd[@]}" || rc=$?
   while [[ $rc -ne 0 && $retry -lt $max_retries ]];
   do
     ((retry=retry+1))
