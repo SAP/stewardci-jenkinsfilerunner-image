@@ -45,7 +45,7 @@ function main() {
   check_required_env_vars "${PARAM_VARS_MANDATORY[@]}"
 
   echo "Cloning pipeline repository $PIPELINE_GIT_URL"
-  with_termination_log with_retries 10 5 git clone "$PIPELINE_GIT_URL" .
+  with_termination_log with_retries 5 5 git clone "$PIPELINE_GIT_URL" .
   echo "Checking out pipeline from revision $PIPELINE_GIT_REVISION"
   with_termination_log git checkout "$PIPELINE_GIT_REVISION"
   echo "Delete pipeline git clone credentials"
@@ -163,18 +163,29 @@ function with_termination_log() {
 }
 
 function with_retries() {
-  local retry_interval=$1 max_retries=$2
+  local retry_interval=$1 timeout_seconds=$2
   local cmd=("${@:3}")
-
-  local retry=0
   local rc
-  rc=0; "${cmd[@]}" || rc=$?
-  while (( rc != 0 && retry < max_retries ));
-  do
-    ((retry++))
-    printf "\nRetrying with delay of %s seconds (%s/%s)...\n" "$retry_interval" "$retry" "$max_retries" >&2
-    sleep "${retry_interval}s"
+
+  # Use Bash built-in variable SECONDS
+  start=$SECONDS
+
+  while true; do
     rc=0; "${cmd[@]}" || rc=$?
+
+    if (( rc == 0 )); then
+      break
+    else
+      elapsedseconds=$(( SECONDS - start ))
+
+      if (( elapsedseconds > timeout_seconds )); then
+        printf "\nTimeout of %s seconds is reached.\n" "$timeout_seconds" >&2
+        break
+      else
+        printf "\nRetrying with a delay of %s seconds (%s/%s seconds elapsed)...\n" "$retry_interval" "$elapsedseconds" "$timeout_seconds" >&2
+        sleep "${retry_interval}s"
+      fi
+    fi
   done
 
   return "$rc"
