@@ -168,7 +168,6 @@ function with_retries() {
 
   local retry=0
   local splitter_line=$(printf "%-50s" "*")
-  echo "Try $retry out of $max_retries max retries..."
   "${cmd[@]}"
   local rc="$?"
   while [[ $rc -ne 0 && $retry -lt $max_retries ]];
