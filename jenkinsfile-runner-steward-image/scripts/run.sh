@@ -172,13 +172,10 @@ function with_retries() {
   rc=0; "${cmd[@]}" || rc=$?
   while (( rc != 0 && retry < max_retries ));
   do
-    ((retry=retry+1))
-    echo "Sleep $retry_interval seconds between retries..."
-    sleep ${retry_interval}s
-    echo "${splitter_line// /*}"
-    echo "Try $retry out of $max_retries max retries..."
-    "${cmd[@]}"
-    rc="$?"
+    ((retry++))
+    printf "\nRetrying with delay of %s seconds (%s/%s)..." "$retry_interval" "$retry" "$max_retries"
+    sleep "${retry_interval}s"
+    rc=0; "${cmd[@]}" || rc=$?
   done
 
   return "$rc"
