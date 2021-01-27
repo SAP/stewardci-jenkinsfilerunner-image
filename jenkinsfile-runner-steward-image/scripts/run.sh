@@ -177,18 +177,16 @@ function with_retries() {
   while true; do
     rc=0; "${cmd[@]}" || rc=$?
 
-    if (( rc == 0 )); then
+    (( rc != 0 )) || break
+
+    local elapsedseconds=$(( EPOCHSECONDS - start ))
+
+    if (( elapsedseconds > timeout_seconds )); then
+      printf "\nNot retrying anymore as timeout of %s seconds is reached.\n" "$timeout_seconds" >&2
       break
     else
-      elapsedseconds=$(( SECONDS - start ))
-
-      if (( elapsedseconds > timeout_seconds )); then
-        printf "\nTimeout of %s seconds is reached.\n" "$timeout_seconds" >&2
-        break
-      else
-        printf "\nRetrying with a delay of %s seconds (%s/%s seconds elapsed)...\n" "$retry_interval" "$elapsedseconds" "$timeout_seconds" >&2
-        sleep "${retry_interval}s"
-      fi
+      printf "\nRetrying with a delay of %s seconds (%s/%s seconds elapsed)...\n" "$retry_interval" "$elapsedseconds" "$timeout_seconds" >&2
+      sleep "${retry_interval}s"
     fi
   done
 
