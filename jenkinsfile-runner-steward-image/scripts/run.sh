@@ -171,8 +171,7 @@ function with_retries() {
 
   local rc
 
-  # Use Bash built-in variable SECONDS
-  start=$SECONDS
+  local start=$EPOCHSECONDS  # bash built-in
 
   while true; do
     rc=0; "${cmd[@]}" || rc=$?
