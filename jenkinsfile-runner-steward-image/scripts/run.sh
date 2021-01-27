@@ -163,8 +163,12 @@ function with_termination_log() {
 }
 
 function with_retries() {
-  local retry_interval=$1 timeout_seconds=$2
-  local cmd=("${@:3}")
+  local -r \
+    retry_interval=$1 \
+    timeout_seconds=$2 \
+    cmd=("${@:3}") \
+  #---
+
   local rc
 
   # Use Bash built-in variable SECONDS
