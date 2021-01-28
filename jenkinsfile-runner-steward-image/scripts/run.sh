@@ -45,7 +45,7 @@ function main() {
   check_required_env_vars "${PARAM_VARS_MANDATORY[@]}"
 
   echo "Cloning pipeline repository $PIPELINE_GIT_URL"
-  with_termination_log git clone "$PIPELINE_GIT_URL" .
+  with_termination_log with_retries 5 30 git clone "$PIPELINE_GIT_URL" .
   echo "Checking out pipeline from revision $PIPELINE_GIT_REVISION"
   with_termination_log git checkout "$PIPELINE_GIT_REVISION"
   echo "Delete pipeline git clone credentials"
@@ -159,6 +159,36 @@ function with_termination_log() {
     }
   fi
   rm -f "$tmp_err_log" &> /dev/null || true
+  return "$rc"
+}
+
+function with_retries() {
+  local -r \
+    retry_interval=$1 \
+    timeout_seconds=$2 \
+    cmd=("${@:3}") \
+  #---
+
+  local rc
+
+  local start=$EPOCHSECONDS  # bash built-in
+
+  while true; do
+    rc=0; "${cmd[@]}" || rc=$?
+
+    (( rc != 0 )) || break
+
+    local elapsedseconds=$(( EPOCHSECONDS - start ))
+
+    if (( elapsedseconds > timeout_seconds )); then
+      printf "\nNot retrying anymore as timeout of %s seconds is reached.\n" "$timeout_seconds" >&2
+      break
+    else
+      printf "\nRetrying with a delay of %s seconds (%s/%s seconds elapsed)...\n" "$retry_interval" "$elapsedseconds" "$timeout_seconds" >&2
+      sleep "${retry_interval}s"
+    fi
+  done
+
   return "$rc"
 }
 
