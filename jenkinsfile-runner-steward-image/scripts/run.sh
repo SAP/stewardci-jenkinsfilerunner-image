@@ -23,6 +23,8 @@ declare -r PARAM_VARS_OPTIONAL=(
   'PIPELINE_LOG_FLUENTD_HOST'
   'PIPELINE_LOG_FLUENTD_PORT'
   'PIPELINE_LOG_FLUENTD_TAG'
+  'PIPELINE_CLONE_INTERVAL'
+  'PIPELINE_CLONE_TIMEOUT'
   'JOB_NAME'
   'RUN_NUMBER'
   'RUN_CAUSE'
@@ -45,7 +47,7 @@ function main() {
   check_required_env_vars "${PARAM_VARS_MANDATORY[@]}"
 
   echo "Cloning pipeline repository $PIPELINE_GIT_URL"
-  with_termination_log with_retries 5 30 git clone "$PIPELINE_GIT_URL" .
+  with_termination_log check_retry_params with_retries ${PIPELINE_CLONE_INTERVAL:-15} ${PIPELINE_CLONE_TIMEOUT:-180} git clone "$PIPELINE_GIT_URL" .
   echo "Checking out pipeline from revision $PIPELINE_GIT_REVISION"
   with_termination_log git checkout "$PIPELINE_GIT_REVISION"
   echo "Delete pipeline git clone credentials"
@@ -190,6 +192,24 @@ function with_retries() {
   done
 
   return "$rc"
+}
+
+function check_retry_params() {
+  local rc \
+    cmd=("$@") \
+    retry_interval=$2 \
+    timeout_seconds=$3 \
+
+  if ! [[ "$retry_interval" =~ ^[0-9]+$ ]] || ! [[ "$timeout_seconds" =~ ^[0-9]+$ ]]; then
+    printf """\nOnly integer values are allowed for PIPELINE_CLONE_INTERVAL \
+and PIPELINE_CLONE_TIMEOUT parameters but '%s' and '%s' are passed respectively ...\n""" "$retry_interval" "$timeout_seconds" >&2
+    return 1
+  elif (( retry_interval > timeout_seconds )); then
+    echo "Parameter PIPELINE_CLONE_INTERVAL cannot be smaller than PIPELINE_CLONE_TIMEOUT in value." >&2
+    return 1
+  fi
+
+  "${cmd[@]}"
 }
 
 function log_failed_command_to_termination_log() {
