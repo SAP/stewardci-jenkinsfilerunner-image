@@ -2,7 +2,7 @@
 
 ### Build process
 
-Our Jenkinsfile Runner Image is being built in two steps
+Our Jenkinsfile Runner Image is being built in two steps.
 
 ## jenkinsfile-runner-base-image
 
