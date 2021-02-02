@@ -201,8 +201,8 @@ function check_retry_params() {
     timeout_seconds=$3 \
 
   if ! [[ "$retry_interval" =~ ^[0-9]+$ ]] || ! [[ "$timeout_seconds" =~ ^[0-9]+$ ]]; then
-    printf """\nOnly integer values are allowed for PIPELINE_CLONE_INTERVAL \
-and PIPELINE_CLONE_TIMEOUT parameters but '%s' and '%s' are passed respectively ...\n""" "$retry_interval" "$timeout_seconds" >&2
+    printf "\nOnly integer values are allowed for PIPELINE_CLONE_INTERVAL \
+and PIPELINE_CLONE_TIMEOUT parameters but '%s' and '%s' are passed respectively ...\n" "$retry_interval" "$timeout_seconds" >&2
     return 1
   elif (( retry_interval > timeout_seconds )); then
     echo "Parameter PIPELINE_CLONE_INTERVAL cannot be smaller than PIPELINE_CLONE_TIMEOUT in value." >&2
