@@ -53,8 +53,8 @@ function main() {
   echo "Cloning pipeline repository $PIPELINE_GIT_URL"
   with_termination_log \
     with_retries \
-      ${PIPELINE_CLONE_RETRY_INTERVAL_SEC:-DEFAULT_PIPELINE_CLONE_RETRY_INTERVAL_SEC} \
-      ${PIPELINE_CLONE_RETRY_TIMEOUT_SEC:-DEFAULT_PIPELINE_CLONE_RETRY_TIMEOUT_SEC} \
+      ${PIPELINE_CLONE_RETRY_INTERVAL_SEC:-$DEFAULT_PIPELINE_CLONE_RETRY_INTERVAL_SEC} \
+      ${PIPELINE_CLONE_RETRY_TIMEOUT_SEC:-$DEFAULT_PIPELINE_CLONE_RETRY_TIMEOUT_SEC} \
     git clone "$PIPELINE_GIT_URL" .
   echo "Checking out pipeline from revision $PIPELINE_GIT_REVISION"
   with_termination_log git checkout "$PIPELINE_GIT_REVISION"
