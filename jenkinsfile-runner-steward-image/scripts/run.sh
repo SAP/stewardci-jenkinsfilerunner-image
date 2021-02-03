@@ -31,6 +31,10 @@ declare -r PARAM_VARS_OPTIONAL=(
   'TERMINATION_LOG_PATH'
 )
 
+declare -r \
+  DEFAULT_PIPELINE_CLONE_RETRY_INTERVAL_SEC=15 \
+  DEFAULT_PIPELINE_CLONE_RETRY_TIMEOUT_SEC=180
+
 declare -r _JENKINS_APP_DIR="/app/jenkins"
 declare -r _JENKINS_CASC_D="${_JENKINS_APP_DIR}/WEB-INF/jenkins.yaml.d"
 declare -r _JENKINS_HOME="/jenkins_home"
@@ -47,7 +51,11 @@ function main() {
   check_required_env_vars "${PARAM_VARS_MANDATORY[@]}"
 
   echo "Cloning pipeline repository $PIPELINE_GIT_URL"
-  with_termination_log check_retry_params with_retries ${PIPELINE_CLONE_INTERVAL:-15} ${PIPELINE_CLONE_TIMEOUT:-180} git clone "$PIPELINE_GIT_URL" .
+  with_termination_log \
+    with_retries \
+      ${PIPELINE_CLONE_RETRY_INTERVAL_SEC:-DEFAULT_PIPELINE_CLONE_RETRY_INTERVAL_SEC} \
+      ${PIPELINE_CLONE_RETRY_TIMEOUT_SEC:-DEFAULT_PIPELINE_CLONE_RETRY_TIMEOUT_SEC} \
+    git clone "$PIPELINE_GIT_URL" .
   echo "Checking out pipeline from revision $PIPELINE_GIT_REVISION"
   with_termination_log git checkout "$PIPELINE_GIT_REVISION"
   echo "Delete pipeline git clone credentials"
@@ -164,12 +172,26 @@ function with_termination_log() {
   return "$rc"
 }
 
+function log_failed_command_to_termination_log() {
+  local err_log=$1 rc=$2
+  local cmd=("${@:3}")
+
+  {
+    echo "Command [${cmd[@]@Q}] failed with exit code $rc"
+    echo "Error output:"
+    cat "$err_log"
+  } >> "${TERMINATION_LOG_PATH}"
+}
+
 function with_retries() {
   local -r \
     retry_interval=$1 \
     timeout_seconds=$2 \
     cmd=("${@:3}") \
   #---
+
+  validate_integer 'retry_interval' "$retry_interval"
+  validate_integer 'timeout_seconds' "$timeout_seconds"
 
   local rc
 
@@ -194,33 +216,17 @@ function with_retries() {
   return "$rc"
 }
 
-function check_retry_params() {
-  local rc \
-    cmd=("$@") \
-    retry_interval=$2 \
-    timeout_seconds=$3 \
+function validate_integer() {
+  local \
+    param_name=$1 \
+    param_value=$2
 
-  if ! [[ "$retry_interval" =~ ^[0-9]+$ ]] || ! [[ "$timeout_seconds" =~ ^[0-9]+$ ]]; then
-    printf "\nOnly integer values are allowed for PIPELINE_CLONE_INTERVAL \
-and PIPELINE_CLONE_TIMEOUT parameters but '%s' and '%s' are passed respectively ...\n" "$retry_interval" "$timeout_seconds" >&2
-    return 1
-  elif (( retry_interval > timeout_seconds )); then
-    echo "Parameter PIPELINE_CLONE_INTERVAL cannot be smaller than PIPELINE_CLONE_TIMEOUT in value." >&2
+  if ! [[ "$param_value" =~ ^[0-9]+$ ]]; then
+    printf "Error: parameter '%s' is not a positive integer: '%s'\n" "$param_name" "$param_value" >&2
     return 1
   fi
 
-  "${cmd[@]}"
-}
-
-function log_failed_command_to_termination_log() {
-  local err_log=$1 rc=$2
-  local cmd=("${@:3}")
-
-  {
-    echo "Command [${cmd[@]@Q}] failed with exit code $rc"
-    echo "Error output:"
-    cat "$err_log"
-  } >> "${TERMINATION_LOG_PATH}"
+  return 0
 }
 
 function make_jfr_pipeline_param_args() {
