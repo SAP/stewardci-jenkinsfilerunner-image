@@ -190,8 +190,8 @@ function with_retries() {
     cmd=("${@:3}") \
   #---
 
-  validate_integer 'retry_interval' "$retry_interval"
-  validate_integer 'timeout_seconds' "$timeout_seconds"
+  validate_integer 'retry_interval' "$retry_interval" || return 1
+  validate_integer 'timeout_seconds' "$timeout_seconds" || return 1
 
   local rc
 
