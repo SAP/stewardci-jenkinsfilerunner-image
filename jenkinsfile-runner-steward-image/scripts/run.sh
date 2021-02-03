@@ -190,19 +190,19 @@ function with_retries() {
     cmd=("${@:3}") \
   #---
 
-  validate_integer 'retry_interval' "$retry_interval" || return 1
-  validate_integer 'timeout_seconds' "$timeout_seconds" || return 1
+  validate_integer 'retry_interval' "$retry_interval" || exit 1
+  validate_integer 'timeout_seconds' "$timeout_seconds" || exit 1
 
   local rc
 
-  local start=$EPOCHSECONDS  # bash built-in
+  local start=$SECONDS  # bash built-in
 
   while true; do
     rc=0; "${cmd[@]}" || rc=$?
 
     (( rc != 0 )) || break
 
-    local elapsedseconds=$(( EPOCHSECONDS - start ))
+    local elapsedseconds=$(( SECONDS - start ))
 
     if (( elapsedseconds > timeout_seconds )); then
       printf "\nNot retrying anymore as timeout of %s seconds is reached.\n" "$timeout_seconds" >&2
