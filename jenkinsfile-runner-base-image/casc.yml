@@ -1,6 +1,9 @@
 jenkins:
   systemMessage: "Jenkinsfile Runner"
   slaveAgentPort: 50000
+  agentProtocols:
+  - "JNLP4-connect"
+  - "Ping"
   clouds:
   - kubernetes:
       containerCapStr: "0"
