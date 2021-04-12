@@ -3,7 +3,7 @@ jenkins:
   slaveAgentPort: 50000
   agentProtocols:
   - "JNLP4-connect"
-  - "Ping  
+  - "Ping"
   clouds:
   - kubernetes:
       containerCapStr: "0"
