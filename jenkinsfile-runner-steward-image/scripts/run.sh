@@ -23,11 +23,17 @@ declare -r PARAM_VARS_OPTIONAL=(
   'PIPELINE_LOG_FLUENTD_HOST'
   'PIPELINE_LOG_FLUENTD_PORT'
   'PIPELINE_LOG_FLUENTD_TAG'
+  'PIPELINE_CLONE_RETRY_INTERVAL_SEC'
+  'PIPELINE_CLONE_RETRY_TIMEOUT_SEC'
   'JOB_NAME'
   'RUN_NUMBER'
   'RUN_CAUSE'
   'TERMINATION_LOG_PATH'
 )
+
+declare -r \
+  DEFAULT_PIPELINE_CLONE_RETRY_INTERVAL_SEC=15 \
+  DEFAULT_PIPELINE_CLONE_RETRY_TIMEOUT_SEC=180
 
 declare -r _JENKINS_APP_DIR="/app/jenkins"
 declare -r _JENKINS_CASC_D="${_JENKINS_APP_DIR}/WEB-INF/jenkins.yaml.d"
@@ -45,7 +51,11 @@ function main() {
   check_required_env_vars "${PARAM_VARS_MANDATORY[@]}"
 
   echo "Cloning pipeline repository $PIPELINE_GIT_URL"
-  with_termination_log git clone "$PIPELINE_GIT_URL" .
+  with_termination_log \
+    with_retries \
+      ${PIPELINE_CLONE_RETRY_INTERVAL_SEC:-$DEFAULT_PIPELINE_CLONE_RETRY_INTERVAL_SEC} \
+      ${PIPELINE_CLONE_RETRY_TIMEOUT_SEC:-$DEFAULT_PIPELINE_CLONE_RETRY_TIMEOUT_SEC} \
+    git clone "$PIPELINE_GIT_URL" .
   echo "Checking out pipeline from revision $PIPELINE_GIT_REVISION"
   with_termination_log git checkout "$PIPELINE_GIT_REVISION"
   echo "Delete pipeline git clone credentials"
@@ -171,6 +181,52 @@ function log_failed_command_to_termination_log() {
     echo "Error output:"
     cat "$err_log"
   } >> "${TERMINATION_LOG_PATH}"
+}
+
+function with_retries() {
+  local -r \
+    retry_interval=$1 \
+    timeout_seconds=$2 \
+    cmd=("${@:3}") \
+  #---
+
+  validate_integer 'retry_interval' "$retry_interval" || exit 1
+  validate_integer 'timeout_seconds' "$timeout_seconds" || exit 1
+
+  local rc
+
+  local start=$SECONDS  # bash built-in
+
+  while true; do
+    rc=0; "${cmd[@]}" || rc=$?
+
+    (( rc != 0 )) || break
+
+    local elapsedseconds=$(( SECONDS - start ))
+
+    if (( elapsedseconds > timeout_seconds )); then
+      printf "\nNot retrying anymore as timeout of %s seconds is reached.\n" "$timeout_seconds" >&2
+      break
+    else
+      printf "\nRetrying with a delay of %s seconds (%s/%s seconds elapsed)...\n" "$retry_interval" "$elapsedseconds" "$timeout_seconds" >&2
+      sleep "${retry_interval}s"
+    fi
+  done
+
+  return "$rc"
+}
+
+function validate_integer() {
+  local \
+    param_name=$1 \
+    param_value=$2
+
+  if ! [[ "$param_value" =~ ^[0-9]+$ ]]; then
+    printf "Error: parameter '%s' is not a positive integer: '%s'\n" "$param_name" "$param_value" >&2
+    return 1
+  fi
+
+  return 0
 }
 
 function make_jfr_pipeline_param_args() {
