@@ -5,11 +5,11 @@ jenkins:
   - "JNLP4-connect"
   - "Ping"
   disabledAgentProtocols:
-  - CLI-connect
-  - CLI2-connect
-  - JNLP-connect
-  - JNLP2-connect
-  - JNLP3-connect
+  - "CLI-connect"
+  - "CLI2-connect"
+  - "JNLP-connect"
+  - "JNLP2-connect"
+  - "JNLP3-connect"
   clouds:
   - kubernetes:
       containerCapStr: "0"
