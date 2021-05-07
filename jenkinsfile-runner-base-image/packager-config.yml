@@ -21,7 +21,7 @@ buildSettings:
         git: https://github.com/SAP/stewardci-jenkinsfilerunner-image
         branch: "jenkinsfile-runner--1.0-beta-27-steward-1"
     docker:
-      base: "jenkins/jenkins:2.277.4-alpine"
+      base: "jenkins/jenkins:2.291-alpine"
       tag: "jenkinsfile-runner-base-local"
       build: true
 
@@ -29,7 +29,7 @@ war:
   groupId: "org.jenkins-ci.main"
   artifactId: "jenkins-war"
   source:
-    version: "2.277.4"
+    version: "2.291"
 
 systemProperties:
     jenkins.model.Jenkins.slaveAgentPort: "50000"
@@ -71,7 +71,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "analysis-model-api"
     source:
-      version: "10.2.1"
+      version: "10.2.5"
 # OWASP Markup Formatter (Jenkins-Version: 2.121.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "antisamy-markup-formatter"
@@ -416,7 +416,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "plugin-util-api"
     source:
-      version: "2.1.0"
+      version: "2.2.0"
 # Popper.js API (Jenkins-Version: 2.249.1)
   - groupId: "io.jenkins.plugins"
     artifactId: "popper-api"
@@ -476,7 +476,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "warnings-ng"
     source:
-      version: "9.0.1"
+      version: "9.1.0"
 # Pipeline (Jenkins-Version: 2.130)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-aggregator"
