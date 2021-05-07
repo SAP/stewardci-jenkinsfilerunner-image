@@ -21,7 +21,7 @@ buildSettings:
         git: https://github.com/SAP/stewardci-jenkinsfilerunner-image
         branch: "jenkinsfile-runner--1.0-beta-27-steward-1"
     docker:
-      base: "jenkins/jenkins:2.291-alpine"
+      base: "jenkins/jenkins:2.277.4-alpine"
       tag: "jenkinsfile-runner-base-local"
       build: true
 
@@ -29,7 +29,7 @@ war:
   groupId: "org.jenkins-ci.main"
   artifactId: "jenkins-war"
   source:
-    version: "2.291"
+    version: "2.277.4"
 
 systemProperties:
     jenkins.model.Jenkins.slaveAgentPort: "50000"
@@ -227,11 +227,11 @@ plugins:
     artifactId: "github-api"
     source:
       version: "1.123"
-# GitHub Branch Source (Jenkins-Version: 2.283)
+# GitHub Branch Source (Jenkins-Version: 2.271)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "github-branch-source"
     source:
-      version: "2.10.3"
+      version: "2.10.2"
 # Gradle (Jenkins-Version: 2.138.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "gradle"
@@ -442,11 +442,11 @@ plugins:
     artifactId: "snakeyaml-api"
     source:
       version: "1.27.0"
-# SSH Credentials (Jenkins-Version: 2.282)
+# SSH Credentials (Jenkins-Version: 2.190.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "ssh-credentials"
     source:
-      version: "1.18.2"
+      version: "1.18.1"
 # Structs (Jenkins-Version: 2.222.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "structs"
