@@ -87,11 +87,6 @@ plugins:
     artifactId: "authentication-tokens"
     source:
       version: "1.4"
-# Badge (Jenkins-Version: 2.60.3)
-  - groupId: "org.jenkins-ci.plugins"
-    artifactId: "badge"
-    source:
-      version: "1.8"
 # Bootstrap 4 API (Jenkins-Version: 2.249.1)
   - groupId: "io.jenkins.plugins"
     artifactId: "bootstrap4-api"
@@ -141,7 +136,7 @@ plugins:
   - groupId: "io.jenkins"
     artifactId: "configuration-as-code"
     source:
-      version: "1.50"
+      version: "1.51"
 # Configuration as Code Plugin - Groovy Scripting Extension (Jenkins-Version: 2.60.3)
   - groupId: "io.jenkins.plugins"
     artifactId: "configuration-as-code-groovy"
@@ -151,7 +146,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "credentials"
     source:
-      version: "2.3.18"
+      version: "2.3.19"
 # Credentials Binding (Jenkins-Version: 2.176.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "credentials-binding"
@@ -182,16 +177,11 @@ plugins:
     artifactId: "echarts-api"
     source:
       version: "5.1.0-2"
-# Email Extension (Jenkins-Version: 2.222.4)
-  - groupId: "org.jenkins-ci.plugins"
-    artifactId: "email-ext"
-    source:
-      version: "2.82"
 # Font Awesome API (Jenkins-Version: 2.249.1)
   - groupId: "io.jenkins.plugins"
     artifactId: "font-awesome-api"
     source:
-      version: "5.15.2-2"
+      version: "5.15.3-2"
 # Forensics API (Jenkins-Version: 2.249.1)
   - groupId: "io.jenkins.plugins"
     artifactId: "forensics-api"
@@ -227,11 +217,11 @@ plugins:
     artifactId: "github-api"
     source:
       version: "1.123"
-# GitHub Branch Source (Jenkins-Version: 2.271)
+# GitHub Branch Source (Jenkins-Version: 2.277.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "github-branch-source"
     source:
-      version: "2.10.2"
+      version: "2.10.4"
 # Gradle (Jenkins-Version: 2.138.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "gradle"
@@ -451,12 +441,12 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "structs"
     source:
-      version: "1.22"
+      version: "1.23"
 # Timestamper (Jenkins-Version: 2.222.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "timestamper"
     source:
-      version: "1.12"
+      version: "1.13"
 # Token Macro (Jenkins-Version: 2.274)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "token-macro"
@@ -496,7 +486,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-cps"
     source:
-      version: "2.90"
+      version: "2.91"
 # Pipeline: Shared Groovy Libraries (Jenkins-Version: 2.222.4)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-cps-global-lib"
