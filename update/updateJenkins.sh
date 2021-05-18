@@ -2,6 +2,10 @@
 set -eu -o pipefail
 exec <&-
 
+#changelogUrl needs to be in sync with updateCenterUrl in generate.groovy!
+changelogUrl='https://www.jenkins.io/changelog-stable/' #LTS
+#changelogUrl='https://www.jenkins.io/changelog/'       #LATEST
+
 PROJECT_ROOT=$(cd "$(dirname "$BASH_SOURCE")/.." && pwd) || {
     echo >&2 "failed to determine script location"
     exit 1
@@ -13,21 +17,21 @@ packagerConfig="${PROJECT_ROOT}/jenkinsfile-runner-base-image/packager-config.ym
 function main() {
     echo "This is not automated yet - update packager-config.yml manually!"
 
-    printLatestLTSVersion
+    printLatestVersion true
     printCurrentBase
 }
 
-function printLatestLTSVersion() {
+function printLatestVersion() {
     local s
-    s=$(curl -sL 'https://www.jenkins.io/changelog-stable/') || {
-        echo >&2 "failed to download Jenkins LTS changelog"
+    s=$(curl -sL "$changelogUrl") || {
+        echo >&2 "failed to download Jenkins changelog from $changelogUrl"
         exit 1
     }
     s=$(<<<"$s" grep "^What's new in" -m1) || {
-        echo >&2 "failed to extract version from Jenkins LTS changelog"
+        echo >&2 "failed to extract version from Jenkins changelog ($changelogUrl)"
         exit 1
     }
-    <<<"$s" sed -e 's/.*in /Latest LTS: /g'
+    <<<"$s" sed -e 's/.*in /Latest: /g'
 }
 
 function printCurrentBase() {

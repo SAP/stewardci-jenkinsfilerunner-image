@@ -1,5 +1,3 @@
-analysis-collector
-badge
 build-timeout
 cobertura
 configuration-as-code
@@ -7,7 +5,6 @@ configuration-as-code-groovy
 credentials
 credentials-binding
 cucumber-testresult-plugin
-email-ext
 gatling
 git
 github

@@ -1,6 +1,10 @@
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
 
+// updateCenterUrl needs to be in sync with changelogUrl in updateJenkins.sh!
+updateCenterUrl = "https://updates.jenkins.io/stable/update-center.json".toURL()    //LTS
+//updateCenterUrl = "https://updates.jenkins.io/current/update-center.json".toURL() //LATEST
+
 wantedPlugins = [:]
 resultingPlugins = [:]
 updateCenter = null
@@ -32,8 +36,7 @@ def process(wantedPluginsFile, outFormat, skipOptional) {
         wantedPluginNames << line
     }
 
-    def url = "https://updates.jenkins.io/update-center.json".toURL()
-    def updateCenterJson = url.text
+    def updateCenterJson = updateCenterUrl.text
     updateCenterJson = updateCenterJson.substring(0, updateCenterJson.length()-2)
     updateCenterJson = updateCenterJson.replace("updateCenter.post(", "")
     updateCenterJson = updateCenterJson.trim()
@@ -43,6 +46,7 @@ def process(wantedPluginsFile, outFormat, skipOptional) {
 
     for(wanted in wantedPluginNames){
         def wantedPlugin = updateCenter.plugins[wanted]
+        if(wantedPlugin == null) throw new RuntimeException("Plugin '${wanted}' not in update-center.json!")
         wantedPlugins[wantedPlugin.name] = wantedPlugin
         resultingPlugins[wantedPlugin.name] = wantedPlugin
         if(verbose) System.err.println "Added: " + wantedPlugin.name
