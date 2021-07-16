@@ -59,10 +59,6 @@ no issues known
 
 Please create issues on this repository to contact us.
 
-## Contributing
-
-You are welcome to contribute to this project via Pull Requests.
-
 ## To-Do (upcoming changes)
 
 see GitHub issues for planned changes
