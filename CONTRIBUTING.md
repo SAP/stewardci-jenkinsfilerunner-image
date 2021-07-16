@@ -1,6 +1,6 @@
 ## Contributing
 
-You are welcome to contribute to this project via Pull Requests. See [Development Guide](docs/development/README.md).
+You are welcome to contribute to this project via Pull Requests.
 
 ## Developer Certificate of Origin (DCO)
 
