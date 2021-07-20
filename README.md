@@ -1,3 +1,5 @@
+[![REUSE status](https://api.reuse.software/badge/github.com/SAP/stewardci-jenkinsfilerunner-image)](https://api.reuse.software/info/github.com/SAP/stewardci-jenkinsfilerunner-image)
+
 ## Description
 
 This repo provides a Jenkinsfile Runner Docker image which is able
@@ -58,10 +60,6 @@ no issues known
 ## How to obtain support
 
 Please create issues on this repository to contact us.
-
-## Contributing
-
-You are welcome to contribute to this project via Pull Requests.
 
 ## To-Do (upcoming changes)
 
