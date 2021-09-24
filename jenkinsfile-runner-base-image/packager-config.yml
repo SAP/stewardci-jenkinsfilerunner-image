@@ -19,7 +19,7 @@ buildSettings:
         # git: https://github.com/jenkinsci/jenkinsfile-runner.git
         # branch: "1.0-beta-19"
         git: https://github.com/SAP/stewardci-jenkinsfilerunner-image
-        branch: "jenkinsfile-runner--1.0-beta-27-steward-1"
+        branch: "jenkinsfile-runner--1.0-beta-30-steward-1"
     docker:
       base: "jenkins/jenkins:2.303.1-alpine"
       tag: "jenkinsfile-runner-base-local"
