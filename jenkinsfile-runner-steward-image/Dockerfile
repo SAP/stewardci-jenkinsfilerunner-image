@@ -19,6 +19,6 @@ USER jenkins:jenkins
 COPY --from=packager-output --chown=jenkins:jenkins /app /app
 COPY --from=packager-output --chown=jenkins:jenkins /usr/share/jenkins /usr/share/jenkins
 
-
 COPY scripts/ /scripts
-ENTRYPOINT [ "bash", "/scripts/run.sh" ]
+COPY steward-interface/ /steward-interface
+ENTRYPOINT [ "/steward-interface/entrypoint" ]
