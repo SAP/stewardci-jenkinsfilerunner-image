@@ -17,7 +17,7 @@ buildSettings:
       source:
         # Use fork until fixes are available in upstream
         # git: https://github.com/jenkinsci/jenkinsfile-runner.git
-        # branch: "1.0-beta-19"
+        # branch: "1.0-beta-30"
         git: https://github.com/SAP/stewardci-jenkinsfilerunner-image
         branch: "jenkinsfile-runner--1.0-beta-30-steward-1"
     docker:
