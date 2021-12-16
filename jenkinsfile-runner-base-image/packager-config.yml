@@ -151,7 +151,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "credentials"
     source:
-      version: "2.6.2"
+      version: "1055.v1346ba467ba1"
 # Credentials Binding (Jenkins-Version: 2.235.5)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "credentials-binding"
@@ -286,7 +286,7 @@ plugins:
   - groupId: "org.csanchez.jenkins.plugins"
     artifactId: "kubernetes"
     source:
-      version: "1.31.0"
+      version: "1.31.1"
 # Kubernetes Client API (Jenkins-Version: 2.249)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "kubernetes-client-api"
@@ -411,7 +411,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "plugin-util-api"
     source:
-      version: "2.6.0"
+      version: "2.7.0"
 # Popper.js API (Jenkins-Version: 2.249.1)
   - groupId: "io.jenkins.plugins"
     artifactId: "popper-api"
@@ -496,7 +496,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-api"
     source:
-      version: "1105.v3de5e2efac97"
+      version: "1106.v6a04bac22f47"
 # Pipeline: Basic Steps (Jenkins-Version: 2.263.1)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-basic-steps"
@@ -506,7 +506,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-cps"
     source:
-      version: "2640.v00e79c8113de"
+      version: "2644.v29a793dac95a"
 # Pipeline: Shared Groovy Libraries (Jenkins-Version: 2.303.1)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-cps-global-lib"
@@ -521,7 +521,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-job"
     source:
-      version: "2.42"
+      version: "1145.v7f2433caa07f"
 # Pipeline: Multibranch (Jenkins-Version: 2.277.4)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-multibranch"
@@ -537,11 +537,11 @@ plugins:
     artifactId: "workflow-step-api"
     source:
       version: "613.v375732a042b1"
-# Pipeline: Supporting APIs (Jenkins-Version: 2.222.4)
+# Pipeline: Supporting APIs (Jenkins-Version: 2.289.1)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-support"
     source:
-      version: "3.8"
+      version: "792.v1a3cd6ade3ef"
 # Workspace Cleanup (Jenkins-Version: 2.164.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "ws-cleanup"
