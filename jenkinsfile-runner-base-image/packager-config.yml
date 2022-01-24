@@ -407,11 +407,11 @@ plugins:
     artifactId: "pipeline-stage-view"
     source:
       version: "2.20"
-# Pipeline Utility Steps (Jenkins-Version: 2.222.4)
+# Pipeline Utility Steps (Jenkins-Version: 2.289.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "pipeline-utility-steps"
     source:
-      version: "2.11.0"
+      version: "2.12.0"
 # Plain Credentials (Jenkins-Version: 2.138.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "plain-credentials"
