@@ -50,11 +50,8 @@ function main() {
   truncate -c -s 0 "${TERMINATION_LOG_PATH}"
   check_required_env_vars "${PARAM_VARS_MANDATORY[@]}"
 
-  # Fix for https://github.com/SAP/stewardci-core/issues/327
-  echo "Adding current directory (${PWD}) as git safe.directory"
-  with_termination_log git config --global --add safe.directory "${PWD}"
-
   echo "Cloning pipeline repository $PIPELINE_GIT_URL"
+  with_termination_log git config --global --add safe.directory "${PWD}" #fix for https://github.com/SAP/stewardci-core/issues/327
   with_termination_log \
     with_retries \
       ${PIPELINE_CLONE_RETRY_INTERVAL_SEC:-$DEFAULT_PIPELINE_CLONE_RETRY_INTERVAL_SEC} \
