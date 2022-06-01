@@ -6,12 +6,14 @@ jenkins:
   - "Ping"
   clouds:
   - kubernetes:
+      name: "kubernetes"
       containerCapStr: "0"
       directConnection: true
       maxRequestsPerHostStr: "32"
-      name: "kubernetes"
-      namespace: "xxx"
-      serverUrl: "https://kubernetes.default"
+      # The following fields are not set so that
+      # the K8s client's auto-config is used:
+      namespace: ""
+      serverUrl: ""
 unclassified:
   location:
     adminAddress: "noreply@sap.com"
