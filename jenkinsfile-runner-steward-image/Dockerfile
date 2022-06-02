@@ -18,6 +18,9 @@ USER jenkins:jenkins
 
 COPY --from=packager-output --chown=jenkins:jenkins /app /app
 COPY --from=packager-output --chown=jenkins:jenkins /usr/share/jenkins /usr/share/jenkins
+# avoid warnings about old .hpi extensions
+RUN cd /usr/share/jenkins/ref/plugins/ && \
+    for f in *.hpi; do mv -- "$f" "${f%.hpi}.jpi"; done
 
 COPY scripts/ /scripts
 COPY steward-interface/ /steward-interface
