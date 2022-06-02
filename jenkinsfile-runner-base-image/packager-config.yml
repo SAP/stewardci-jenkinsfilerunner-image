@@ -302,6 +302,11 @@ plugins:
     artifactId: "kubernetes-credentials-provider"
     source:
       version: "0.20"
+# Lockable Resources (Jenkins-Version: 2.249.1)
+  - groupId: "org.6wind.jenkins"
+    artifactId: "lockable-resources"
+    source:
+      version: "2.15"
 # Mailer (Jenkins-Version: 2.289.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "mailer"
