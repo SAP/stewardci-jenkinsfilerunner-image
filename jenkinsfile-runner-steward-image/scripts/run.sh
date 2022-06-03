@@ -86,6 +86,7 @@ function main() {
       ${RUN_NUMBER:+--build-number "${RUN_NUMBER}"}
       ${RUN_CAUSE:+--cause "${RUN_CAUSE}"}
       -f "$PIPELINE_FILE"
+      --httpPort 80
       "${JFR_PIPELINE_PARAM_ARGS[@]}"
   )
   local jfr_rc=0
