@@ -117,11 +117,11 @@ plugins:
     artifactId: "checks-api"
     source:
       version: "1.7.4"
-# Folders (Jenkins-Version: 2.277.1)
+# Folders (Jenkins-Version: 2.319.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "cloudbees-folder"
     source:
-      version: "6.722.v8165b_a_cf25e9"
+      version: "6.729.v2b_9d1a_74d673"
 # Cobertura (Jenkins-Version: 2.204.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "cobertura"
@@ -176,17 +176,17 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "echarts-api"
     source:
-      version: "5.3.2-2"
+      version: "5.3.2-3"
 # Font Awesome API (Jenkins-Version: 2.319.3)
   - groupId: "io.jenkins.plugins"
     artifactId: "font-awesome-api"
     source:
       version: "6.1.1-1"
-# Forensics API (Jenkins-Version: 2.289.1)
+# Forensics API (Jenkins-Version: 2.319.3)
   - groupId: "io.jenkins.plugins"
     artifactId: "forensics-api"
     source:
-      version: "1.13.0"
+      version: "1.14.0"
 # Gatling (Jenkins-Version: 2.150.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "gatling"
@@ -221,7 +221,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "gradle"
     source:
-      version: "1.38"
+      version: "1.39.1"
 # HTML Publisher (Jenkins-Version: 2.289.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "htmlpublisher"
@@ -266,7 +266,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "jjwt-api"
     source:
-      version: "0.11.2-71.v2722b_b_06a_2a_f"
+      version: "0.11.5-77.v646c772fddb_0"
 # JQuery3 API (Jenkins-Version: 2.319.3)
   - groupId: "io.jenkins.plugins"
     artifactId: "jquery3-api"
@@ -286,7 +286,7 @@ plugins:
   - groupId: "org.csanchez.jenkins.plugins"
     artifactId: "kubernetes"
     source:
-      version: "3600.v144b_cd192ca_a_"
+      version: "3636.v84b_a_1dea_6240"
 # Kubernetes Client API (Jenkins-Version: 2.249)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "kubernetes-client-api"
@@ -346,7 +346,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "pipeline-groovy-lib"
     source:
-      version: "591.v3a_7f422b_d058"
+      version: "593.va_a_fc25d520e9"
 # Pipeline: Input Step (Jenkins-Version: 2.289.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "pipeline-input-step"
@@ -386,7 +386,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "pipeline-utility-steps"
     source:
-      version: "2.12.1"
+      version: "2.12.2"
 # Plain Credentials (Jenkins-Version: 2.249.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "plain-credentials"
@@ -467,11 +467,11 @@ plugins:
     artifactId: "workflow-aggregator"
     source:
       version: "581.v0c46fa_697ffd"
-# Pipeline: API (Jenkins-Version: 2.289.1)
+# Pipeline: API (Jenkins-Version: 2.332.1)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-api"
     source:
-      version: "1153.vb_912c0e47fb_a_"
+      version: "1164.v760c223ddb_32"
 # Pipeline: Basic Steps (Jenkins-Version: 2.332.1)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-basic-steps"
@@ -481,17 +481,17 @@ plugins:
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-cps"
     source:
-      version: "2706.v71dd22b_c5a_a_2"
-# Pipeline: Nodes and Processes (Jenkins-Version: 2.303.3)
+      version: "2725.v7b_c717eb_12ce"
+# Pipeline: Nodes and Processes (Jenkins-Version: 2.332.1)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-durable-task-step"
     source:
-      version: "1139.v252a_e12e8463"
+      version: "1146.v1a_d2e603f929"
 # Pipeline: Job (Jenkins-Version: 2.332.1)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-job"
     source:
-      version: "1182.v60a_e6279b_579"
+      version: "1186.v8def1a_5f3944"
 # Pipeline: Multibranch (Jenkins-Version: 2.289.1)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-multibranch"
