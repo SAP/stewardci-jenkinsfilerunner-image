@@ -21,7 +21,7 @@ buildSettings:
         git: https://github.com/SAP/stewardci-jenkinsfilerunner-image
         branch: "jenkinsfile-runner--1.0-beta-30-steward-1"
     docker:
-      base: "jenkins/jenkins:2.332.3-alpine"
+      base: "jenkins/jenkins:2.346.1-alpine"
       tag: "jenkinsfile-runner-base-local"
       build: true
 
@@ -29,7 +29,7 @@ war:
   groupId: "org.jenkins-ci.main"
   artifactId: "jenkins-war"
   source:
-    version: "2.332.3"
+    version: "2.346.1"
 
 systemProperties:
     jenkins.model.Jenkins.slaveAgentPort: "50000"
@@ -67,11 +67,11 @@ plugins:
     artifactId: "ace-editor"
     source:
       version: "1.1"
-# Analysis Model API (Jenkins-Version: 2.289.1)
+# Analysis Model API (Jenkins-Version: 2.319.3)
   - groupId: "io.jenkins.plugins"
     artifactId: "analysis-model-api"
     source:
-      version: "10.10.1"
+      version: "10.12.0"
 # OWASP Markup Formatter (Jenkins-Version: 2.277.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "antisamy-markup-formatter"
@@ -127,26 +127,36 @@ plugins:
     artifactId: "cobertura"
     source:
       version: "1.17"
-# Code Coverage API (Jenkins-Version: 2.289.1)
+# Code Coverage API (Jenkins-Version: 2.319.3)
   - groupId: "io.jenkins.plugins"
     artifactId: "code-coverage-api"
     source:
-      version: "2.0.4"
+      version: "3.0.0"
+# commons-lang3 v3.x Jenkins Api (Jenkins-Version: 2.277.1)
+  - groupId: "io.jenkins.plugins"
+    artifactId: "commons-lang3-api"
+    source:
+      version: "3.12.0.0"
+# commons-text API (Jenkins-Version: 2.289.1)
+  - groupId: "io.jenkins.plugins"
+    artifactId: "commons-text-api"
+    source:
+      version: "1.9-9.v39a_53e2e0343"
 # Configuration as Code (Jenkins-Version: 2.289.3)
   - groupId: "io.jenkins"
     artifactId: "configuration-as-code"
     source:
-      version: "1429.v09b_044a_c93de"
+      version: "1464.vd8507b_82e41a_"
 # Configuration as Code Plugin - Groovy Scripting Extension (Jenkins-Version: 2.60.3)
   - groupId: "io.jenkins.plugins"
     artifactId: "configuration-as-code-groovy"
     source:
       version: "1.1"
-# Credentials (Jenkins-Version: 2.319.1)
+# Credentials (Jenkins-Version: 2.340)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "credentials"
     source:
-      version: "1087.1089.v2f1b_9a_b_040e4"
+      version: "1129.vef26f5df883c"
 # Credentials Binding (Jenkins-Version: 2.319.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "credentials-binding"
@@ -157,11 +167,11 @@ plugins:
     artifactId: "cucumber-testresult-plugin"
     source:
       version: "0.10.1"
-# DataTables.net API (Jenkins-Version: 2.289.1)
+# DataTables.net API (Jenkins-Version: 2.319.3)
   - groupId: "io.jenkins.plugins"
     artifactId: "data-tables-api"
     source:
-      version: "1.11.4-4"
+      version: "1.12.1-2"
 # Display URL API (Jenkins-Version: 2.332.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "display-url-api"
@@ -176,7 +186,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "echarts-api"
     source:
-      version: "5.3.2-3"
+      version: "5.3.3-1"
 # Font Awesome API (Jenkins-Version: 2.319.3)
   - groupId: "io.jenkins.plugins"
     artifactId: "font-awesome-api"
@@ -186,7 +196,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "forensics-api"
     source:
-      version: "1.14.0"
+      version: "1.15.1"
 # Gatling (Jenkins-Version: 2.150.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "gatling"
@@ -202,11 +212,11 @@ plugins:
     artifactId: "git-client"
     source:
       version: "3.11.0"
-# GitHub (Jenkins-Version: 2.277.1)
+# GitHub (Jenkins-Version: 2.346.1)
   - groupId: "com.coravy.hudson.plugins.github"
     artifactId: "github"
     source:
-      version: "1.34.3"
+      version: "1.34.4"
 # GitHub API (Jenkins-Version: 2.289.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "github-api"
@@ -221,7 +231,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "gradle"
     source:
-      version: "1.39.1"
+      version: "1.39.2"
 # HTML Publisher (Jenkins-Version: 2.289.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "htmlpublisher"
@@ -281,12 +291,12 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "junit"
     source:
-      version: "1119.va_a_5e9068da_d7"
+      version: "1119.1121.vc43d0fc45561"
 # Kubernetes (Jenkins-Version: 2.303.3)
   - groupId: "org.csanchez.jenkins.plugins"
     artifactId: "kubernetes"
     source:
-      version: "3636.v84b_a_1dea_6240"
+      version: "3651.v908e7db_10d06"
 # Kubernetes Client API (Jenkins-Version: 2.249)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "kubernetes-client-api"
@@ -316,7 +326,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "matrix-project"
     source:
-      version: "771.v574584b_39e60"
+      version: "772.v494f19991984"
 # Metrics (Jenkins-Version: 2.332.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "metrics"
@@ -351,7 +361,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "pipeline-input-step"
     source:
-      version: "448.v37cea_9a_10a_70"
+      version: "449.v77f0e8b_845c4"
 # Pipeline: Milestone Step (Jenkins-Version: 2.289.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "pipeline-milestone-step"
@@ -361,17 +371,17 @@ plugins:
   - groupId: "org.jenkinsci.plugins"
     artifactId: "pipeline-model-api"
     source:
-      version: "2.2086.v12b_420f036e5"
+      version: "2.2097.v33db_b_de764b_e"
 # Pipeline: Declarative (Jenkins-Version: 2.332.1)
   - groupId: "org.jenkinsci.plugins"
     artifactId: "pipeline-model-definition"
     source:
-      version: "2.2086.v12b_420f036e5"
+      version: "2.2097.v33db_b_de764b_e"
 # Pipeline: Declarative Extension Points API (Jenkins-Version: 2.332.1)
   - groupId: "org.jenkinsci.plugins"
     artifactId: "pipeline-model-extensions"
     source:
-      version: "2.2086.v12b_420f036e5"
+      version: "2.2097.v33db_b_de764b_e"
 # Pipeline: Stage Step (Jenkins-Version: 2.289.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "pipeline-stage-step"
@@ -381,12 +391,12 @@ plugins:
   - groupId: "org.jenkinsci.plugins"
     artifactId: "pipeline-stage-tags-metadata"
     source:
-      version: "2.2086.v12b_420f036e5"
+      version: "2.2097.v33db_b_de764b_e"
 # Pipeline Utility Steps (Jenkins-Version: 2.289.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "pipeline-utility-steps"
     source:
-      version: "2.12.2"
+      version: "2.13.0"
 # Plain Credentials (Jenkins-Version: 2.249.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "plain-credentials"
@@ -422,26 +432,26 @@ plugins:
     artifactId: "script-security"
     source:
       version: "1175.v4b_d517d6db_f0"
-# SnakeYAML API (Jenkins-Version: 2.204.6)
+# SnakeYAML API (Jenkins-Version: 2.289.3)
   - groupId: "io.jenkins.plugins"
     artifactId: "snakeyaml-api"
     source:
-      version: "1.30.1"
-# SSH Credentials (Jenkins-Version: 2.289.3)
+      version: "1.30.2-75.v66c9c4b_438b_d"
+# SSH Credentials (Jenkins-Version: 2.346.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "ssh-credentials"
     source:
-      version: "277.v95c2fec1c047"
+      version: "291.v8211e4f8efb_c"
 # Structs (Jenkins-Version: 2.289.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "structs"
     source:
       version: "318.va_f3ccb_729b_71"
-# Timestamper (Jenkins-Version: 2.277.4)
+# Timestamper (Jenkins-Version: 2.289.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "timestamper"
     source:
-      version: "1.17"
+      version: "1.18"
 # Token Macro (Jenkins-Version: 2.289.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "token-macro"
@@ -457,16 +467,16 @@ plugins:
     artifactId: "variant"
     source:
       version: "1.4"
-# Warnings Next Generation (Jenkins-Version: 2.319.1)
+# Warnings Next Generation (Jenkins-Version: 2.319.3)
   - groupId: "io.jenkins.plugins"
     artifactId: "warnings-ng"
     source:
-      version: "9.12.0"
+      version: "9.13.0"
 # Pipeline (Jenkins-Version: 2.303.3)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-aggregator"
     source:
-      version: "581.v0c46fa_697ffd"
+      version: "590.v6a_d052e5a_a_b_5"
 # Pipeline: API (Jenkins-Version: 2.332.1)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-api"
@@ -486,12 +496,12 @@ plugins:
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-durable-task-step"
     source:
-      version: "1146.v1a_d2e603f929"
+      version: "1155.v79567b_e0a_2de"
 # Pipeline: Job (Jenkins-Version: 2.332.1)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-job"
     source:
-      version: "1186.v8def1a_5f3944"
+      version: "1189.va_d37a_e9e4eda_"
 # Pipeline: Multibranch (Jenkins-Version: 2.289.1)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-multibranch"
