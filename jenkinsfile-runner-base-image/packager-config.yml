@@ -15,7 +15,8 @@ buildSettings:
         #TODO: replace once Jenkinsfile Runner archives runner & CWP is updated
         noCache: true
       source:
-        # Use fork until fixes are available in upstream
+        # Use fork until fixes are available in upstream.
+        # We should check if the --waitOnExit parameter makes our fork obsolete. Will be contained after 1.0-beta-30.
         # git: https://github.com/jenkinsci/jenkinsfile-runner.git
         # branch: "1.0-beta-30"
         git: https://github.com/SAP/stewardci-jenkinsfilerunner-image
