@@ -102,11 +102,11 @@ plugins:
     artifactId: "bouncycastle-api"
     source:
       version: "2.26"
-# Branch API (Jenkins-Version: 2.289.1)
+# Branch API (Jenkins-Version: 2.332.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "branch-api"
     source:
-      version: "2.1046.v0ca_37783ecc5"
+      version: "2.1051.v9985666b_f6cc"
 # Build Timeout (Jenkins-Version: 2.332.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "build-timeout"
@@ -511,7 +511,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-cps"
     source:
-      version: "3520.va_8fc49e2f96f"
+      version: "3536.vb_8a_6628079d5"
 # Pipeline: Nodes and Processes (Jenkins-Version: 2.346.1)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-durable-task-step"
