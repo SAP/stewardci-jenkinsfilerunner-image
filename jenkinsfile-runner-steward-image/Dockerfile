@@ -1,6 +1,6 @@
 FROM jenkinsfile-runner-base-local as packager-output
-# adoptopenjdk/openjdk11:x86_64-alpine-jdk-11.0.15_10-slim
-FROM adoptopenjdk/openjdk11@sha256:e66d87a0adcff97a7173fec2acc4f2edf77b8c5ce0a8e8063a62a0040dd5c74d
+# eclipse-temurin:11.0.16.1_1-jdk-alpine
+FROM eclipse-temurin@sha256:6295fa4981cc24ed0b58a31a2b8a87b66e485eae27a66059bb6288a8a1f4e001
 
 RUN apk update && apk upgrade && \
     apk add jq xmlstarlet bash git curl
