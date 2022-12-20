@@ -16,6 +16,7 @@ jacoco
 kubernetes
 kubernetes-credentials-provider
 lockable-resources
+mask-passwords
 pipeline-github
 pipeline-github-lib
 pipeline-utility-steps

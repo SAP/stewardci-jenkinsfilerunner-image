@@ -342,6 +342,11 @@ plugins:
     artifactId: "mailer"
     source:
       version: "438.v02c7f0a_12fa_4"
+# Mask Passwords (Jenkins-Version: 2.272)
+  - groupId: "org.jenkins-ci.plugins"
+    artifactId: "mask-passwords"
+    source:
+      version: "3.3"
 # Matrix Project (Jenkins-Version: 2.359)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "matrix-project"
