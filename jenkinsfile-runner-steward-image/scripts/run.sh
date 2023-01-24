@@ -121,7 +121,7 @@ function main() {
       echo >&2 "error: could not log failed command to termination log"
     }
     rm -f "$jfr_err_log" &> /dev/null || true
-    terminate ${RESULT_ERROR_INFRA}
+    terminate $RESULT_ERROR_INFRA
   fi
   rm -f "$jfr_err_log" &> /dev/null || true
 
