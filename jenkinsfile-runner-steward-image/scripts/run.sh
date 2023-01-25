@@ -1,18 +1,13 @@
 #!/bin/bash
 set -eu -o pipefail
 
+# Exit codes
 declare -r RESULT_SUCCESS=0
 declare -r RESULT_ERROR_INFRA=1
 declare -r RESULT_ERROR_CONTENT=2
 declare -r RESULT_ERROR_CONFIG=3
 
 unset FINAL_RESULT
-
-# terminate sets the passed RC and exits
-function terminate {
-  FINAL_RESULT=$1
-  exit
-}
 
 # on_exit will be called on each exit
 # if a valid RC is set by terminate function this RC is the final RC
@@ -27,6 +22,12 @@ function on_exit {
 }
 
 trap on_exit EXIT
+
+# terminate sets the passed RC and exits
+function terminate {
+  FINAL_RESULT=$1
+  exit
+}
 
 HERE=$(cd "$(dirname "$BASH_SOURCE")" && pwd) || {
   echo >&2 "error: failed to determine script location"
