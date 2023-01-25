@@ -1,9 +1,37 @@
 #!/bin/bash
 set -eu -o pipefail
 
+# Exit codes
+declare -r RESULT_SUCCESS=0
+declare -r RESULT_ERROR_INFRA=1
+declare -r RESULT_ERROR_CONTENT=2
+declare -r RESULT_ERROR_CONFIG=3
+
+unset FINAL_RESULT
+
+# on_exit will be called on each exit
+# if a valid RC is set by terminate function this RC is the final RC
+# if RC is no valid integer $RESULT_ERROR_INFRA is returned
+# if script exits without the call of terminate function $RESULT_ERROR_INFRA is returned
+function on_exit {
+  if [[ -n "${FINAL_RESULT-}" && -z "${FINAL_RESULT//[0-9]}" ]]; then
+    exit $FINAL_RESULT
+  else
+    exit $RESULT_ERROR_INFRA
+  fi
+}
+
+trap on_exit EXIT
+
+# terminate sets the passed RC and exits
+function terminate {
+  FINAL_RESULT=$1
+  exit
+}
+
 HERE=$(cd "$(dirname "$BASH_SOURCE")" && pwd) || {
   echo >&2 "error: failed to determine script location"
-  exit 1
+  terminate $RESULT_ERROR_INFRA
 }
 declare -r HERE
 
@@ -95,7 +123,7 @@ function main() {
       echo >&2 "error: could not log failed command to termination log"
     }
     rm -f "$jfr_err_log" &> /dev/null || true
-    exit 1
+    terminate $RESULT_ERROR_INFRA
   fi
   rm -f "$jfr_err_log" &> /dev/null || true
 
@@ -106,17 +134,17 @@ function main() {
   result=$(with_termination_log xmlstarlet sel -t -v /flow-build/result "$build_xml")
   if [[ $completed != "true" ]]; then
     echo "Pipeline not completed" | tee -a "${TERMINATION_LOG_PATH}" || true
-    exit "$jfr_rc"
+    terminate $RESULT_ERROR_INFRA
   fi
   if [[ ! $result ]]; then
     echo "No pipeline result in build.xml" | tee -a "${TERMINATION_LOG_PATH}" || true
-    exit "$jfr_rc"
+    terminate $RESULT_ERROR_INFRA
   fi
   echo "Pipeline completed with result: $result" | tee -a "${TERMINATION_LOG_PATH}" || true
   if [[ $result != "SUCCESS" ]]; then
-    exit 1
+    terminate $RESULT_ERROR_CONTENT
   fi
-  exit 0
+  terminate $RESULT_SUCCESS
 }
 
 function check_required_env_vars() {
@@ -191,8 +219,8 @@ function with_retries() {
     cmd=("${@:3}") \
   #---
 
-  validate_integer 'retry_interval' "$retry_interval" || exit 1
-  validate_integer 'timeout_seconds' "$timeout_seconds" || exit 1
+  validate_integer 'retry_interval' "$retry_interval" || terminate $RESULT_ERROR_CONFIG
+  validate_integer 'timeout_seconds' "$timeout_seconds" || terminate $RESULT_ERROR_CONFIG
 
   local rc
 
@@ -259,6 +287,5 @@ function configure_log_elasticsearch() {
 function get_host_addr() {
   hostname -i | sed -e '1!d; s/[[:space:]].*//'
 }
-
 
 main "$@"
