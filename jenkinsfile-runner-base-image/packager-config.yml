@@ -316,17 +316,17 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "kubernetes-client-api"
     source:
-      version: "6.3.1-206.v76d3b_6b_14db_b"
+      version: "5.12.2-193.v26a_6078f65a_9" # Do not change this version until Jenkins core version is updated to > 2.346.3.
 # Kubernetes Credentials (Jenkins-Version: 2.332.4)
   - groupId: "org.jenkinsci.plugins"
     artifactId: "kubernetes-credentials"
     source:
-      version: "0.10.0"
+      version: "0.9.0" # Do not change this version until Jenkins core version is updated to > 2.346.3.
 # Kubernetes Credentials Provider (Jenkins-Version: 2.303.3)
   - groupId: "com.cloudbees.jenkins.plugins"
     artifactId: "kubernetes-credentials-provider"
     source:
-      version: "1.209.v862c6e5fb_1ef"
+      version: "1.206.v7ce2cf7b_0c8b" # Do not change this version until Jenkins core version is updated to > 2.346.3.
 # Lockable Resources (Jenkins-Version: 2.289.3)
   - groupId: "org.6wind.jenkins"
     artifactId: "lockable-resources"
