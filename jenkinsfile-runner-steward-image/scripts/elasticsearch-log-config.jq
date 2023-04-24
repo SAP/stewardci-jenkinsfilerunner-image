@@ -118,6 +118,9 @@ if $leadingParam == "PIPELINE_LOG_FLUENTD_HOST" then
     "unclassified": {
       "elasticSearchLogs": {
         "elasticSearch": {
+          # This is a workaround for a bug in the plugin configuration loading.
+          # Once the bug is fixed, it can be removed.
+          "url": "https://dummy.value.to.pass.validation",
           "elasticsearchWriteAccess": {
             "fluentd": {
               "host": mandatory_param("PIPELINE_LOG_FLUENTD_HOST"),
