@@ -63,8 +63,8 @@ declare -r \
   DEFAULT_PIPELINE_CLONE_RETRY_INTERVAL_SEC=15 \
   DEFAULT_PIPELINE_CLONE_RETRY_TIMEOUT_SEC=180
 
-declare -r _JENKINS_APP_DIR="/app/jenkins"
-declare -r _JENKINS_CASC_D="${_JENKINS_APP_DIR}/WEB-INF/jenkins.yaml.d"
+# declare -r _JENKINS_APP_DIR="/app/jenkins"
+declare -r _JENKINS_CASC_D="/app/jenkins/WEB-INF/jenkins.yaml.d"
 declare -r _JENKINS_HOME="/jenkins_home"
 
 declare -r TERMINATION_LOG_PATH=${TERMINATION_LOG_PATH:-/run/termination-log}
@@ -106,7 +106,7 @@ function main() {
 
   local jfr_cmd=(
     /app/bin/jenkinsfile-runner
-      -w "$_JENKINS_APP_DIR"
+      -w /app/jenkins/executable
       -p /usr/share/jenkins/ref/plugins
       --runHome "${_JENKINS_HOME}"
       --no-sandbox
