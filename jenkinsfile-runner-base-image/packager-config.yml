@@ -181,7 +181,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "durable-task"
     source:
-      version: "504.vb10d1ae5ba2f"
+      version: "506.v1b_3e14b_6f5da_"
 # ECharts API (Jenkins-Version: 2.346.3)
   - groupId: "io.jenkins.plugins"
     artifactId: "echarts-api"
@@ -231,7 +231,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "gradle"
     source:
-      version: "2.5.1"
+      version: "2.6"
 # HTML Publisher (Jenkins-Version: 2.289.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "htmlpublisher"
@@ -391,17 +391,17 @@ plugins:
   - groupId: "org.jenkinsci.plugins"
     artifactId: "pipeline-model-api"
     source:
-      version: "2.2125.vddb_a_44a_d605e"
+      version: "2.2131.vb_9788088fdb_5"
 # Pipeline: Declarative (Jenkins-Version: 2.361.4)
   - groupId: "org.jenkinsci.plugins"
     artifactId: "pipeline-model-definition"
     source:
-      version: "2.2125.vddb_a_44a_d605e"
+      version: "2.2131.vb_9788088fdb_5"
 # Pipeline: Declarative Extension Points API (Jenkins-Version: 2.361.4)
   - groupId: "org.jenkinsci.plugins"
     artifactId: "pipeline-model-extensions"
     source:
-      version: "2.2125.vddb_a_44a_d605e"
+      version: "2.2131.vb_9788088fdb_5"
 # Pipeline: Stage Step (Jenkins-Version: 2.346.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "pipeline-stage-step"
@@ -411,7 +411,7 @@ plugins:
   - groupId: "org.jenkinsci.plugins"
     artifactId: "pipeline-stage-tags-metadata"
     source:
-      version: "2.2125.vddb_a_44a_d605e"
+      version: "2.2131.vb_9788088fdb_5"
 # Pipeline Utility Steps (Jenkins-Version: 2.361.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "pipeline-utility-steps"
@@ -471,7 +471,7 @@ plugins:
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "timestamper"
     source:
-      version: "1.24"
+      version: "1.25"
 # Token Macro (Jenkins-Version: 2.361.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "token-macro"
