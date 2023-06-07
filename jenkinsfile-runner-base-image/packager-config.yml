@@ -19,8 +19,10 @@ buildSettings:
         # We should check if the --waitOnExit parameter makes our fork obsolete. Will be contained after 1.0-beta-30.
         # git: https://github.com/jenkinsci/jenkinsfile-runner.git
         # branch: "1.0-beta-30"
-        git: https://github.com/SAP/stewardci-jenkinsfilerunner-image
-        branch: "jenkinsfile-runner--1.0-beta-30-steward-1"
+        git: https://github.com/romanisb/jenkinsfile-runner.git
+        branch: "pr_suppress_stdout"
+        # git: https://github.com/SAP/stewardci-jenkinsfilerunner-image
+        # branch: "jenkinsfile-runner--1.0-beta-30-steward-1"
     docker:
         # Last version which does not break due to "JEP-230: Convert modules to plugins"
         # https://github.com/jenkinsci/jep/tree/master/jep/230
