@@ -110,7 +110,7 @@ function main() {
       -p /usr/share/jenkins/ref/plugins
       --runHome "${_JENKINS_HOME}"
       --no-sandbox
-      --no-stdout
+      --no-build-logs
       ${JOB_NAME:+--job-name "${JOB_NAME}"}
       ${RUN_NUMBER:+--build-number "${RUN_NUMBER}"}
       ${RUN_CAUSE:+--cause "${RUN_CAUSE}"}
