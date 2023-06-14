@@ -1,9 +1,13 @@
 # A jq 1.5+ filter script that generates the configuration of the
 # Jenkins Elasticsearch Logs plug-in.
 #
+# If none of the leading parameters is set (see below) then no output
+# is created, i.e. the log plug-in configuration is omitted and it
+# should be inactive then.
+#
 # It takes the following environment variables as input:
 #
-#   PIPELINE_LOG_FLUENTD_HOST
+#   PIPELINE_LOG_FLUENTD_HOST (leading param)
 #       The host name of Fluentd service to forward logs to.
 #       If specified, forwarding to Fluentd will be configured.
 #
@@ -15,7 +19,7 @@
 #       The event tag for Fluentd forwarding.
 #       Mandatory if forwarding to Fluentd is to be configured.
 #
-#   PIPELINE_LOG_ELASTICSEARCH_INDEX_URL
+#   PIPELINE_LOG_ELASTICSEARCH_INDEX_URL (leading param)
 #       The Elasticsearch index URL. If specified, forwarding to
 #       Elasticsearch will be configured, except if forwarding
 #       to Fluentd is enabled via PIPELINE_LOG_FLUENTD_HOST.
