@@ -89,68 +89,75 @@ first(existing_params_out_of([
 
 |
 
-# common configuration part
-{
-  "unclassified": {
-    "elasticSearchLogs": {
-      "elasticSearch": {
-        "runIdProvider": {
-          "json": {
-            "jsonSource": {
-              "string": {
-                "jsonString": mandatory_param("PIPELINE_LOG_ELASTICSEARCH_RUN_ID_JSON"; fromjson | tojson),
+if $leadingParam then
+
+  # common configuration part
+  {
+    "unclassified": {
+      "elasticSearchLogs": {
+        "elasticSearch": {
+          "runIdProvider": {
+            "json": {
+              "jsonSource": {
+                "string": {
+                  "jsonString": mandatory_param("PIPELINE_LOG_ELASTICSEARCH_RUN_ID_JSON"; fromjson | tojson),
+                }
+              }
+            }
+          },
+          "saveAnnotations": false,
+          "writeAnnotationsToLogFile": false
+        }
+      }
+    }
+  }
+
+  *  # recursively merge with ...
+
+  if $leadingParam == "PIPELINE_LOG_FLUENTD_HOST" then
+    # write to Fluentd
+    {
+      "unclassified": {
+        "elasticSearchLogs": {
+          "elasticSearch": {
+            "elasticsearchWriteAccess": {
+              "fluentd": {
+                "host": mandatory_param("PIPELINE_LOG_FLUENTD_HOST"),
+                "port": mandatory_param("PIPELINE_LOG_FLUENTD_PORT"),
+                "tag": mandatory_param("PIPELINE_LOG_FLUENTD_TAG"),
+                "bufferCapacity": 1098304,
+                "bufferRetentionTimeMillis": 1000,
+                "maxRetries": 30,
+                "maxWaitSeconds": 30,
+                "retryMillis": 1000,
+                "timeoutMillis": 3000
               }
             }
           }
-        },
-        "saveAnnotations": false,
-        "writeAnnotationsToLogFile": false
+        }
       }
     }
-  }
-}
 
-*  # recursively merge with ...
-
-if $leadingParam == "PIPELINE_LOG_FLUENTD_HOST" then
-  # write to Fluentd
-  {
-    "unclassified": {
-      "elasticSearchLogs": {
-        "elasticSearch": {
-          "elasticsearchWriteAccess": {
-            "fluentd": {
-              "host": mandatory_param("PIPELINE_LOG_FLUENTD_HOST"),
-              "port": mandatory_param("PIPELINE_LOG_FLUENTD_PORT"),
-              "tag": mandatory_param("PIPELINE_LOG_FLUENTD_TAG"),
-              "bufferCapacity": 1098304,
-              "bufferRetentionTimeMillis": 1000,
-              "maxRetries": 30,
-              "maxWaitSeconds": 30,
-              "retryMillis": 1000,
-              "timeoutMillis": 3000
-            }
+  elif $leadingParam == "PIPELINE_LOG_ELASTICSEARCH_INDEX_URL" then
+    # write to Elasticsearch directly
+    {
+      "unclassified": {
+        "elasticSearchLogs": {
+          "elasticSearch": {
+            "elasticsearchWriteAccess": "esDirectWrite",
+            "url": mandatory_param("PIPELINE_LOG_ELASTICSEARCH_INDEX_URL"),
+            "certificateId": optional_param("PIPELINE_LOG_ELASTICSEARCH_TRUSTEDCERTS_SECRET"),
+            "credentialsId": optional_param("PIPELINE_LOG_ELASTICSEARCH_AUTH_SECRET")
           }
         }
       }
     }
-  }
 
-elif $leadingParam == "PIPELINE_LOG_ELASTICSEARCH_INDEX_URL" then
-  # write to Elasticsearch directly
-  {
-    "unclassified": {
-      "elasticSearchLogs": {
-        "elasticSearch": {
-          "elasticsearchWriteAccess": "esDirectWrite",
-          "url": mandatory_param("PIPELINE_LOG_ELASTICSEARCH_INDEX_URL"),
-          "certificateId": optional_param("PIPELINE_LOG_ELASTICSEARCH_TRUSTEDCERTS_SECRET"),
-          "credentialsId": optional_param("PIPELINE_LOG_ELASTICSEARCH_AUTH_SECRET")
-        }
-      }
-    }
-  }
+  else
+    error("internal error: unhandled leading parameter: \($leadingArg)")
+  end
 
 else
-  error("internal error: unexpected leading parameter: \($leadingParam)")
+  # no configuration -> logging to Elasticsearch is disabled
+  empty
 end
