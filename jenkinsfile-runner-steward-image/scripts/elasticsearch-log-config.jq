@@ -1,13 +1,13 @@
 # A jq 1.5+ filter script that generates the configuration of the
 # Jenkins Elasticsearch Logs plug-in.
 #
-# If none of the leading parameters is set (see below) then no output
+# If PIPELINE_LOG_ELASTICSEARCH_INDEX_URL is not set then no output
 # is created, i.e. the log plug-in configuration is omitted and it
 # should be inactive then.
 #
 # It takes the following environment variables as input:
 #
-#   PIPELINE_LOG_FLUENTD_HOST (leading param)
+#   PIPELINE_LOG_FLUENTD_HOST
 #       The host name of Fluentd service to forward logs to.
 #       If specified, forwarding to Fluentd will be configured.
 #
@@ -19,7 +19,7 @@
 #       The event tag for Fluentd forwarding.
 #       Mandatory if forwarding to Fluentd is to be configured.
 #
-#   PIPELINE_LOG_ELASTICSEARCH_INDEX_URL (leading param)
+#   PIPELINE_LOG_ELASTICSEARCH_INDEX_URL
 #       The Elasticsearch index URL. If specified, forwarding to
 #       Elasticsearch will be configured, except if forwarding
 #       to Fluentd is enabled via PIPELINE_LOG_FLUENTD_HOST.
@@ -86,14 +86,12 @@ def mandatory_param($name; conv):
 # Main
 ####################
 
-first(existing_params_out_of([
-    "PIPELINE_LOG_FLUENTD_HOST",
-    "PIPELINE_LOG_ELASTICSEARCH_INDEX_URL"
-])) as $leadingParam
+if optional_param("PIPELINE_LOG_ELASTICSEARCH_INDEX_URL") | not then
 
-|
+  # no log destination -> do not configure log plug-in
+  empty
 
-if $leadingParam then
+else
 
   # common configuration part
   {
@@ -118,7 +116,7 @@ if $leadingParam then
 
   *  # recursively merge with ...
 
-  if $leadingParam == "PIPELINE_LOG_FLUENTD_HOST" then
+  if optional_param("PIPELINE_LOG_FLUENTD_HOST") then
     # write to Fluentd
     {
       "unclassified": {
@@ -141,8 +139,7 @@ if $leadingParam then
         }
       }
     }
-
-  elif $leadingParam == "PIPELINE_LOG_ELASTICSEARCH_INDEX_URL" then
+  else
     # write to Elasticsearch directly
     {
       "unclassified": {
@@ -156,12 +153,6 @@ if $leadingParam then
         }
       }
     }
-
-  else
-    error("internal error: unhandled leading parameter: \($leadingArg)")
   end
 
-else
-  # no configuration -> logging to Elasticsearch is disabled
-  empty
 end
