@@ -1,6 +1,10 @@
 # A jq 1.5+ filter script that generates the configuration of the
 # Jenkins Elasticsearch Logs plug-in.
 #
+# If PIPELINE_LOG_ELASTICSEARCH_INDEX_URL is not set then no output
+# is created, i.e. the log plug-in configuration is omitted and it
+# should be inactive then.
+#
 # It takes the following environment variables as input:
 #
 #   PIPELINE_LOG_FLUENTD_HOST
@@ -82,75 +86,73 @@ def mandatory_param($name; conv):
 # Main
 ####################
 
-first(existing_params_out_of([
-    "PIPELINE_LOG_FLUENTD_HOST",
-    "PIPELINE_LOG_ELASTICSEARCH_INDEX_URL"
-])) as $leadingParam
+if optional_param("PIPELINE_LOG_ELASTICSEARCH_INDEX_URL") | not then
 
-|
+  # no log destination -> do not configure log plug-in
+  empty
 
-# common configuration part
-{
-  "unclassified": {
-    "elasticSearchLogs": {
-      "elasticSearch": {
-        "runIdProvider": {
-          "json": {
-            "jsonSource": {
-              "string": {
-                "jsonString": mandatory_param("PIPELINE_LOG_ELASTICSEARCH_RUN_ID_JSON"; fromjson | tojson),
+else
+
+  # common configuration part
+  {
+    "unclassified": {
+      "elasticSearchLogs": {
+        "elasticSearch": {
+          "runIdProvider": {
+            "json": {
+              "jsonSource": {
+                "string": {
+                  "jsonString": mandatory_param("PIPELINE_LOG_ELASTICSEARCH_RUN_ID_JSON"; fromjson | tojson),
+                }
+              }
+            }
+          },
+          "saveAnnotations": false,
+          "writeAnnotationsToLogFile": false
+        }
+      }
+    }
+  }
+
+  *  # recursively merge with ...
+
+  if optional_param("PIPELINE_LOG_FLUENTD_HOST") then
+    # write to Fluentd
+    {
+      "unclassified": {
+        "elasticSearchLogs": {
+          "elasticSearch": {
+            "elasticsearchWriteAccess": {
+              "fluentd": {
+                "host": mandatory_param("PIPELINE_LOG_FLUENTD_HOST"),
+                "port": mandatory_param("PIPELINE_LOG_FLUENTD_PORT"),
+                "tag": mandatory_param("PIPELINE_LOG_FLUENTD_TAG"),
+                "bufferCapacity": 1098304,
+                "bufferRetentionTimeMillis": 1000,
+                "maxRetries": 30,
+                "maxWaitSeconds": 30,
+                "retryMillis": 1000,
+                "timeoutMillis": 3000
               }
             }
           }
-        },
-        "saveAnnotations": false,
-        "writeAnnotationsToLogFile": false
+        }
       }
     }
-  }
-}
-
-*  # recursively merge with ...
-
-if $leadingParam == "PIPELINE_LOG_FLUENTD_HOST" then
-  # write to Fluentd
-  {
-    "unclassified": {
-      "elasticSearchLogs": {
-        "elasticSearch": {
-          "elasticsearchWriteAccess": {
-            "fluentd": {
-              "host": mandatory_param("PIPELINE_LOG_FLUENTD_HOST"),
-              "port": mandatory_param("PIPELINE_LOG_FLUENTD_PORT"),
-              "tag": mandatory_param("PIPELINE_LOG_FLUENTD_TAG"),
-              "bufferCapacity": 1098304,
-              "bufferRetentionTimeMillis": 1000,
-              "maxRetries": 30,
-              "maxWaitSeconds": 30,
-              "retryMillis": 1000,
-              "timeoutMillis": 3000
-            }
+  else
+    # write to Elasticsearch directly
+    {
+      "unclassified": {
+        "elasticSearchLogs": {
+          "elasticSearch": {
+            "elasticsearchWriteAccess": "esDirectWrite",
+            "url": mandatory_param("PIPELINE_LOG_ELASTICSEARCH_INDEX_URL"),
+            "certificateId": optional_param("PIPELINE_LOG_ELASTICSEARCH_TRUSTEDCERTS_SECRET"),
+            "credentialsId": optional_param("PIPELINE_LOG_ELASTICSEARCH_AUTH_SECRET")
           }
         }
       }
     }
-  }
+  end
 
-elif $leadingParam == "PIPELINE_LOG_ELASTICSEARCH_INDEX_URL" then
-  # write to Elasticsearch directly
-  {
-    "unclassified": {
-      "elasticSearchLogs": {
-        "elasticSearch": {
-          "elasticsearchWriteAccess": "esDirectWrite",
-          "url": mandatory_param("PIPELINE_LOG_ELASTICSEARCH_INDEX_URL"),
-          "certificateId": optional_param("PIPELINE_LOG_ELASTICSEARCH_TRUSTEDCERTS_SECRET"),
-          "credentialsId": optional_param("PIPELINE_LOG_ELASTICSEARCH_AUTH_SECRET")
-        }
-      }
-    }
-  }
-
-else
-  error("internal error: unexpected leading parameter: \($leadingParam)")
 end

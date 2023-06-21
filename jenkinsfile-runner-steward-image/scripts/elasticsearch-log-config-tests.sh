@@ -48,6 +48,10 @@ function _define_testdata() {
   array_merge PARAMS_FLUENTD_FULL PARAMS_FLUENTD_MANDATORY
   declare -r PARAMS_FLUENTD_FULL
 
+  declare -grA PARAMS_ES_INDEX_URL=(
+    [PIPELINE_LOG_ELASTICSEARCH_INDEX_URL]="esURL1"
+  )
+
   declare -grA PARAMS_ES_MANDATORY=(
     [PIPELINE_LOG_ELASTICSEARCH_INDEX_URL]="esURL1"
   )
@@ -200,10 +204,27 @@ function test_leading_param_precedence() {
   assert_result_equals "$EXPECTED_FLUENTD_MANDATORY" "$result"
 }
 
+function test_fluentd_es_index_url_missing() {
+  # SETUP
+  local -A params=()
+  array_merge params \
+      PARAMS_FLUENTD_MANDATORY \
+      PARAMS_COMMON_MANDATORY
+      # no PARAMS_ES_INDEX_URL here
+
+  # EXERCISE
+  local result
+  result=$(_excercise params)
+
+  # VERIFY
+  assert_result_equals "" "$result"
+}
+
 function test_fluentd_mandatory() {
   # SETUP
   local -A params=()
   array_merge params \
+      PARAMS_ES_INDEX_URL \
       PARAMS_FLUENTD_MANDATORY \
       PARAMS_COMMON_MANDATORY
 
@@ -219,6 +240,7 @@ function test_fluentd_full() {
   # SETUP
   local -A params=()
   array_merge params \
+      PARAMS_ES_INDEX_URL \
       PARAMS_FLUENTD_FULL \
       PARAMS_COMMON_FULL
 
@@ -264,6 +286,7 @@ function test_fluentd_fail_on_missing_param() {
   # SETUP
   local -A mandatory_params=()
   array_merge mandatory_params \
+      PARAMS_ES_INDEX_URL \
       PARAMS_FLUENTD_MANDATORY \
       PARAMS_COMMON_MANDATORY
 
@@ -334,7 +357,7 @@ function test_common_fail_on_missing_param() {
   # SETUP
   local -A mandatory_params=()
   array_merge mandatory_params \
-      PARAMS_FLUENTD_MANDATORY \
+      PARAMS_ES_MANDATORY \
       PARAMS_COMMON_MANDATORY
 
   # SUBTESTS
@@ -381,7 +404,7 @@ function test_invalid_RUNID_JSON() {
   local p_name="PIPELINE_LOG_ELASTICSEARCH_RUN_ID_JSON"
   local -A params=()
   array_merge params \
-      PARAMS_FLUENTD_MANDATORY \
+      PARAMS_ES_MANDATORY \
       PARAMS_COMMON_MANDATORY
   params[$p_name]=AAA
 
@@ -399,6 +422,7 @@ function _excercise_and_verify_invalid_param_value() {
     echo "+++"
     echo "$err_out"
     echo "+++"
+    return 1
   }
 }
 

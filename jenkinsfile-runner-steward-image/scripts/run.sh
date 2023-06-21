@@ -92,7 +92,12 @@ function main() {
 
   with_termination_log sed -i "s/0.0.0.0/$host_addr/g" "$casc_yml"
   with_termination_log sed -i "s/xxx/$RUN_NAMESPACE/" "$casc_yml"
-  with_termination_log configure_log_elasticsearch
+  local logforwarding_enabled
+  logforwarding_enabled=$(with_termination_log configure_log_elasticsearch)
+  local -a JFR_LOG_ARGS=()
+  if [[ $logforwarding_enabled ]]; then
+    JFR_LOG_ARGS+=("--no-build-logs")
+  fi
 
   with_termination_log mkdir -p "${_JENKINS_HOME}"
 
@@ -110,9 +115,10 @@ function main() {
       -p /usr/share/jenkins/ref/plugins
       --runHome "${_JENKINS_HOME}"
       --no-sandbox
-      ${JOB_NAME:+--job-name "${JOB_NAME}"}
-      ${RUN_NUMBER:+--build-number "${RUN_NUMBER}"}
-      ${RUN_CAUSE:+--cause "${RUN_CAUSE}"}
+      "${JFR_LOG_ARGS[@]}"
+      ${JOB_NAME:+ --job-name "${JOB_NAME}"}
+      ${RUN_NUMBER:+ --build-number "${RUN_NUMBER}"}
+      ${RUN_CAUSE:+ --cause "${RUN_CAUSE}"}
       -f "$PIPELINE_FILE"
       "${JFR_PIPELINE_PARAM_ARGS[@]}"
   )
@@ -280,8 +286,15 @@ function make_jfr_pipeline_param_args() {
 }
 
 function configure_log_elasticsearch() {
-  jq -n -S -f "${HERE}/elasticsearch-log-config.jq" \
-      >"${_JENKINS_CASC_D}/log-elasticsearch.yml"
+  local -r CONFIG_FILE="${_JENKINS_CASC_D}/log-elasticsearch.yml"
+
+  jq -n -S -f "${HERE}/elasticsearch-log-config.jq" >"$CONFIG_FILE" || return 1
+
+  # Report via stdout whether logging is configured.
+  # The config file is empty if NOT configured.
+  if [[ -s $CONFIG_FILE ]]; then
+    echo -n "x" # non-empty output means true
+  fi
 }
 
 function get_host_addr() {
