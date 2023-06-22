@@ -20,7 +20,7 @@ buildSettings:
         # git: https://github.com/jenkinsci/jenkinsfile-runner.git
         # branch: "1.0-beta-30"
         git: https://github.com/romanisb/jenkinsfile-runner.git
-        branch: "stewardci"
+        branch: "jenkinsfile-runner--1.0-beta-30-steward"
         # git: https://github.com/SAP/stewardci-jenkinsfilerunner-image
         # branch: "jenkinsfile-runner--1.0-beta-30-steward-1"
     docker:
