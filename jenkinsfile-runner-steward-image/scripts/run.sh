@@ -115,7 +115,7 @@ function main() {
       -p /usr/share/jenkins/ref/plugins
       --runHome "${_JENKINS_HOME}"
       --no-sandbox
-      --write-log-init-timeout 120
+      --write-log-init-timeout 20
       "${JFR_LOG_ARGS[@]}"
       ${JOB_NAME:+ --job-name "${JOB_NAME}"}
       ${RUN_NUMBER:+ --build-number "${RUN_NUMBER}"}
