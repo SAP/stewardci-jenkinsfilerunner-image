@@ -95,9 +95,9 @@ function main() {
   local logforwarding_enabled
   logforwarding_enabled=$(with_termination_log configure_log_elasticsearch)
   local -a JFR_LOG_ARGS=()
-  if [[ $logforwarding_enabled ]]; then
-    JFR_LOG_ARGS+=("--no-build-logs")
-  fi
+  #if [[ $logforwarding_enabled ]]; then
+  #  JFR_LOG_ARGS+=("--no-build-logs")
+  #fi
 
   with_termination_log mkdir -p "${_JENKINS_HOME}"
 
