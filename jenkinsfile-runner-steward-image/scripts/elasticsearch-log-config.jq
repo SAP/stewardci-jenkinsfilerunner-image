@@ -108,7 +108,8 @@ else
             }
           },
           "saveAnnotations": false,
-          "writeAnnotationsToLogFile": false
+          "writeAnnotationsToLogFile": false,
+          "splitMessagesLongerThan": optional_param("PIPELINE_LOGS_PLUGIN_SPLIT_MESSAGES_LONGER_THAN")
         }
       }
     }
@@ -127,12 +128,19 @@ else
                 "host": mandatory_param("PIPELINE_LOG_FLUENTD_HOST"),
                 "port": mandatory_param("PIPELINE_LOG_FLUENTD_PORT"),
                 "tag": mandatory_param("PIPELINE_LOG_FLUENTD_TAG"),
-                "bufferCapacity": 1098304,
-                "bufferRetentionTimeMillis": 1000,
-                "maxRetries": 30,
-                "maxWaitSeconds": 30,
-                "retryMillis": 1000,
-                "timeoutMillis": 3000
+                "senderBaseRetryIntervalMillis": mandatory_param("PIPELINE_LOGS_PLUGIN_SENDER_BASE_RETRY_INTERVAL_MILLIS"),
+                "senderMaxRetryIntervalMillis": mandatory_param("PIPELINE_LOGS_PLUGIN_SENDER_MAX_RETRY_INTERVAL_MILLIS"),
+                "senderMaxRetryCount": mandatory_param("PIPELINE_LOGS_PLUGIN_SENDER_MAX_RETRY_COUNT"),
+                "connectionTimeoutMillis": mandatory_param("PIPELINE_LOGS_PLUGIN_CONNECTION_TIMEOUT_MILLIS"),
+                "readTimeoutMillis": mandatory_param("PIPELINE_LOGS_PLUGIN_READ_TIMEOUT_MILLIS"),
+                "bufferChunkInitialSize": optional_param("PIPELINE_LOGS_PLUGIN_BUFFER_CHUNK_INITIAL_SIZE"),
+                "bufferChunkRetentionSize": optional_param("PIPELINE_LOGS_PLUGIN_BUFFER_CHUNK_RETENTION_SIZE"),
+                "bufferChunkRetentionTimeMillis": optional_param("PIPELINE_LOGS_PLUGIN_BUFFER_CHUNK_RETENTION_TIME_MILLIS"),
+                "maxBufferSize": optional_param("PIPELINE_LOGS_PLUGIN_MAX_BUFFER_SIZE"),
+                "maxWaitSecondsUntilBufferFlushed": optional_param("PIPELINE_LOGS_PLUGIN_MAX_WAIT_SECONDS_UNTIL_BUFFER_FLUSHED"),
+                "maxWaitSecondsUntilFlusherTerminated": optional_param("PIPELINE_LOGS_PLUGIN_MAX_WAIT_SECONDS_UNTIL_FLUSHER_TERMINATED"),
+                "flushAttemptIntervalMillis": optional_param("PIPELINE_LOGS_PLUGIN_FLUSH_ATTEMPT_INTERVAL_MILLIS"),
+                "emitMaxRetriesIfBufferFull": optional_param("PIPELINE_LOGS_PLUGIN_EMIT_MAX_RETRIES_IF_BUFFER_FULL")
               }
             }
           }
