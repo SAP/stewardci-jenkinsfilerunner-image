@@ -7,6 +7,14 @@
 #
 # It takes the following environment variables as input:
 #
+#   PIPELINE_LOG_ELASTICSEARCH_RUN_ID_JSON
+#       The run ID to be set for all log events, in JSON format.
+#       Mandatory.
+#
+#   PIPELINE_LOG_ELASTICSEARCH_SPLIT_MESSAGES_LONGER_THAN
+#       The number of characters to split long messages at.
+#       Optional.
+#
 #   PIPELINE_LOG_FLUENTD_HOST
 #       The host name of Fluentd service to forward logs to.
 #       If specified, forwarding to Fluentd will be configured.
@@ -19,14 +27,57 @@
 #       The event tag for Fluentd forwarding.
 #       Mandatory if forwarding to Fluentd is to be configured.
 #
+#   PIPELINE_LOG_FLUENTD_SENDER_BASE_RETRY_INTERVAL_MILLIS
+#       Optional.
+#
+#   PIPELINE_LOG_FLUENTD_SENDER_MAX_RETRY_INTERVAL_MILLIS
+#       Optional.
+#
+#   PIPELINE_LOG_FLUENTD_SENDER_MAX_RETRY_COUNT
+#       Optional.
+#
+#   PIPELINE_LOG_FLUENTD_CONNECTION_TIMEOUT_MILLIS
+#       Optional.
+#
+#   PIPELINE_LOG_FLUENTD_READ_TIMEOUT_MILLIS
+#       Optional.
+#
+#   PIPELINE_LOG_FLUENTD_MAX_WAIT_SECONDS_UNTIL_BUFFER_FLUSHED
+#       Optional.
+#
+#   PIPELINE_LOG_FLUENTD_MAX_WAIT_SECONDS_UNTIL_FLUSHER_TERMINATED
+#       Optional.
+#
+#   PIPELINE_LOG_FLUENTD_BUFFER_CHUNK_INITIAL_SIZE
+#       Optional.
+#
+#   PIPELINE_LOG_FLUENTD_BUFFER_CHUNK_RETENTION_SIZE
+#       Optional.
+#
+#   PIPELINE_LOG_FLUENTD_BUFFER_CHUNK_RETENTION_TIME_MILLIS
+#       Optional.
+#
+#   PIPELINE_LOG_FLUENTD_FLUSH_ATTEMPT_INTERVAL_MILLIS
+#       Optional.
+#
+#   PIPELINE_LOG_FLUENTD_MAX_BUFFER_SIZE
+#       Optional.
+#
+#   PIPELINE_LOG_FLUENTD_EMIT_TIMEOUT_MILLIS
+#       Optional.
+#
 #   PIPELINE_LOG_ELASTICSEARCH_INDEX_URL
 #       The Elasticsearch index URL. If specified, forwarding to
 #       Elasticsearch will be configured, except if forwarding
 #       to Fluentd is enabled via PIPELINE_LOG_FLUENTD_HOST.
 #
-#   PIPELINE_LOG_ELASTICSEARCH_TRUSTEDCERTS_SECRET
-#       The ID of the Jenkins credential containing the trusted
-#       certificates.
+#   PIPELINE_LOG_ELASTICSEARCH_CONNECT_TIMEOUT_MILLIS
+#       Optional.
+#
+#   PIPELINE_LOG_ELASTICSEARCH_REQUEST_TIMEOUT_MILLIS
+#       Optional.
+#
+#   PIPELINE_LOG_ELASTICSEARCH_SOCKET_TIMEOUT_MILLIS
 #       Optional.
 #
 #   PIPELINE_LOG_ELASTICSEARCH_AUTH_SECRET
@@ -35,9 +86,10 @@
 #       to Elasticsearch is to be configured.
 #       Optional.
 #
-#   PIPELINE_LOG_ELASTICSEARCH_RUN_ID_JSON
-#       The run ID to be set for all log events, in JSON format.
-#       Mandatory.
+#   PIPELINE_LOG_ELASTICSEARCH_TRUSTEDCERTS_SECRET
+#       The ID of the Jenkins credential containing the trusted
+#       certificates.
+#       Optional.
 #
 
 ####################
@@ -65,7 +117,7 @@ def optional_param($name):
   ;
 
 def optional_param($name; conv):
-  optional_param($name) | _prefix_error_with_param_name($name; conv)
+  optional_param($name) | if . != null then _prefix_error_with_param_name($name; conv) else . end
   ;
 
 def mandatory_param($name):
@@ -96,8 +148,8 @@ else
   # common configuration part
   {
     "unclassified": {
-      "elasticSearchLogs": {
-        "elasticSearch": {
+      "elasticsearchLogs": {
+        "elasticsearch": {
           "runIdProvider": {
             "json": {
               "jsonSource": {
@@ -109,7 +161,7 @@ else
           },
           "saveAnnotations": false,
           "writeAnnotationsToLogFile": false,
-          "splitMessagesLongerThan": optional_param("PIPELINE_LOGS_PLUGIN_SPLIT_MESSAGES_LONGER_THAN")
+          "splitMessagesLongerThan": optional_param("PIPELINE_LOG_ELASTICSEARCH_SPLIT_MESSAGES_LONGER_THAN"; tonumber)
         }
       }
     }
@@ -121,26 +173,26 @@ else
     # write to Fluentd
     {
       "unclassified": {
-        "elasticSearchLogs": {
-          "elasticSearch": {
-            "elasticsearchWriteAccess": {
-              "fluentd": {
+        "elasticsearchLogs": {
+          "elasticsearch": {
+            "eventWriterConfig": {
+              "fluentdEventWriter": {
                 "host": mandatory_param("PIPELINE_LOG_FLUENTD_HOST"),
                 "port": mandatory_param("PIPELINE_LOG_FLUENTD_PORT"),
                 "tag": mandatory_param("PIPELINE_LOG_FLUENTD_TAG"),
-                "senderBaseRetryIntervalMillis": mandatory_param("PIPELINE_LOGS_PLUGIN_SENDER_BASE_RETRY_INTERVAL_MILLIS"),
-                "senderMaxRetryIntervalMillis": mandatory_param("PIPELINE_LOGS_PLUGIN_SENDER_MAX_RETRY_INTERVAL_MILLIS"),
-                "senderMaxRetryCount": mandatory_param("PIPELINE_LOGS_PLUGIN_SENDER_MAX_RETRY_COUNT"),
-                "connectionTimeoutMillis": mandatory_param("PIPELINE_LOGS_PLUGIN_CONNECTION_TIMEOUT_MILLIS"),
-                "readTimeoutMillis": mandatory_param("PIPELINE_LOGS_PLUGIN_READ_TIMEOUT_MILLIS"),
-                "bufferChunkInitialSize": optional_param("PIPELINE_LOGS_PLUGIN_BUFFER_CHUNK_INITIAL_SIZE"),
-                "bufferChunkRetentionSize": optional_param("PIPELINE_LOGS_PLUGIN_BUFFER_CHUNK_RETENTION_SIZE"),
-                "bufferChunkRetentionTimeMillis": optional_param("PIPELINE_LOGS_PLUGIN_BUFFER_CHUNK_RETENTION_TIME_MILLIS"),
-                "maxBufferSize": optional_param("PIPELINE_LOGS_PLUGIN_MAX_BUFFER_SIZE"),
-                "maxWaitSecondsUntilBufferFlushed": optional_param("PIPELINE_LOGS_PLUGIN_MAX_WAIT_SECONDS_UNTIL_BUFFER_FLUSHED"),
-                "maxWaitSecondsUntilFlusherTerminated": optional_param("PIPELINE_LOGS_PLUGIN_MAX_WAIT_SECONDS_UNTIL_FLUSHER_TERMINATED"),
-                "flushAttemptIntervalMillis": optional_param("PIPELINE_LOGS_PLUGIN_FLUSH_ATTEMPT_INTERVAL_MILLIS"),
-                "emitMaxRetriesIfBufferFull": optional_param("PIPELINE_LOGS_PLUGIN_EMIT_MAX_RETRIES_IF_BUFFER_FULL")
+                "senderBaseRetryIntervalMillis": optional_param("PIPELINE_LOG_FLUENTD_SENDER_BASE_RETRY_INTERVAL_MILLIS"; tonumber),
+                "senderMaxRetryIntervalMillis": optional_param("PIPELINE_LOG_FLUENTD_SENDER_MAX_RETRY_INTERVAL_MILLIS"; tonumber),
+                "senderMaxRetryCount": optional_param("PIPELINE_LOG_FLUENTD_SENDER_MAX_RETRY_COUNT"; tonumber),
+                "connectionTimeoutMillis": optional_param("PIPELINE_LOG_FLUENTD_CONNECTION_TIMEOUT_MILLIS"; tonumber),
+                "readTimeoutMillis": optional_param("PIPELINE_LOG_FLUENTD_READ_TIMEOUT_MILLIS"; tonumber),
+                "maxWaitSecondsUntilBufferFlushed": optional_param("PIPELINE_LOG_FLUENTD_MAX_WAIT_SECONDS_UNTIL_BUFFER_FLUSHED"; tonumber),
+                "maxWaitSecondsUntilFlusherTerminated": optional_param("PIPELINE_LOG_FLUENTD_MAX_WAIT_SECONDS_UNTIL_FLUSHER_TERMINATED"; tonumber),
+                "bufferChunkInitialSize": optional_param("PIPELINE_LOG_FLUENTD_BUFFER_CHUNK_INITIAL_SIZE"; tonumber),
+                "bufferChunkRetentionSize": optional_param("PIPELINE_LOG_FLUENTD_BUFFER_CHUNK_RETENTION_SIZE"; tonumber),
+                "bufferChunkRetentionTimeMillis": optional_param("PIPELINE_LOG_FLUENTD_BUFFER_CHUNK_RETENTION_TIME_MILLIS"; tonumber),
+                "flushAttemptIntervalMillis": optional_param("PIPELINE_LOG_FLUENTD_FLUSH_ATTEMPT_INTERVAL_MILLIS"; tonumber),
+                "maxBufferSize": optional_param("PIPELINE_LOG_FLUENTD_MAX_BUFFER_SIZE"; tonumber),
+                "emitTimeoutMillis": optional_param("PIPELINE_LOG_FLUENTD_EMIT_TIMEOUT_MILLIS"; tonumber)
               }
             }
           }
@@ -151,12 +203,18 @@ else
     # write to Elasticsearch directly
     {
       "unclassified": {
-        "elasticSearchLogs": {
-          "elasticSearch": {
-            "elasticsearchWriteAccess": "esDirectWrite",
-            "url": mandatory_param("PIPELINE_LOG_ELASTICSEARCH_INDEX_URL"),
-            "certificateId": optional_param("PIPELINE_LOG_ELASTICSEARCH_TRUSTEDCERTS_SECRET"),
-            "credentialsId": optional_param("PIPELINE_LOG_ELASTICSEARCH_AUTH_SECRET")
+        "elasticsearchLogs": {
+          "elasticsearch": {
+            "eventWriterConfig": {
+              "indexAPIEventWriter": {
+                "indexUrl": mandatory_param("PIPELINE_LOG_ELASTICSEARCH_INDEX_URL"),
+                "connectTimeoutMillis": optional_param("PIPELINE_LOG_ELASTICSEARCH_CONNECT_TIMEOUT_MILLIS"; tonumber),
+                "requestTimeoutMillis": optional_param("PIPELINE_LOG_ELASTICSEARCH_REQUEST_TIMEOUT_MILLIS"; tonumber),
+                "socketTimeoutMillis": optional_param("PIPELINE_LOG_ELASTICSEARCH_SOCKET_TIMEOUT_MILLIS"; tonumber),
+                "authCredentialsId": optional_param("PIPELINE_LOG_ELASTICSEARCH_AUTH_SECRET"),
+                "trustStoreCredentialsId": optional_param("PIPELINE_LOG_ELASTICSEARCH_TRUSTEDCERTS_SECRET")
+              }
+            }
           }
         }
       }

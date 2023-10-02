@@ -43,7 +43,19 @@ function _define_testdata() {
   )
 
   declare -gA PARAMS_FLUENTD_FULL=(
-    # no optional params so far
+    [PIPELINE_LOG_FLUENTD_SENDER_BASE_RETRY_INTERVAL_MILLIS]='11975'
+    [PIPELINE_LOG_FLUENTD_SENDER_MAX_RETRY_INTERVAL_MILLIS]='87630'
+    [PIPELINE_LOG_FLUENTD_SENDER_MAX_RETRY_COUNT]='60721'
+    [PIPELINE_LOG_FLUENTD_CONNECTION_TIMEOUT_MILLIS]='95021'
+    [PIPELINE_LOG_FLUENTD_READ_TIMEOUT_MILLIS]='86275'
+    [PIPELINE_LOG_FLUENTD_MAX_WAIT_SECONDS_UNTIL_BUFFER_FLUSHED]='96720'
+    [PIPELINE_LOG_FLUENTD_MAX_WAIT_SECONDS_UNTIL_FLUSHER_TERMINATED]='52605'
+    [PIPELINE_LOG_FLUENTD_BUFFER_CHUNK_INITIAL_SIZE]='78752'
+    [PIPELINE_LOG_FLUENTD_BUFFER_CHUNK_RETENTION_SIZE]='58990'
+    [PIPELINE_LOG_FLUENTD_BUFFER_CHUNK_RETENTION_TIME_MILLIS]='46284'
+    [PIPELINE_LOG_FLUENTD_FLUSH_ATTEMPT_INTERVAL_MILLIS]='19464'
+    [PIPELINE_LOG_FLUENTD_MAX_BUFFER_SIZE]='86255'
+    [PIPELINE_LOG_FLUENTD_EMIT_TIMEOUT_MILLIS]='79553'
   )
   array_merge PARAMS_FLUENTD_FULL PARAMS_FLUENTD_MANDATORY
   declare -r PARAMS_FLUENTD_FULL
@@ -57,8 +69,11 @@ function _define_testdata() {
   )
 
   declare -gA PARAMS_ES_FULL=(
-    [PIPELINE_LOG_ELASTICSEARCH_TRUSTEDCERTS_SECRET]="esTrustedCertsSecret1"
+    [PIPELINE_LOG_ELASTICSEARCH_CONNECT_TIMEOUT_MILLIS]='73543'
+    [PIPELINE_LOG_ELASTICSEARCH_REQUEST_TIMEOUT_MILLIS]='97221'
+    [PIPELINE_LOG_ELASTICSEARCH_SOCKET_TIMEOUT_MILLIS]='18536'
     [PIPELINE_LOG_ELASTICSEARCH_AUTH_SECRET]="esAuthSecret1"
+    [PIPELINE_LOG_ELASTICSEARCH_TRUSTEDCERTS_SECRET]="esTrustedCertsSecret1"
   )
   array_merge PARAMS_ES_FULL PARAMS_ES_MANDATORY
   declare -r PARAMS_ES_FULL
@@ -68,7 +83,7 @@ function _define_testdata() {
   )
 
   declare -gA PARAMS_COMMON_FULL=(
-    # no optional parameter so far
+    [PIPELINE_LOG_ELASTICSEARCH_SPLIT_MESSAGES_LONGER_THAN]='73785'
   )
   array_merge PARAMS_COMMON_FULL PARAMS_COMMON_MANDATORY
   declare -r PARAMS_COMMON_FULL
@@ -82,19 +97,29 @@ function _define_testdata() {
   declare -gr EXPECTED_FLUENTD_MANDATORY=$(cat <<"EOF"
 {
   "unclassified": {
-    "elasticSearchLogs": {
-      "elasticSearch": {
-        "elasticsearchWriteAccess": {
-          "fluentd": {
-            "bufferCapacity": 1098304,
-            "bufferRetentionTimeMillis": 1000,
+    "elasticsearchLogs": {
+      "elasticsearch": {
+        "saveAnnotations": false,
+        "writeAnnotationsToLogFile": false,
+        "splitMessagesLongerThan": null,
+        "eventWriterConfig": {
+          "fluentdEventWriter": {
             "host": "fluentdHost1",
-            "maxRetries": 30,
-            "maxWaitSeconds": 30,
             "port": "111",
-            "retryMillis": 1000,
             "tag": "fluentdTag1",
-            "timeoutMillis": 3000
+            "senderBaseRetryIntervalMillis": null,
+            "senderMaxRetryIntervalMillis": null,
+            "senderMaxRetryCount": null,
+            "connectionTimeoutMillis": null,
+            "readTimeoutMillis": null,
+            "maxWaitSecondsUntilBufferFlushed": null,
+            "maxWaitSecondsUntilFlusherTerminated": null,
+            "bufferChunkInitialSize": null,
+            "bufferChunkRetentionSize": null,
+            "bufferChunkRetentionTimeMillis": null,
+            "flushAttemptIntervalMillis": null,
+            "maxBufferSize": null,
+            "emitTimeoutMillis": null
           }
         },
         "runIdProvider": {
@@ -105,9 +130,7 @@ function _define_testdata() {
               }
             }
           }
-        },
-        "saveAnnotations": false,
-        "writeAnnotationsToLogFile": false
+        }
       }
     }
   }
@@ -115,16 +138,34 @@ function _define_testdata() {
 EOF
   )
 
-  declare -gr EXPECTED_FLUENTD_FULL=$EXPECTED_FLUENTD_MANDATORY
-
-  declare -gr EXPECTED_ES_MANDATORY=$(cat <<"EOF"
+  declare -gr EXPECTED_FLUENTD_FULL=$(cat <<"EOF"
 {
   "unclassified": {
-    "elasticSearchLogs": {
-      "elasticSearch": {
-        "certificateId": null,
-        "credentialsId": null,
-        "elasticsearchWriteAccess": "esDirectWrite",
+    "elasticsearchLogs": {
+      "elasticsearch": {
+        "saveAnnotations": false,
+        "writeAnnotationsToLogFile": false,
+        "splitMessagesLongerThan": 73785,
+        "eventWriterConfig": {
+          "fluentdEventWriter": {
+            "host": "fluentdHost1",
+            "port": "111",
+            "tag": "fluentdTag1",
+            "senderBaseRetryIntervalMillis": 11975,
+            "senderMaxRetryIntervalMillis": 87630,
+            "senderMaxRetryCount": 60721,
+            "connectionTimeoutMillis": 95021,
+            "readTimeoutMillis": 86275,
+            "maxWaitSecondsUntilBufferFlushed": 96720,
+            "maxWaitSecondsUntilFlusherTerminated": 52605,
+            "bufferChunkInitialSize": 78752,
+            "bufferChunkRetentionSize": 58990,
+            "bufferChunkRetentionTimeMillis": 46284,
+            "flushAttemptIntervalMillis": 19464,
+            "maxBufferSize": 86255,
+            "emitTimeoutMillis": 79553
+          }
+        },
         "runIdProvider": {
           "json": {
             "jsonSource": {
@@ -133,10 +174,41 @@ EOF
               }
             }
           }
-        },
+        }
+      }
+    }
+  }
+}
+EOF
+  )
+
+  declare -gr EXPECTED_ES_MANDATORY=$(cat <<"EOF"
+{
+  "unclassified": {
+    "elasticsearchLogs": {
+      "elasticsearch": {
         "saveAnnotations": false,
-        "url": "esURL1",
-        "writeAnnotationsToLogFile": false
+        "writeAnnotationsToLogFile": false,
+        "splitMessagesLongerThan": null,
+        "eventWriterConfig": {
+          "indexAPIEventWriter": {
+            "indexUrl": "esURL1",
+            "connectTimeoutMillis": null,
+            "requestTimeoutMillis": null,
+            "socketTimeoutMillis": null,
+            "authCredentialsId": null,
+            "trustStoreCredentialsId": null
+          }
+        },
+        "runIdProvider": {
+          "json": {
+            "jsonSource": {
+              "string": {
+                "jsonString": "{\"key1\":\"value1\"}"
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -146,11 +218,21 @@ EOF
   declare -gr EXPECTED_ES_FULL=$(cat <<"EOF"
 {
   "unclassified": {
-    "elasticSearchLogs": {
-      "elasticSearch": {
-        "certificateId": "esTrustedCertsSecret1",
-        "credentialsId": "esAuthSecret1",
-        "elasticsearchWriteAccess": "esDirectWrite",
+    "elasticsearchLogs": {
+      "elasticsearch": {
+        "saveAnnotations": false,
+        "writeAnnotationsToLogFile": false,
+        "splitMessagesLongerThan": 73785,
+        "eventWriterConfig": {
+          "indexAPIEventWriter": {
+            "indexUrl": "esURL1",
+            "connectTimeoutMillis": 73543,
+            "requestTimeoutMillis": 97221,
+            "socketTimeoutMillis": 18536,
+            "authCredentialsId": "esAuthSecret1",
+            "trustStoreCredentialsId": "esTrustedCertsSecret1"
+          }
+        },
         "runIdProvider": {
           "json": {
             "jsonSource": {
@@ -159,10 +241,7 @@ EOF
               }
             }
           }
-        },
-        "saveAnnotations": false,
-        "url": "esURL1",
-        "writeAnnotationsToLogFile": false
+        }
       }
     }
   }
