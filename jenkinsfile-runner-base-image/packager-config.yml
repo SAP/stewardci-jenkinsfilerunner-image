@@ -303,22 +303,26 @@ plugins:
   - groupId: "org.csanchez.jenkins.plugins"
     artifactId: "kubernetes"
     source:
-      version: "4007.v633279962016"
+      #version: "4007.v633279962016"
+      version: "4054.v2da_8e2794884"
 # Kubernetes Client API (Jenkins-Version: 2.361.4)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "kubernetes-client-api"
     source:
-      version: "6.4.1-215.v2ed17097a_8e9"
+      #version: "6.4.1-215.v2ed17097a_8e9"
+      version: "6.8.1-224.vd388fca_4db_3b_"
 # Kubernetes Credentials (Jenkins-Version: 2.332.4)
   - groupId: "org.jenkinsci.plugins"
     artifactId: "kubernetes-credentials"
     source:
-      version: "0.10.0"
+      #version: "0.10.0"
+      version: "0.11.0"
 # Kubernetes Credentials Provider (Jenkins-Version: 2.361.4)
   - groupId: "com.cloudbees.jenkins.plugins"
     artifactId: "kubernetes-credentials-provider"
     source:
-      version: "1.225.v14f9e6b_28f53"
+      #version: "1.225.v14f9e6b_28f53"
+      version: "1.238.v637de1db_9e80"
 # Lockable Resources (Jenkins-Version: 2.387.3)
   - groupId: "org.6wind.jenkins"
     artifactId: "lockable-resources"
