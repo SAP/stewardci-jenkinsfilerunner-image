@@ -139,11 +139,11 @@ plugins:
     artifactId: "commons-text-api"
     source:
       version: "1.10.0-78.v3e7b_ea_d5a_fe1"
-# Configuration as Code (Jenkins-Version: 2.387.3)
+# Configuration as Code (Jenkins-Version: 2.414.1)
   - groupId: "io.jenkins"
     artifactId: "configuration-as-code"
     source:
-      version: "1700.v6f448841296e"
+      version: "1714.v09593e830cfa"
 # Configuration as Code Plugin - Groovy Scripting Extension (Jenkins-Version: 2.60.3)
   - groupId: "io.jenkins.plugins"
     artifactId: "configuration-as-code-groovy"
@@ -254,16 +254,16 @@ plugins:
     artifactId: "ionicons-api"
     source:
       version: "56.v1b_1c8c49374e"
-# Jackson 2 API (Jenkins-Version: 2.361.4)
+# Jackson 2 API (Jenkins-Version: 2.401.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "jackson2-api"
     source:
-      version: "2.15.2-350.v0c2f3f8fc595"
-# JaCoCo (Jenkins-Version: 2.361.4)
+      version: "2.15.3-366.vfe8d1fa_f8c87"
+# JaCoCo (Jenkins-Version: 2.401.3)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "jacoco"
     source:
-      version: "3.3.4"
+      version: "3.3.5"
 # Jakarta Activation API (Jenkins-Version: 2.361.4)
   - groupId: "io.jenkins.plugins"
     artifactId: "jakarta-activation-api"
@@ -299,29 +299,25 @@ plugins:
     artifactId: "junit"
     source:
       version: "1240.vf9529b_881428"
-# Kubernetes (Jenkins-Version: 2.387.3)
+# Kubernetes (Jenkins-Version: 2.401.1)
   - groupId: "org.csanchez.jenkins.plugins"
     artifactId: "kubernetes"
     source:
-      #version: "4007.v633279962016"
       version: "4054.v2da_8e2794884"
-# Kubernetes Client API (Jenkins-Version: 2.361.4)
+# Kubernetes Client API (Jenkins-Version: 2.401.1)
   - groupId: "org.jenkins-ci.plugins"
     artifactId: "kubernetes-client-api"
     source:
-      #version: "6.4.1-215.v2ed17097a_8e9"
       version: "6.8.1-224.vd388fca_4db_3b_"
-# Kubernetes Credentials (Jenkins-Version: 2.332.4)
+# Kubernetes Credentials (Jenkins-Version: 2.401.1)
   - groupId: "org.jenkinsci.plugins"
     artifactId: "kubernetes-credentials"
     source:
-      #version: "0.10.0"
       version: "0.11"
-# Kubernetes Credentials Provider (Jenkins-Version: 2.361.4)
+# Kubernetes Credentials Provider (Jenkins-Version: 2.414.1)
   - groupId: "com.cloudbees.jenkins.plugins"
     artifactId: "kubernetes-credentials-provider"
     source:
-      #version: "1.225.v14f9e6b_28f53"
       version: "1.238.v637de1db_9e80"
 # Lockable Resources (Jenkins-Version: 2.387.3)
   - groupId: "org.6wind.jenkins"
@@ -513,11 +509,11 @@ plugins:
     artifactId: "workflow-durable-task-step"
     source:
       version: "1289.v4d3e7b_01546b_"
-# Pipeline: Job (Jenkins-Version: 2.361.4)
+# Pipeline: Job (Jenkins-Version: 2.414)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-job"
     source:
-      version: "1326.ve643e00e9220"
+      version: "1348.v32a_a_f150910e"
 # Pipeline: Multibranch (Jenkins-Version: 2.387.3)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-multibranch"
