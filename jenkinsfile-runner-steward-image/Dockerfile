@@ -1,5 +1,5 @@
 FROM jenkinsfile-runner-base-local as packager-output
-FROM eclipse-temurin:11.0.20_8-jdk-alpine@sha256:87219038abbc0e3a14868694b3567a39a4a6779de66ab0a23ff2c3812a8f1181
+FROM eclipse-temurin:11.0.20.1_1-jdk-alpine@sha256:2a16c92565236e8d9b3c3747d995c33f239e8ed30bcea1c1ba6c1a5cfa72da79
 
 RUN apk update && apk upgrade && \
     apk add jq xmlstarlet bash git curl
