@@ -102,6 +102,12 @@ function main() {
       ${PIPELINE_CLONE_RETRY_INTERVAL_SEC:-$DEFAULT_PIPELINE_CLONE_RETRY_INTERVAL_SEC} \
       ${PIPELINE_CLONE_RETRY_TIMEOUT_SEC:-$DEFAULT_PIPELINE_CLONE_RETRY_TIMEOUT_SEC} \
     git clone "$PIPELINE_GIT_URL" .
+  echo "Checking if revision $PIPELINE_GIT_REVISION exists"
+  revision_missing=$(with_termination_log git rev-parse --quiet --end-of-options "remotes/origin/$PIPELINE_GIT_REVISION")
+  if [[ $revision_missing ]]; then
+    echo "Pipeline not completed. Pipeline git revision \"$PIPELINE_GIT_REVISION\" was not found." | tee -a "${TERMINATION_LOG_PATH}" || true
+    terminate $RESULT_ERROR_CONFIG
+  fi
   echo "Checking out pipeline from revision $PIPELINE_GIT_REVISION"
   with_termination_log git checkout "$PIPELINE_GIT_REVISION"
   echo "Delete pipeline git clone credentials"
