@@ -105,8 +105,8 @@ function main() {
   echo "Checking if revision $PIPELINE_GIT_REVISION exists"
   local rc=0
   with_termination_log git rev-parse --verify --quiet --end-of-options "origin/$PIPELINE_GIT_REVISION^{commit}" || rc=$?
-  if [[ $rc ]]; then
-    echo "Pipeline not completed. Pipeline git revision \"$PIPELINE_GIT_REVISION\" was not found." | tee -a "${TERMINATION_LOG_PATH}" || true
+  if (( rc != 0 )); then
+    echo "Pipeline not completed. Pipeline git revision \"$PIPELINE_GIT_REVISION\" was not found. RC: $rc" | tee -a "${TERMINATION_LOG_PATH}" || true
     terminate $RESULT_ERROR_CONFIG
   fi
   echo "Checking out pipeline from revision $PIPELINE_GIT_REVISION"
