@@ -117,7 +117,7 @@ function main() {
 
   # check out pipeline repo
   echo "Checking out pipeline from revision '$PIPELINE_GIT_REVISION' ($pipeline_git_commit)"
-  with_termination_log git checkout "$pipeline_git_commit"
+  with_termination_log git checkout "$PIPELINE_GIT_REVISION"
 
   # delete Git credentials
   with_termination_log rm -f ~/.git-credentials
