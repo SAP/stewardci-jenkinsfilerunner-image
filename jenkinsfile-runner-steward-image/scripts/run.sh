@@ -95,23 +95,31 @@ function main() {
   truncate -c -s 0 "${TERMINATION_LOG_PATH}"
   check_required_env_vars "${PARAM_VARS_MANDATORY[@]}"
 
-  echo "Cloning pipeline repository $PIPELINE_GIT_URL"
+  echo "Cloning pipeline repository '$PIPELINE_GIT_URL'"
   with_termination_log git config --global --add safe.directory "${PWD}" #fix for https://github.com/SAP/stewardci-core/issues/327
+  local random_branch_name
+  random_branch_name=$(printf "random-%08x%08x%08x" "$SRANDOM" "$SRANDOM" "$SRANDOM")
+  # TODO support remote repos with SHA256 object format
+  with_termination_log git init --initial-branch="$random_branch_name" .
   with_termination_log \
     with_retries \
-      ${PIPELINE_CLONE_RETRY_INTERVAL_SEC:-$DEFAULT_PIPELINE_CLONE_RETRY_INTERVAL_SEC} \
-      ${PIPELINE_CLONE_RETRY_TIMEOUT_SEC:-$DEFAULT_PIPELINE_CLONE_RETRY_TIMEOUT_SEC} \
-    git clone "$PIPELINE_GIT_URL" .
-  echo "Checking if revision $PIPELINE_GIT_REVISION exists"
-  local rc=0
-  with_termination_log git rev-parse --verify --quiet --end-of-options "origin/$PIPELINE_GIT_REVISION^{commit}" || rc=$?
-  if (( rc != 0 )); then
-    echo "Pipeline not completed. Pipeline git revision \"$PIPELINE_GIT_REVISION\" not found." | tee -a "${TERMINATION_LOG_PATH}" || true
+      "${PIPELINE_CLONE_RETRY_INTERVAL_SEC:-$DEFAULT_PIPELINE_CLONE_RETRY_INTERVAL_SEC}" \
+      "${PIPELINE_CLONE_RETRY_TIMEOUT_SEC:-$DEFAULT_PIPELINE_CLONE_RETRY_TIMEOUT_SEC}" \
+    git fetch --depth=1 --no-tags -- "$PIPELINE_GIT_URL" '+*:*'
+
+  # check git revision
+  local pipeline_git_commit
+  pipeline_git_commit=$(with_termination_log resolve_git_revision "$PIPELINE_GIT_REVISION")
+  if [[ ! $pipeline_git_commit ]]; then
+    echo "Pipeline Git revision '$PIPELINE_GIT_REVISION' not found." | tee -a "${TERMINATION_LOG_PATH}" || true
     terminate $RESULT_ERROR_CONFIG
   fi
-  echo "Checking out pipeline from revision $PIPELINE_GIT_REVISION"
-  with_termination_log git checkout "$PIPELINE_GIT_REVISION"
-  echo "Delete pipeline git clone credentials"
+
+  # check out pipeline repo
+  echo "Checking out pipeline from revision '$PIPELINE_GIT_REVISION' ($pipeline_git_commit)"
+  with_termination_log git checkout "$pipeline_git_commit"
+
+  # delete Git credentials
   with_termination_log rm -f ~/.git-credentials
 
   with_termination_log sed -i "s/0.0.0.0/$host_addr/g" "$casc_yml"
@@ -133,6 +141,7 @@ function main() {
 
   export JAVA_OPTS="${JAVA_OPTS:+$JAVA_OPTS }-Dhudson.TcpSlaveAgentListener.hostName=$host_addr"
 
+  echo "Starting Jenkinsfile Runner ..."
   local jfr_cmd=(
     /app/bin/jenkinsfile-runner
       -w "$_JENKINS_APP_DIR"
@@ -287,6 +296,21 @@ function validate_integer() {
   fi
 
   return 0
+}
+
+function resolve_git_revision() {
+  local git_revision=$1
+  #---
+
+  local rc
+  rc=0; git rev-parse --verify --quiet --end-of-options "$git_revision^{commit}" || rc=$?
+  case $rc in
+    0 | 1)
+      return 0
+      ;;
+    *)
+      return $rc
+  esac
 }
 
 function make_jfr_pipeline_param_args() {
