@@ -105,7 +105,7 @@ function main() {
     with_retries \
       "${PIPELINE_CLONE_RETRY_INTERVAL_SEC:-$DEFAULT_PIPELINE_CLONE_RETRY_INTERVAL_SEC}" \
       "${PIPELINE_CLONE_RETRY_TIMEOUT_SEC:-$DEFAULT_PIPELINE_CLONE_RETRY_TIMEOUT_SEC}" \
-    git fetch --depth=1 --no-tags -- "$PIPELINE_GIT_URL" '+*:*'
+    git fetch --quiet --depth=1 --no-tags -- "$PIPELINE_GIT_URL" '+*:*'
 
   # check git revision
   local pipeline_git_commit
