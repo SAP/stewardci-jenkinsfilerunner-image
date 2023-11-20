@@ -107,13 +107,14 @@ function main() {
       "${PIPELINE_CLONE_RETRY_TIMEOUT_SEC:-$DEFAULT_PIPELINE_CLONE_RETRY_TIMEOUT_SEC}" \
     git fetch --quiet --depth=1 --no-tags -- "$PIPELINE_GIT_URL" '+*:*'
 
-  echo "Checking out pipeline from revision '$PIPELINE_GIT_REVISION' ($pipeline_git_commit)"
+  echo "Resolving pipeline Git revision '$PIPELINE_GIT_REVISION'"
   local pipeline_git_commit
   pipeline_git_commit=$(with_termination_log resolve_git_revision "$PIPELINE_GIT_REVISION")
   if [[ ! $pipeline_git_commit ]]; then
     echo "Pipeline Git revision '$PIPELINE_GIT_REVISION' not found." | tee -a "${TERMINATION_LOG_PATH}" || true
     terminate $RESULT_ERROR_CONFIG
   fi
+  echo "Checking out pipeline Git commit $pipeline_git_commit"
   with_termination_log git checkout --quiet "$pipeline_git_commit"
 
   # delete Git credentials
