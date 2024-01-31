@@ -3,7 +3,7 @@ import groovy.json.JsonOutput
 
 // updateCenterUrl needs to be in sync with changelogUrl in updateJenkins.sh!
 // updateCenterUrl = "https://updates.jenkins.io/stable/update-center.json".toURL()    //LTS
-updateCenterUrl = "https://updates.jenkins.io/update-center.json?version=2.414.2".toURL() // Version-specific
+updateCenterUrl = "https://updates.jenkins.io/update-center.json?version=2.426.3".toURL() // Version-specific
 //updateCenterUrl = "https://updates.jenkins.io/current/update-center.json".toURL() //LATEST
 
 wantedPlugins = [:]
