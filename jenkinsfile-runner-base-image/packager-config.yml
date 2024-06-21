@@ -511,7 +511,7 @@ plugins:
   - groupId: "io.jenkins.plugins"
     artifactId: "warnings-ng"
     source:
-      version: "11.3.0"
+      version: "10.7.0"
 # Pipeline (Jenkins-Version: 2.303.3)
   - groupId: "org.jenkins-ci.plugins.workflow"
     artifactId: "workflow-aggregator"
