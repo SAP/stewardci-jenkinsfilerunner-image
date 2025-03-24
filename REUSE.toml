@@ -1,0 +1,10 @@
+version = 1
+SPDX-PackageName = "github.com/SAP/stewardci-jenkinsfilerunner-image"
+SPDX-PackageSupplier = "roman.isbrecht_at_sap.com"
+SPDX-PackageDownloadLocation = "github.com/SAP/stewardci-jenkinsfilerunner-image"
+
+[[annotations]]
+path = "**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2019-2020 SAP SE or an SAP affiliate company and project \"Steward\" contributors"
+SPDX-License-Identifier = "Apache-2.0"
